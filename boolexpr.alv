@@ -1,0 +1,18 @@
+(def t (a b) a)
+(def f (a b) b)
+(def and1 (a b) (a b f))
+(def or1 (a b) (a t b))
+(def not1 (a) (a f t))
+(def nor1 (a b) (~ (| a b)))
+(def nand1 (a b) (~ (& a b)))
+
+(def eval1 (expr)
+  (cond
+    ((== (car expr) '&) (and1 (eval1 (ref expr 1)) (eval1 (ref expr 2))))
+    ((== (car expr) '|) (or1 (eval1 (ref expr 1)) (eval1 (ref expr 2))))
+    ((== (car expr) '~) (not1 (eval1 (ref expr 1))))
+    ((== (car expr) '~|) (nor1 (ref expr 1) (ref expr 2)))
+    ((== (car expr) '~&) (nand1 (ref expr 1) (ref expr 2)))
+    (else expr)))
+
+--(eval1 (usrin >> ))
