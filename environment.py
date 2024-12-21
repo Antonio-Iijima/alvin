@@ -129,11 +129,11 @@ class Literal:
     def __len__(self): return len(self.contents)
 
     def __repr__(self):
-        from alvin import Python_to_ALVIN
+        from main import Python_to_ALVIN
         return f"'{Python_to_ALVIN(self.contents)}"
 
     def __str__(self):
-        from alvin import Python_to_ALVIN
+        from main import Python_to_ALVIN
         return f"'{Python_to_ALVIN(self.contents)}"
     
     def __eq__(self, other): return isinstance(other, Literal) and self.contents == other.contents
