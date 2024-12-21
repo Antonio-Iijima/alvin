@@ -6,7 +6,7 @@ The command line takes two optional arguments, in arbitrary order:
    It is not recommended to use this mode when reading from a file.  
 -d runs the interpreter in debugging mode, which disables exception handling 
    and exits to the default Python traceback.
-"""            
+"""          
 
 
 
@@ -14,7 +14,6 @@ from sys import argv, stdin
 from os import system, name
 from interpreter import evaluate, KEYWORDS
 from environment import *
-import fileinput
 
 
 
