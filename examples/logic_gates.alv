@@ -8,10 +8,3 @@
 (def XOR (x y) (x (NOT y) y))
 
 (def halfadder (a b) ((AND a b) (XOR a b)))
-
-AND
-OR
-NOT
-
-(AND true false)
-(halfadder true false)

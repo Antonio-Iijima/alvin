@@ -1,4 +1,9 @@
-"""Necessary ALVIN data types."""
+"""Environment data structure."""
+
+
+
+import datatypes
+import interpreter
 
 
 
@@ -8,8 +13,9 @@
 
 class Environment:
     """Environment data structure, represented as a stack of dictionaries."""
-    def __init__(self, env=[{}]) -> None:
-        self.env = env
+    def __init__(self, name="") -> None:
+        self.env = [{}]
+        self.name = name
 
     def begin_scope(self) -> None:
         """Begin new scope."""
@@ -25,33 +31,29 @@ class Environment:
         elif var in self.env[scope]: return scope
         else: return self.find_scope(var, scope+1)
 
-    def set(self, var: str, val: any) -> None: 
-        """Assign val to var in the current scope."""
-        from interpreter import evaluate
-        self.env[0][var] = evaluate(val)
+    def set(self, var: str, val: any, scope=0) -> None: 
+        """Assign val to var in the given scope (default current)."""
+        self.env[scope][var] = interpreter.evaluate(val)
 
     def define(self, name: str, parameters: list, body: list) -> None:
         """Define a named function."""
-        self.env[0][name] = Function(name, parameters, body)
+        self.env[0][name] = datatypes.Function(name, parameters, body)
 
     def update(self, var: str, val: any) -> None | str:
         """Reassign previously declared var to new val."""
         scope = self.find_scope(var)
         if scope == -1: raise ValueError(f"cannot update variable {var} before assignment.")
-        from interpreter import evaluate
-        self.env[scope][var] = evaluate(val)
+        else: self.env[scope][var] = interpreter.evaluate(val)
 
     def delete(self, var: str, scope=0) -> None | str: 
-        """Delete closest declaration of var. Not applicable to functions."""
+        """Delete closest declaration of var."""
         scope = self.find_scope(var)
         if scope == -1: raise ValueError(f"cannot delete variable {var} before assignment.")
         self.env[scope].pop(var)
 
     def match_arguments(self, parameters: list, args: list, scope=0) -> None:
         """Matches a list of parameters with a list of arguments for use in functions."""
-        for i in range(len(parameters)):
-            if i < len(args): self.env[scope][parameters[i]] = args[i]
-            else: self.env[scope][parameters[i]] = "###"
+        for i in range(len(parameters)): self.set(parameters[i], args[i])
 
     def lookup(self, var: str, scope=0) -> any:
         """Finds nearest declaration of var."""
@@ -61,11 +63,18 @@ class Environment:
         else: return self.env[scope][var]
 
     def contains_value(self, val, scope=0):
-        "Recursive membership function. If true returns the key, otherwise false."
-        if scope == len(self.env): return False
+        "Recursive membership function. If true returns the variable, otherwise ###."
+        if scope == len(self.env): return "###"
         for key in self.env[scope]:
             if self.env[scope][key] == val: return key
         else: return self.contains_value(val, scope+1)
+
+    def contains_variable(self, var, scope=0):
+        "Recursive membership function. If true returns the value, otherwise ###."
+        if scope == len(self.env): return "###"
+        for key in self.env[scope]:
+            if key == var: return self.env[scope][key]
+        else: return self.contains_value(var, scope+1)        
 
     def runlocal(self, logic, args):
         try:
@@ -76,66 +85,21 @@ class Environment:
         except Exception as e:
             self.end_scope()
             raise e
-        
-    def copy(self): return Environment(self.env[:])
 
+    def extend(self, other: "Environment"): 
+        self.env = other.env + self.env
+       
     def __len__(self): return len(self.env)
 
-    def __str__(self): return str(self.env)
+    def __str__(self): return "\n".join([f"".join([f"\nLevel {i}\n"] + [f"{key} : {val}\n" for key, val in self.env[i].items()]) for i in range(len(self.env))])
+
+    def __repr__(self): return str(self)
 
 
 
-##### Function #####
+##### Global Access #####
 
 
 
-class Function:
-    def __init__(self, name=None, parameters=[], body=[]):
-        if name == None: self.name = 'lambda'
-        else: self.name = name
-
-        self.parameters = parameters
-        self.body = body
-
-    def eval(self, args):
-        from interpreter import evaluate, evlist, ENV
-
-        def logic(parameters, body, args):
-            ENV.match_arguments(parameters, evlist(args))
-            return evaluate(body)
-
-        if len(self.parameters) != len(args): raise RuntimeError(f"{len(self.parameters)} arguments were expected but {len(args)} were given")
-
-        return ENV.runlocal(logic, [self.parameters, self.body, args])
-
-    def __str__(self): return f"<{self.name}>"
-
-
-
-##### Literal #####
-
-
-
-class Literal:
-    def __init__(self, contents):
-        self.contents = contents
-
-    def get_contents(self): return self.contents
-
-    def __getitem__(self, index): return self.contents[index]
-
-    def __setitem__(self, index, item): self.contents[index] = item
-
-    def __len__(self): return len(self.contents)
-
-    def __repr__(self):
-        from main import Python_to_ALVIN
-        return f"'{Python_to_ALVIN(self.contents)}"
-
-    def __str__(self):
-        from main import Python_to_ALVIN
-        return f"'{Python_to_ALVIN(self.contents)}"
-    
-    def __eq__(self, other): return isinstance(other, Literal) and self.contents == other.contents
-
-    def __contains__(self, elem): return str(elem) in self.contents
+ENV = Environment(name="env")
+FUNARG = {}

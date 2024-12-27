@@ -1,0 +1,20 @@
+(def t (a b) a)
+(def f (a b) b)
+(def & (a b) (a b f))
+(def | (a b) (a t b))
+(def ~ (a) (a f t))
+(def ~| (a b) (~ (| a b)))
+(def ~& (a b) (~ (& a b)))
+
+(def >> (expr)
+  (cond
+    ((== expr 't') t)
+    ((== expr 'f') f)
+    ((== (car expr) '&') (& (>> (ref expr 1)) (>> (ref expr 2))))
+    ((== (car expr) '|') (| (>> (ref expr 1)) (>> (ref expr 2))))
+    ((== (car expr) '~') (~ (>> (ref expr 1))))
+    ((== (car expr) '~|') (~| (ref expr 1) (ref expr 2)))
+    ((== (car expr) '~&') (~& (ref expr 1) (ref expr 2)))
+    (else expr)))
+
+--(repeat 10 (show (>> (usrin boolexpr> ))))
