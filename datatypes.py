@@ -62,7 +62,10 @@ class Function:
 
 
 class Literal:
-    def __init__(self, contents): self.contents = " ".join(contents) if isinstance(contents, list) else contents
+    def __init__(self, contents): 
+        if   isinstance(contents, list) : self.contents = " ".join(contents)
+        elif isinstance(contents, str)  : self.contents = contents
+        else: raise TypeError(f"cannot form literal from type {type(contents)}")
     
     def __getitem__(self, index): return Literal(self.contents[index])
 

@@ -86,12 +86,13 @@ class Environment:
             self.end_scope()
             raise e
 
-    def extend(self, other: "Environment"): 
+    def extend(self, other: "Environment"):
+        """Add another environment as lowest scope to current environment.""" 
         self.env = other.env + self.env
        
     def __len__(self): return len(self.env)
 
-    def __str__(self): return "\n".join([f"".join([f"\nLevel {i}\n"] + [f"{key} : {val}\n" for key, val in self.env[i].items()]) for i in range(len(self.env))])
+    def __str__(self): return "\n".join([f"".join([f"\nScope {i}\n"] + [f"{key} : {val}\n" for key, val in self.env[i].items()]) for i in range(len(self.env))])
 
     def __repr__(self): return str(self)
 

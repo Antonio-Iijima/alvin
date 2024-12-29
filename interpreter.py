@@ -58,12 +58,12 @@ def cdr(x)         :
 
 def evlist(x)       : return [] if x == [] else cons(evaluate(x[0]), evlist(x[1:]))
 def usrin(expr)     : return datatypes.Literal(input(f"{' '.join(expr)} "))
-def ref(lst, index) : return lst[int(index)] 
+def ref(lit, index) : return lit[int(index)] 
 def boolean(x)      : return x == "#t"
 def elem(x, y)      : return x in y
-def retype(x)       : return int(x) if str(x).isnumeric() else float(x)
+def numify(x)       : return int(x) if str(x).isnumeric() else float(x)
 def show(expr)      : print(main.Python_to_ALVIN(expr))
-
+ 
 
 def repeat(number, body):
     """Syntax: (repeat <number> <body>)
@@ -173,7 +173,7 @@ def evaluate(expr):
     
     if   isnull(expr)     : return []
     elif isbool(expr)     : return boolean(expr)
-    elif isnumber(expr)   : return retype(expr)
+    elif isnumber(expr)   : return numify(expr)
     elif isdatatype(expr) : return expr
     elif isvariable(expr) : return environment.ENV.lookup(expr)
 
