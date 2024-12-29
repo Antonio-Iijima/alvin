@@ -24,7 +24,6 @@ The most basic operations you can perform in ALVIN are mathematical. Most operat
 ```
 Note that this grammar only permits unary and binary operations, and that the only unary mathematical operator in ALVIN is `++` (unary minus has not yet been implemented). `<literal>` and `<variable>` will be discussed in the next section.
 
-##
 
 ### Variables & Literals
 
