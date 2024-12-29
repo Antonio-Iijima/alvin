@@ -8,7 +8,7 @@
 
 ALVIN uses a LISP-like syntax: all expressions are contained within parentheses, and all operators, functions, and control words are prefix. Most basic arithmetic expressions, e.g. `(+ 1 3)`, are the same as in LISP, as are function calls, e.g. `(func x y)`. The only control structures that have been retained in their original forms are `cond` and `let`. All others have been created specifically for ALVIN. The following documentation attempts to provide a brief overview of the entire language.
 
-N.B. - The provided grammars loosely adhere to Backus-Naur Form; feel free to note the many errors and contact me with potential solutions. Assume `(` and `)` are literal, and `|` means 'or' unless otherwise specified.
+##### N.B. - The provided grammars loosely adhere to Backus-Naur Form; feel free to note the many errors and contact me with potential solutions. Assume `(` and `)` are literal, and `|` means 'or' unless otherwise specified.
 
 # Introduction
 
