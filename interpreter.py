@@ -41,12 +41,12 @@ def subtract(x, y) : return x - y
 def mod(x, y)      : return x % y
 def increment(x)   : return x + 1
 
-def NOT(a)         : return not a
-def OR(a, b)       : return a or b
-def AND(a, b)      : return a and b
-def XOR(a, b)      : return a is not b
-def NOR(a, b)      : return not (a or b)
-def NAND(a, b)     : return not (a and b)
+def NOT(a)         : return not bool(a)
+def OR(a, b)       : return bool(a) or bool(b)
+def AND(a, b)      : return bool(a) and bool(b)
+def XOR(a, b)      : return bool(a) is not bool(b)
+def NOR(a, b)      : return not (bool(a) or bool(b))
+def NAND(a, b)     : return not (bool(a) and bool(b))
 
 def car(x)         : 
     if len(x) == 0 : raise IndexError(f"cannot take car of {x}")
