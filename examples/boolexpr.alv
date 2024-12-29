@@ -6,15 +6,19 @@
 (def ~| (a b) (~ (| a b)))
 (def ~& (a b) (~ (& a b)))
 
-(def >> (expr)
+(def b> (expr)
   (cond
     ((== expr 't') t)
     ((== expr 'f') f)
-    ((== (car expr) '&') (& (>> (ref expr 1)) (>> (ref expr 2))))
-    ((== (car expr) '|') (| (>> (ref expr 1)) (>> (ref expr 2))))
-    ((== (car expr) '~') (~ (>> (ref expr 1))))
-    ((== (car expr) '~|') (~| (ref expr 1) (ref expr 2)))
-    ((== (car expr) '~&') (~& (ref expr 1) (ref expr 2)))
+    ((> (len expr) 1) (cond                     
+                        ((== (car expr) '&') (& (b> (ref expr 1)) (b> (ref expr 2))))
+                        ((== (car expr) '|') (| (b> (ref expr 1)) (b> (ref expr 2))))
+                        ((== (car expr) '~') (~ (b> (ref expr 1))))
+                        ((== (car expr) '~|') (~| (ref expr 1) (ref expr 2)))
+                        ((== (car expr) '~&') (~& (ref expr 1) (ref expr 2)))
+                        (else expr)))
     (else expr)))
 
---(repeat 10 (show (>> (usrin boolexpr> ))))
+
+
+(repeat 10 (show (b> (usrin b> ))))
