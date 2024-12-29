@@ -117,7 +117,7 @@ def do(exprlist, body):
     e.g. (do ((set a 3) (set b (* a 5)) (set a (- b 2))) (show (a b)))"""
 
     def logic(exprlist, body):
-        for expr in exprlist: evaluate(expr)
+        for expr in exprlist[0]: evaluate(expr)
         return evaluate(body)
     
     return environment.ENV.runlocal(logic, [exprlist, body])

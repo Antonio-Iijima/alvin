@@ -59,9 +59,12 @@ Literals are either numbers (integers or floats; handled separately in division 
 
 An `<atom>` can be either a number or a string. A `char` can be any alphanumeric or special character. The unary `atom?` predicate returns `#t` if its argument is an atom and `#f` otherwise; `null?` works similarly for empty lists.
 
-Several functions have been provided for dealing with lists. 
-- `car` returns the head of the list (same as LISP)
-- `cdr` returns the tail of the list (same as LISP)
+Several functions have been provided for dealing with lists, many of which will be familiar from LISP:
+
+- `car` returns the head of the list
+- `cdr` returns the tail of the list
+- `cons` adds an element to the beginning of a list
+- `append` joins two lists together via repeated `cons`ing
 - `len` returns the length of the list
 - `sort` returns the list sorted by ascending order
 - `split` returns a tuple of the first and second halves of the original list as lists.
@@ -85,15 +88,74 @@ Variable binding in control structures and functions will be covered in the rele
 
 `<set>` is used for variable declaration; `<update>` is used to modify a variable that has already been declared. Using `<set>` to reassign a previously declared variable will work, but is not recommended. Both `<set>` and `<update>` evaluate `<value>` before binding it to `<variable>`; therefore in the expression `(set i (+ 2 3))`, `i` is bound to 5, not `(+ 2 3)`.
 
-# Control Flow
+# Control Structures
+
+There are five control structures, three of them iterative: `cond`, `let`, `until`, `do`, and `repeat`.
 
 ## Iteration
 
-## Conditional
+`repeat`, `do`, and `until` all allow iteration and repetition, with varying degrees of complexity. We shall adress each individually.
+
+### `repeat`
+
+The grammar for `repeat` is the following:
+
+```
+<repeat-expr> ::= (repeat <expr> <number>)
+```
+`repeat` expressions are the simplest ALVIN iteration structures: the code in `<expr>` is evaluated `<number>` times. That's it.
+
+### `do`
+
+The grammar for `do` is the following:
+
+```
+<do-expr>   ::= (do <expr-list> <expr>)
+<expr-list> ::= (<exprs>)
+<exprs>     ::= <expr> [<exprs>]
+```
+`do` is slightly more complex than `repeat`. Instead of evaluating an expression *n* times, `do` sequentially evaluates a list of expressions, and then returns the value of one final expression. Thus in the case of `(do ((set a 3) (set b (* a 5)) (set a (- b 2))) (a b))`, the output is `(13 15)`.
+
+### `until`
+
+The grammar for `until` is the following:
+
+```
+<until-expr>  ::= (until <state> <expr>)
+<state>       ::= (<condition> <delta>)
+<condition>   ::= <logic-expr> | <math-expr>
+<delta>       ::= <update-expr> | <set-expr>
+```
+
+This is the most complex iteration structure. The `<state>` is a tuple of a `condition` (which must contain a variable), and a `delta` (an expression that modifies the variable in the `condition`). Thus an example `until` expression that prints all numbers squared from 0-5 would be `(until ((== i 6) (update i (++ i))) (show (** i 2)))`. Note that the variable in the `condition` (in this case `i`) must be declared *before* use in this expression.
+
+## Conditionals
+
+`cond` is the only structure which allows conditional evaluation. Its form is also borrowed from LISP, and its grammar is relatively straightforward:
+
+```
+<cond>             ::= (cond <body>)
+<body>             ::= (<conditional-list> <else>)
+<conditional-list> ::= <conditional> [<conditionals>]
+<conditional>      ::= (<condition> <expr>)
+<else>             ::= (else <expr>)
+```
+
+During evaluation, the `condition`s in each `<conditional>` of the `conditional-list` are evaluated sequentially. When one returns true, evaluation stops and the `<expr>` paired to the valid condition is returned. Thus `(cond (((== a 1) 1) (else 3)))` returns 1 if `a` is 1, and 3 otherwise.
 
 ## 
 
 # Functions
+
+## Declaration
+
+### Lambda Functions
+
+## Binding & Scope
+
+### The Environment
+
+### The FUNARG Problem
 
 # Miscellaneous
 
@@ -104,7 +166,9 @@ Variable binding in control structures and functions will be covered in the rele
 
 `del`
 
-`show`
+`show` and `quote`
+
+`eval`
 
 
 ## Keywords
