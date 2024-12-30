@@ -88,7 +88,7 @@ Variable binding in control structures and functions will be covered in the rele
 
 `<set>` is used for variable declaration; `<update>` is used to modify a variable that has already been declared. Using `<set>` to reassign a previously declared variable will work, but is not recommended. Both `<set>` and `<update>` evaluate `<value>` before binding it to `<variable>`; therefore in the expression `(set i (+ 2 3))`, `i` is bound to 5, not `(+ 2 3)`.
 
-# Control Structures
+# Control Structures & Special Forms
 
 There are five control structures, three of them iterative: `cond`, `let`, `until`, `do`, and `repeat`.
 
@@ -136,18 +136,41 @@ This is the most complex iteration structure. The `<state>` is a tuple of a `con
 ```
 <cond>             ::= (cond <body>)
 <body>             ::= (<conditional-list> <else>)
-<conditional-list> ::= <conditional> [<conditionals>]
+<conditional-list> ::= (<conditional> [<conditionals>])
 <conditional>      ::= (<condition> <expr>)
 <else>             ::= (else <expr>)
 ```
 
 During evaluation, the `condition`s in each `<conditional>` of the `conditional-list` are evaluated sequentially. When one returns true, evaluation stops and the `<expr>` paired to the valid condition is returned. Thus `(cond (((== a 1) 1) (else 3)))` returns 1 if `a` is 1, and 3 otherwise.
 
-## 
+## `let`
+
+`let` is the only special form ALVIN contains. It is the only way, other than `set` and `update`, for the user to explicitly bind variables. The grammar for `let` is:
+
+```
+<let-expr> ::= (let <binding-list> <expr>)
+<bindings> ::= (<binding> [<bindings>])
+<binding>  ::= (<variable> <value>)
+```
+
+The execution is simple. The `<expr>` is evaluated in the environment created by the sequential evaluation of the `<binding-list>`, which is nothing more than a list of pairs of variables and their values. These `<value>`s can be any expression, number, function, etc.
 
 # Functions
 
+The implementation of functions is generally one of the most interesting and nuanced aspects of any programming language. ALVIN is no exception.
+
 ## Declaration
+
+Function declaration should be fairly familiar from LISP:
+
+```
+<function-expr>  ::= (def <name> <parameters> <expr>)
+<parameters>     ::= ([<some-variables>])
+<some-variables> ::= <variable> [<some-variables>]
+```
+
+Function `<name>`s are regular strings, same as regular variables. Parameters are optional, parentheses are not; a function with no parameters must be written `(def f () (+ 1 2))`. 
+
 
 ### Lambda Functions
 
