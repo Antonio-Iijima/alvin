@@ -19,7 +19,7 @@ def isfunction(x) : return isinstance(x, datatypes.Function)
 def isatom(x)     : return not(isinstance(x, list))
 def isnull(x)     : return x in ("'()", [], None)
 def isbool(x)     : return x in ("#t","#f")
-def iskeyword(x)  : return not(isdatatype(x)) and x in KEYWORDS
+def iskeyword(x)  : return not(isdatatype(x)) and not(isinstance(x, list)) and x in KEYWORDS
 
 def cond(expr)     : return evaluate(expr[0][1]) if (expr[0][0] == "else" or evaluate(expr[0][0])) else cond(expr[1:])
 def append(x, y)   : return y if x == [] else cons(x[0], append(x[1:], y))

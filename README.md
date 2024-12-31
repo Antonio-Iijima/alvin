@@ -8,7 +8,7 @@
 
 ALVIN uses a LISP-like syntax: all expressions are contained within parentheses, and all operators, functions, and control words are prefix. Most basic arithmetic expressions, e.g. `(+ 1 3)`, are the same as in LISP, as are function calls, e.g. `(func x y)`. The only control structures that have been retained in their original forms are `cond` and `let`. All others have been created specifically for ALVIN. The following documentation attempts to provide a brief overview of the entire language.
 
-##### N.B. - The provided grammars loosely adhere to Backus-Naur Form; feel free to note the many errors and contact me with potential solutions. Assume `(` and `)` are literal, and `|` means 'or' unless otherwise specified.
+##### N.B. - The provided grammars loosely adhere to EBNF; feel free to note the many errors and contact me with potential solutions. Assume `(` and `)` are literal, and `|` means 'or' unless otherwise specified.
 
 # Introduction
 
@@ -157,10 +157,11 @@ The execution is simple. The `<expr>` is evaluated in the environment created by
 
 # Functions
 
-The implementation of functions is generally one of the most interesting and nuanced aspects of any programming language. ALVIN is no exception.
+The implementation of functions is one of the most fundamental and interesting  aspects of any programming language. ALVIN is no exception.
 
 ## Declaration
 
+### Named Functions
 Function declaration should be fairly familiar from LISP:
 
 ```
@@ -169,16 +170,31 @@ Function declaration should be fairly familiar from LISP:
 <some-variables> ::= <variable> [<some-variables>]
 ```
 
-Function `<name>`s are regular strings, same as regular variables. Parameters are optional, parentheses are not; a function with no parameters must be written `(def f () (+ 1 2))`. 
+Function `<name>`s are strings, same as regular variables. Parameters are optional, parentheses are not; a function with no parameters must be written `(def f () (+ 1 2))`. 
 
+### Anonymous Functions
 
-### Lambda Functions
+Anonymous, or $\lambda$ functions, have an identical syntax to LISP:
+
+```
+<lambda-expr> ::= (lambda <parameters> <expr>)
+```
+
+While it is technically possible to 'name' a lambda function, through the use of such a construction as `(set f (lambda (x) (+ x 1))`, if you wish to reuse a function it is better to use `def` to name it directly.
 
 ## Binding & Scope
 
+We have covered three separate instances of binding values in ALVIN: `set`/`update` for single variables, `let` for multiple variables, and the implicit binding of function parameters. Before addressing this last one, we should provide an overview of how the environment is implemented.
+
 ### The Environment
 
+The Environment data structure is the backbone of the ALVIN interpreter. It is internally represented using a Stack of dictionaries, i.e. `[{}, {}, {}]`. The dictionaries and their hierarchy in the Stack correspond to the scopes, which are created and destroyed as the program is evaluated.
+
+During the evaluation of a function, `do`, `until`, or `let`, a new local scope is created and added to the Environment stack. All declared variables are bound (passed arguments to parameters, any `set` or `update` statements in a `do` or `until` block, and all `let` bindings). Functions have some additional work on account of FUNARGs (see next segment), but this is the basic structure. Once the evaluation of the body of the expression is complete, the top scope (i.e. the most recently pushed scope) is popped off the stack, and evaluation proceeds without it.
+
 ### The FUNARG Problem
+
+The $\text{FUNARG}$ problem concerns what to do with functions passed as arguments or returned as return values. It is technically two problems, the former being the Upward, and the latter the Downward FUNARG Problem. ALVIN addresses both.
 
 # Miscellaneous
 
