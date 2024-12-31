@@ -117,7 +117,7 @@ def do(exprlist, body):
     e.g. (do ((set a 3) (set b (* a 5)) (set a (- b 2))) (show (a b)))"""
 
     def logic(exprlist, body):
-        for expr in exprlist[0]: evaluate(expr)
+        for expr in exprlist: evaluate(expr)
         return evaluate(body)
     
     return environment.ENV.runlocal(logic, [exprlist, body])
@@ -162,7 +162,7 @@ SPECIAL = ["cond", "update", "set",
            "def", "lambda", "quote", 
            "del", "until", "do", 
            "eval", "ref", "usrin",
-           "repeat", "let"]
+           "repeat", "let", "setf"]
 
 
 KEYWORDS = {}; KEYWORDS.update(BINARY); KEYWORDS.update(UNARY); KEYWORDS.update([(key, True) for key in SPECIAL])
@@ -187,11 +187,12 @@ def evaluate(expr):
         elif operator == "ref"    : return ref(evaluate(expr[1]), expr[2])
         elif operator == "def"    : environment.ENV.define(expr[1], expr[2], expr[3])
         elif operator == "repeat" : return repeat(expr[1], expr[2])
-        elif operator == "do"     : return do(expr[1:-1], expr[-1])
+        elif operator == "do"     : return do(expr[1], expr[2])
         elif operator == "update" : environment.ENV.update(expr[1], expr[2])
         elif operator == "let"    : return let(expr[1], expr[2])
         elif operator == "eval"   : return alvin_eval(expr[1])
         elif operator == "set"    : environment.ENV.set(expr[1], expr[2])
+        elif operator == "setf"   : environment.ENV.set(expr[1], expr[2], f=True)
         elif operator == "quote"  : return datatypes.Literal(expr[1])
         elif operator == "usrin"  : return usrin(expr[1:])
         elif operator == "cond"   : return cond(expr[1:])

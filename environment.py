@@ -17,6 +17,9 @@ class Environment:
         self.env = [{}]
         self.name = name
 
+    def is_empty(self) -> bool:
+        return self.env == [{}]
+
     def begin_scope(self) -> None:
         """Begin new scope."""
         self.env = [{}] + self.env
@@ -31,9 +34,9 @@ class Environment:
         elif var in self.env[scope]: return scope
         else: return self.find_scope(var, scope+1)
 
-    def set(self, var: str, val: any, scope=0) -> None: 
+    def set(self, var: str, val: any, scope=0, f=False) -> None: 
         """Assign val to var in the given scope (default current)."""
-        self.env[scope][var] = interpreter.evaluate(val)
+        self.env[scope][var] = val if f else interpreter.evaluate(val)
 
     def define(self, name: str, parameters: list, body: list) -> None:
         """Define a named function."""

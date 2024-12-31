@@ -18,35 +18,37 @@ class Function:
         self.name = name
         self.parameters = [] if parameters == None else parameters
         self.body = [] if body == None else body
-        self.id = None
-
-        self.new_id()
-      
+        self.id = None; self.refresh_id()
+        
     def eval(self, args):
         def logic(body):
             environment.ENV.extend(environment.FUNARG[self.id])
             value = interpreter.evaluate(body)
             environment.ENV.end_scope()
-            if isinstance(value, Function): 
-                value.id = self.id; return value
+            if isinstance(value, Function):
+                value.id = self.id; value.refresh_id(); return value
             else: return value
 
         if len(self.parameters) != len(args): 
             raise RuntimeError(f"{len(self.parameters)} arguments were expected but {len(args)} were given")
 
-        self.new_id()
-
+        self.refresh_id()
         environment.FUNARG[self.id].match_arguments(self.parameters, interpreter.evlist(args))
+        value = environment.ENV.runlocal(logic, [self.body])
+        self.garbage_collect()
+        return value
 
-        return environment.ENV.runlocal(logic, [self.body])
-
-
-    def new_id(self): 
+    def refresh_id(self): 
         def generate_id(length): return ''.join(random.choices([str(i) for i in range(10)], k=length))
         
         old_id = self.id; self.id = f"id:{generate_id(15)}.{self.name}"
         if old_id in environment.FUNARG: environment.FUNARG[self.id] = environment.FUNARG.pop(old_id)
         else: environment.FUNARG[self.id] = environment.Environment(name="funarg")
+
+    def garbage_collect(self):
+        keys = list(environment.FUNARG.keys())
+        for id in keys:
+            if environment.FUNARG[id].is_empty(): environment.FUNARG.pop(id)
 
     def __str__(self):
         if self.name == 'lambda':
