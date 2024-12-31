@@ -190,11 +190,11 @@ We have covered three separate instances of binding values in ALVIN: `set`/`upda
 
 The Environment data structure is the backbone of the ALVIN interpreter. It is internally represented using a Stack of dictionaries, i.e. `[{}, {}, {}]`. The dictionaries and their hierarchy in the Stack correspond to the scopes, which are created and destroyed as the program is evaluated.
 
-During the evaluation of a function, `do`, `until`, or `let`, a new local scope is created and added to the Environment stack. All declared variables are bound (passed arguments to parameters, any `set` or `update` statements in a `do` or `until` block, and all `let` bindings). Functions have some additional work on account of FUNARGs (see next segment), but this is the basic structure. Once the evaluation of the body of the expression is complete, the top scope (i.e. the most recently pushed scope) is popped off the stack, and evaluation proceeds without it.
+During the evaluation of a function, `do`, `until`, or `let`, a new local scope is created and added to the Environment stack. All declared variables are bound (passed arguments to parameters, any `set` or `update` statements in a `do` or `until` block, and all `let` bindings). Functions have some additional work on account of $\text{FUNARGs}$ (see next segment), but this is the basic structure. Once the evaluation of the body of the expression is complete, the top scope (i.e. the most recently pushed scope) is popped off the stack, and evaluation proceeds without it.
 
 ### The FUNARG Problem
 
-The $\text{FUNARG}$ problem concerns what to do with functions passed as arguments or returned as return values. It is technically two problems, the former being the Upward, and the latter the Downward FUNARG Problem. ALVIN addresses both.
+The $\text{FUNARG}$ problem concerns what to do with functions passed as arguments or returned as return values. It is technically two problems, the former being the Upward, and the latter the Downward $\text{FUNARG}$ Problem. ALVIN addresses both.
 
 # Miscellaneous
 
