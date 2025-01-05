@@ -13,20 +13,22 @@ import main
 
 
 def isvariable(x) : return isinstance(x, str) and not(iskeyword(x) or isdatatype(x) or isnumber(x))
-def isdatatype(x) : return isinstance(x, (int, float, datatypes.Literal, datatypes.Function))
-def isnumber(x)   : return isinstance(x, str) and x.replace(".","").isnumeric()
+def isdatatype(x) : return isinstance(x, (int, float, datatypes.String, datatypes.LinkedList, datatypes.Function))
+def isnumber(x)   : return isinstance(x, str) and x.replace(".","").removeprefix("-").isnumeric()
 def isfunction(x) : return isinstance(x, datatypes.Function)
 def isatom(x)     : return not(isinstance(x, list))
-def isnull(x)     : return x in ("'()", [], None)
+def isnull(x)     : return x == [] or isinstance(x, datatypes.EmptyList)
 def isbool(x)     : return x in ("#t","#f")
 def iskeyword(x)  : return not(isdatatype(x)) and not(isinstance(x, list)) and x in KEYWORDS
 
-def cond(expr)     : return evaluate(expr[0][1]) if (expr[0][0] == "else" or evaluate(expr[0][0])) else cond(expr[1:])
-def append(x, y)   : return y if x == [] else cons(x[0], append(x[1:], y))
-def split(x)       : return [x[:len(x)//2], x[len(x)//2:]]
-def cons(x, y)     : return [x] + y
-def eqv(x, y)      : return x == y
-def uneq(x, y)     : return x != y
+def cond(expr)   : return evaluate(expr[0][1]) if (expr[0][0] == "else" or evaluate(expr[0][0])) else cond(expr[1:])
+def split(x)     : return [x[:len(x)//2], x[len(x)//2:]]
+def append(x, y) : return x.append(y)
+def cons(x, y)   : return y.cons(x)
+def car(x)       : return x.car()
+def cdr(x)       : return x.cdr()
+def eqv(x, y)    : return x == y
+def uneq(x, y)   : return x != y
 
 def exponent(x, y) : return x ** y
 def leq(x, y)      : return x <= y
@@ -41,29 +43,24 @@ def subtract(x, y) : return x - y
 def mod(x, y)      : return x % y
 def increment(x)   : return x + 1
 
-def NOT(a)         : return not bool(a)
-def OR(a, b)       : return bool(a) or bool(b)
-def AND(a, b)      : return bool(a) and bool(b)
-def XOR(a, b)      : return bool(a) is not bool(b)
-def NOR(a, b)      : return not (bool(a) or bool(b))
-def NAND(a, b)     : return not (bool(a) and bool(b))
+def NOT(a)     : return not bool(a)
+def OR(a, b)   : return bool(a) or bool(b)
+def AND(a, b)  : return bool(a) and bool(b)
+def XOR(a, b)  : return bool(a) is not bool(b)
+def NOR(a, b)  : return not (bool(a) or bool(b))
+def NAND(a, b) : return not (bool(a) and bool(b))
 
-def car(x)         : 
-    if len(x) == 0 : raise IndexError(f"cannot take car of {x}")
-    return x[0]
-def cdr(x)         :
-    if len(x) == 0 : raise IndexError(f"cannot take cdr of {x}")
-    return x[1:]
+def evlist(x)   : return [evaluate(elem) for elem in x]
+def usrin(expr) : return datatypes.String(input(f"{' '.join(expr)} "))
+def boolean(x)  : return x == "#t"
+def elem(x, y)  : return x in y
+def numify(x)   : return int(x) if str(x).removeprefix("-").isnumeric() else float(x)
+def show(expr)  : print(main.Python_to_ALVIN(expr))
 
+def ref(literal, index):
+    if isinstance(literal, (datatypes.String, datatypes.LinkedList)): return literal[int(index)]
+    else: raise TypeError(f"unsupported type for 'ref': {type(literal)}")
 
-def evlist(x)       : return [] if x == [] else cons(evaluate(x[0]), evlist(x[1:]))
-def usrin(expr)     : return datatypes.Literal(input(f"{' '.join(expr)} "))
-def ref(lit, index) : return lit[int(index)] 
-def boolean(x)      : return x == "#t"
-def elem(x, y)      : return x in y
-def numify(x)       : return int(x) if str(x).isnumeric() else float(x)
-def show(expr)      : print(main.Python_to_ALVIN(expr))
- 
 
 def repeat(number, body):
     """Syntax: (repeat <number> <body>)
@@ -125,7 +122,8 @@ def do(exprlist, body):
 
 def alvin_eval(expr):
     """Interpreter access from the command line."""
-    if isinstance(expr, datatypes.Literal): return evaluate(expr.get_contents())
+    if isinstance(expr, datatypes.String): return evaluate(expr.get_contents())
+    elif isinstance(expr, datatypes.LinkedList): return evaluate(list(expr))
     else: raise ValueError(f"cannot apply eval to non-literal expression {expr}")
 
 
@@ -171,7 +169,7 @@ KEYWORDS = {}; KEYWORDS.update(BINARY); KEYWORDS.update(UNARY); KEYWORDS.update(
 def evaluate(expr):
     """Evaluates complete ALVIN expressions."""
     
-    if   isnull(expr)     : return []
+    if   isnull(expr)     : return expr
     elif isbool(expr)     : return boolean(expr)
     elif isnumber(expr)   : return numify(expr)
     elif isdatatype(expr) : return expr
@@ -193,12 +191,12 @@ def evaluate(expr):
         elif operator == "eval"   : return alvin_eval(expr[1])
         elif operator == "set"    : environment.ENV.set(expr[1], expr[2])
         elif operator == "setf"   : environment.ENV.set(expr[1], expr[2], f=True)
-        elif operator == "quote"  : return datatypes.Literal(expr[1])
+        elif operator == "quote"  : return datatypes.String(expr[1])
         elif operator == "usrin"  : return usrin(expr[1:])
         elif operator == "cond"   : return cond(expr[1:])
         elif operator == "del"    : environment.ENV.delete(expr[1])
         else: print(f"What's this? {expr[0]}"); return expr
 
     elif isfunction(expr[0]): return expr[0].eval(expr[1:])
-    elif isvariable(expr[0]): return evaluate(cons(evaluate(expr[0]), expr[1:]))
+    elif isvariable(expr[0]): return evaluate([evaluate(expr[0])] + expr[1:])
     else: pre = expr; post = evlist(expr); return post if pre == post else evaluate(post)

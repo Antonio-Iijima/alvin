@@ -65,21 +65,21 @@ class Environment:
         elif self.env[scope][var] == "###": NameError(f"unbound variable {var} in expression.")
         else: return self.env[scope][var]
 
-    def contains_value(self, val, scope=0):
+    def contains_value(self, val: any, scope=0) -> any:
         "Recursive membership function. If true returns the variable, otherwise ###."
         if scope == len(self.env): return "###"
         for key in self.env[scope]:
             if self.env[scope][key] == val: return key
         else: return self.contains_value(val, scope+1)
 
-    def contains_variable(self, var, scope=0):
+    def contains_variable(self, var: str, scope=0) -> any:
         "Recursive membership function. If true returns the value, otherwise ###."
         if scope == len(self.env): return "###"
         for key in self.env[scope]:
             if key == var: return self.env[scope][key]
         else: return self.contains_value(var, scope+1)        
 
-    def runlocal(self, logic, args):
+    def runlocal(self, logic: callable, args: list) -> any:
         try:
             self.begin_scope()
             value = logic(*args)
@@ -89,15 +89,18 @@ class Environment:
             self.end_scope()
             raise e
 
-    def extend(self, other: "Environment"):
-        """Add another environment as lowest scope to current environment.""" 
+    def extend(self, other: "Environment") -> None:
+        """Add another environment as lowest scope to current environment."""
         self.env = other.env + self.env
        
-    def __len__(self): return len(self.env)
+    def __len__(self) -> int: 
+        return len(self.env)
 
-    def __str__(self): return "\n".join([f"".join([f"\nScope {i}\n"] + [f"{key} : {val}\n" for key, val in self.env[i].items()]) for i in range(len(self.env))])
+    def __str__(self) -> str: 
+        return "\n".join([f"".join([f"\nScope {i}\n"] + [f"{key} : {val}\n" for key, val in self.env[i].items()]) for i in range(len(self.env))])
 
-    def __repr__(self): return str(self)
+    def __repr__(self) -> str: 
+        return str(self)
 
 
 

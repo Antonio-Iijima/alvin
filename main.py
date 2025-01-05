@@ -65,7 +65,12 @@ def ALVIN_to_Python(s: str) -> list[str]:
             return [lst_to_Python(expr[1:closing])] + lst_to_Python(expr[closing+1:])
         elif expr[0] == "'": 
             closing = match(expr, "'")
-            return [datatypes.Literal(lst_to_Python(expr[1:closing]))] + lst_to_Python(expr[closing+1:])
+            contents = lst_to_Python(expr[1:closing])
+            if len(contents) == 1 and isinstance(contents[0], list): 
+                contents = contents[0]
+                if contents == []: return [datatypes.EmptyList()] + lst_to_Python(expr[closing+1:])
+                else: return [datatypes.LinkedList().new(contents)] + lst_to_Python(expr[closing+1:])
+            else: return [datatypes.String(contents)] + lst_to_Python(expr[closing+1:])
         else: return [expr[0]] + lst_to_Python(expr[1:])
 
     return lst_to_Python(ALVIN_to_list(s))[0]
@@ -74,7 +79,7 @@ def ALVIN_to_Python(s: str) -> list[str]:
 def Python_to_ALVIN(s: list[str] | str | int | float) -> str | None:
     if s == None                 : return None
     elif isinstance(s, bool)     : return "#t" if s else "#f"
-    return str(s) if isinstance(s, (int, float, str, datatypes.Function, datatypes.Literal)) else f"({' '.join(Python_to_ALVIN(elem) for elem in s if elem != None)})" 
+    return str(s) if isinstance(s, (int, float, str, datatypes.Function, datatypes.String, datatypes.LinkedList)) else f"({' '.join(Python_to_ALVIN(elem) for elem in s if elem != None)})" 
 
 
 
@@ -122,7 +127,6 @@ def repl(stream=sys.stdin) -> bool:
             if iFlag: print(">>", flush=True, end=" ")
             expression = ""
     
-
 
 def text_box(text: str, centered=False) -> None:
     text = text.strip().split("\n")
