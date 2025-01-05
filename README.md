@@ -2,7 +2,7 @@
 
 ### What is $\text{ALVIN}$?
 
-$\text{ALVIN}$ is a $\text{LISP}$ variant implementation. The idea for this project can be credited to the implementation of $\text{LISP}$ outlined in Paul Graham's essay *The Roots of $\textit{LISP}$*. It was developed in large part over the course of __CSCI 370: Programming Languages__ under Dr. Saverio Perugini.
+$\text{ALVIN}$ is a $\text{LISP}$ variant implementation. The idea for this project can be credited to the implementation of $\text{LISP}$ outlined in Paul Graham's essay *The Roots of* $\textit{LISP}$. It was developed in large part over the course of __CSCI 370: Programming Languages__ under Dr. Saverio Perugini.
 
 ### Basic Syntax
 
