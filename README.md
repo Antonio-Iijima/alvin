@@ -2,13 +2,13 @@
 
 ### What is $\text{ALVIN}$?
 
-$\text{ALVIN}$ is a $\text{LISP}$ variant implementation. The idea for this project can be credited to the implementation of $\text{LISP}$ outlined in Paul Graham's essay *The Roots of* $\textit{LISP}$. It was developed in large part over the course of __CSCI 370: Programming Languages__ under Dr. Saverio Perugini.
+$\text{ALVIN}$ is a $\text{LISP}$ variant implementation. The idea for this project can be credited to the implementation of $\text{LISP}$ outlined in Paul Graham's essay *The Roots of Lisp*. It was developed in large part over the course of __CSCI 370: Programming Languages__ under Dr. Saverio Perugini.
 
 ### Basic Syntax
 
-$\text{ALVIN}$ uses a $\text{LISP}$-like syntax: all expressions are contained within parentheses, and all operators, functions, and control words are prefix. Most basic arithmetic expressions, e.g. `(+ 1 3)`, are the same as in $\text{LISP}$, as are function calls, e.g. `(func x y)`. The only syntactic structures that have been retained in their original forms are `cond` and `let`. All others have been created specifically for $\text{ALVIN}$. The following documentation attempts to provide a brief overview of the entire language.
+$\text{ALVIN}$ uses a $\text{LISP}$-like syntax: all expressions are contained within parentheses, and all operators, functions, and keywords are prefix. Most basic arithmetic expressions, e.g. `(+ 1 3)`, are the same as in $\text{LISP}$, as are function calls, e.g. `(f 1 2)`. The following documentation attempts to provide an overview of the entire language.
 
-##### N.B. - The provided grammars adhere to a very informal EBNF; feel free to note the probably many deviations and contact me with potential solutions. Assume `(` and `)` are literal, `*` after a nonterminal is 0 or more, and `|` is the metacharacter 'or' unless otherwise specified.
+##### N.B. - The provided grammars adhere to a very informal EBNF. Assume `(` and `)` are literal, `*` after a nonterminal indicates 0 or more occurrences, and `|` is the metacharacter 'or' unless otherwise specified.
 
 # Introduction
 
@@ -26,7 +26,7 @@ The most basic operations one can perform in $\text{ALVIN}$ are mathematical. Mo
 <operand>   ::= <literal> | <variable> | <expr>
 ```
 
-Note that this grammar only permits unary and binary operations, and that the only unary mathematical operator in $\text{ALVIN}$ is `++` (unary minus has not as yet been implemented). `<literal>` and `<variable>` will be discussed shortly.
+Note that this grammar only permits unary and binary operations, and that the only unary mathematical operator in $\text{ALVIN}$ is `++`. Unary minus does not technically exist in $\text{ALVIN}$, but negative numbers can be indicated by a `-`, e.g. `-3`. This is not internally considered an operator. The unexplained nonterminals `<literal>` and `<variable>` will be discussed shortly.
 
 ### Logical Operations
 
@@ -47,36 +47,43 @@ Note again that there is only one unary logical operator, `not`. Mathematical ex
 
 ### Literals
 
-Literals are either numbers (integers or floats), lists, or strings. The grammar for the syntax of lists and strings is very simple:
+There are three kinds or classes of literal in $\text{ALVIN}$: numbers (ints or floats), lists, or strings. The grammar for lists and strings is very simple:
 
 ```
-<list>   ::= (<atom>*)
+<list>   ::= (<literal>*)
 <string> ::= '<char>*'
 ```
 
-An `<atom>` can be either a number or a string. A `<char>` can be any alphanumeric or special character. The unary `atom?` predicate returns `#t` if its argument is an atom and `#f` otherwise; `null?` works similarly for empty lists.
+A `<char>` can be any alphanumeric or special character. The unary `atom?` predicate returns `#t` if its argument is an atom and `#f` otherwise; `null?` works similarly for empty lists.
 
-The list (or `LinkedList`) is implemented much the same as in $\text{LISP}$. A list is either an `EmptyList` or a tuple containing a `head` and a `tail`, which latter may be either a `LinkedList` or an `EmptyList`.
+The list (or `LinkedList`) is implemented much the same as in $\text{LISP}$. A list is either an `EmptyList` or a cell containing a `head` and a `tail`. The `head` is a literal; the `tail` may be either a `LinkedList` or an `EmptyList`.
 
 Several functions have been provided for dealing with lists, many of which will be familiar from $\text{LISP}$:
 
-- `car` returns the head of the list
-- `cdr` returns the tail of the list
+- `car` returns the head
+- `cdr` returns the tail
 - `cons` adds an element to the beginning of a list
 - `append` joins two lists together via repeated `cons`ing
 - `len` returns the length of the list
-- `sort` returns the list sorted by ascending order
 - `split` returns a tuple of the first and second halves of the original list as lists.
 
 `ref` returns the element[s] at a given location of the list. The grammar rule is:
 
-`<ref-expr> ::= (ref <list> <index>)`
+```
+<ref-expr> ::= (ref <list> <index>)
+```
 
-Finally, note that lists cannot contain expressions as elements, but can contain variables.
+`sort` returns the list sorted according to `<` or `>` as arguments:
+
+```
+<sort-expr> ::= (sort > <list>)
+```
+The `eval` function is used to evaluate a literal as if it were $\text{ALVIN}$ code. Thus `(eval '(+ 1 2)')` returns 3.
+
 
 ### Variables
 
-Variables are taken from the set of all strings of characters excluding those reserved in the set `KEYWORDS`, which contains all the reserved words in the language. Thus not only `a`, `x`, and `example`, but also `&` and `~` can be variable names.
+Variables are taken from the set of all strings of characters excluding those reserved in the set `KEYWORDS`, which contains all the reserved words in the language. Thus not only `a`, `x`, and `this_is_a_really_long_example_variable_name`, but also `&` and `~` can be used as variable names.
 
 Variable binding in control structures and functions will be covered in the relevant sections. The only other way for the user to bind variables is through the use of `set` and `update`. The grammar:
 
@@ -85,7 +92,7 @@ Variable binding in control structures and functions will be covered in the rele
 <update-expr> ::= (update <variable> <value>)
 ```
 
-`<set>` is used for variable declaration; `<update>` is used to modify a variable that has already been declared. Using `<set>` to reassign a previously declared variable will work, but is not recommended. Both `<set>` and `<update>` evaluate `<value>` before binding it to `<variable>`; therefore in the expression `(set i (+ 2 3))`, `i` is bound to 5, not `(+ 2 3)`. There is a variant of `set` called `setf` which does not evaluate first, and is used for functions.
+`set` is used for variable declaration; `update` is used to modify a variable that has already been declared. Using `set` to reassign a previously declared variable will work, but is not recommended. Both `set` and `update` evaluate `<value>` before binding it to `<variable>`; therefore in the expression `(set i (+ 2 3))`, `i` is bound to 5, not `(+ 2 3)`. There is a variant of `set` called `setf` which does not evaluate first, and is used for functions.
 
 ##### N.B. - The `KEYWORDS` list can be displayed in an interactive interpreter session with the command `keywords`.
 
@@ -121,10 +128,10 @@ The grammar for `do` is the following:
 The grammar for `until` is the following:
 
 ```
-<until-expr>  ::= (until <state> <expr>)
-<state>       ::= (<condition> <delta>)
-<condition>   ::= <logic-expr> | <math-expr>
-<delta>       ::= <update-expr> | <set-expr>
+<until-expr> ::= (until <state> <expr>)
+<state>      ::= (<condition> <delta>)
+<condition>  ::= <logic-expr> | <math-expr>
+<delta>      ::= <update-expr> | <set-expr>
 ```
 
 This is the most detailed iteration structure. The `<state>` is a tuple of a `<condition>` (which must contain a variable) and a `<delta>` (an expression that modifies the variable in the `<condition>`). Thus an example `until` block that prints all numbers squared from 0-5 (inclusive) would be `(until ((== i 6) (update i (++ i))) (show (** i 2)))`. Note that the variable in the `condition` (in this case `i`) must be declared *before* use in this expression.
@@ -134,13 +141,13 @@ This is the most detailed iteration structure. The `<state>` is a tuple of a `<c
 `cond` is the only structure which allows conditional evaluation. Its form is also borrowed from $\text{LISP}$, and its grammar is relatively straightforward:
 
 ```
-<cond>             ::= (cond <body>)
-<body>             ::= ((<conditional>*) <else>)
-<conditional>      ::= (<condition> <expr>)
-<else>             ::= (else <expr>)
+<cond>        ::= (cond <body>)
+<body>        ::= ((<conditional>*) <else>)
+<conditional> ::= (<condition> <expr>)
+<else>        ::= (else <expr>)
 ```
 
-During evaluation, the `<condition>` in each `<conditional>` is evaluated sequentially. When one returns true, evaluation stops and the `<expr>` part of the valid `<conditional>` is returned. Thus `(cond (((== a 1) 1) (else 3)))` returns 1 if `a` is 1, and 3 otherwise.
+During evaluation, the `<condition>` in each `<conditional>` is evaluated sequentially. When one returns `#t`, evaluation stops and the `<expr>` part of the valid `<conditional>` is returned. Thus `(cond (((== a 1) 1) (else 3)))` returns 1 if `a` is 1, and 3 otherwise.
 
 ## `let`
 
@@ -181,11 +188,11 @@ While it is technically possible to 'name' a lambda function, through the use of
 
 ## Binding & Scope
 
-$\text{ALVIN}$ is a dynamically scoped language. So far, we have covered three separate instances of binding values it makes available: `set`/`update` for single variables, `let` for multiple variables in sequence, and the implicit binding of function parameters. There is one additional binder: `setf`, a variation of `set` specifically for binding named functions. The use of this will become clearer in the next section, but first we should provide an overview of how the environment is implemented.
+$\text{ALVIN}$ is a dynamically scoped language. So far, we have covered three separate instances of binding values it makes available: `set`/`update` for single variables, `let` for multiple variables in sequence, and the implicit binding of function parameters. There is one additional binder which was mentioned briefly: `setf`, a variation of `set` specifically for binding named functions. The use of this will become clearer in the next section, but first we should provide an overview of how the environment is implemented.
 
 ### The Environment
 
-The Environment data structure is the backbone of the $\text{ALVIN}$ interpreter. It is internally represented using a stack of dictionaries, i.e. `[{}, {'a':1}, {'x':3,'y':10}]`. The dictionaries and their hierarchy in the stack correspond to the scopes, which are created and destroyed as the program is evaluated.
+The Environment data structure is the backbone of the $\text{ALVIN}$ interpreter. It is internally represented using a stack of dictionaries. The dictionaries and their hierarchy in the stack correspond to the scopes, which are created and destroyed as the program is evaluated.
 
 During the evaluation of a function, `do`, `until`, or `let`, a new local scope is created and added to the Environment stack. All declarations are bound (passed arguments to parameters, any `set` or `update` statements in a `do` or `until` block, and all `let` bindings). Functions have some additional work on account of $\text{FUNARGs}$ (see next segment), but this is the basic structure. Once the evaluation of the body of the expression is complete, the top scope (i.e. the most recently pushed scope) is popped off the stack, and evaluation proceeds without it.
 
@@ -195,16 +202,13 @@ Variables declared in a given scope are visible to all lower scopes. If a variab
 
 ## The $\text{FUNARG}$ Problem
 
-The $\text{FUNARG}$ problem concerns handling functions passed as arguments or returned as return values. This problem can take two possible forms: upward and downward. Any language that desires to have first-class functions must either solve both, or compromise and sacrifice having true first-class functions. $\text{ALVIN}$ attempts to be in the former category.
+The $\text{FUNARG}$ problem concerns handling functions passed as arguments or returned as return values. This problem can take two possible forms: upward and downward. Solutions to this problem vary greatly across languages. $\text{ALVIN}$'s is fairly unique.
 
 ### Function IDs and $\text{FUNARG}$ Access
 
-Functions in $\text{ALVIN}$ are internally implemented as objects. When an $\text{ALVIN}$ function is created, whether by being defined with `def` or constructed and returned by another function, it initializes with a unique 15-digit ID or tag, e.g. `id:699082600495941.f`. Functions then use this ID to index a special dictionary `FUNARG`. In this dictionary, function IDs are the keys and Environments are the values. Every function has its own personal Environment in this dictionary. Nothing is contained in a function's $\text{FUNARG}$ environment until the function is called, at which time its parameters are bound to their arguments.
+Functions in $\text{ALVIN}$ are internally implemented as objects. When an $\text{ALVIN}$ function is created, whether by being defined with `def` or constructed and returned by another function, it initializes with a unique 15-digit ID or tag, e.g. `id:699082600495941.f`. Functions then use their ID to index a special dictionary `FUNARG`, where function IDs are the keys and Environments are the values. Every function has its own personal Environment in this dictionary. Although the entry in `FUNARG` is added when the function is created, nothing is contained in a function's `FUNARG` environment until the function is called, at which time its parameters are bound to their arguments.
 
-Now all this is not very useful, except when a function is about to return another function. If a function detects that its return value is of the `Function` type, it sets the output function's ID to be its own - effectively giving it access to its own scope - and then calls the output function's `refresh_id()` method, which does two things:
-
-- Gives the function a new id and deletes the old one from `FUNARG`. This is essential for differentiating functions, as will be seen in the __Closures__ section.
-- Either carries over the old or creates a new Environment in `FUNARG` for the new ID
+Now all this is not very useful, except when a function is about to return another function. If a function detects that its return value is of the `Function` type, it sets the output function's ID to be its own - effectively giving it access to its own scope - and then calls the output function's `refresh_id()` method, which gives it a new ID and binds the new ID to the old ID's Environment, effectively saving a replica of the parent function's Environment as its own.
 
 We now have enough information to see how $\text{ALVIN}$ addresses both $\text{FUNARG}$ problems.
 
@@ -236,7 +240,7 @@ Because $\text{ALVIN}$ uses shallow binding, the parameters `a` and `b` in `<f>`
 
 ### The Upward $\text{FUNARG}$ Problem
 
-The upward $\text{FUNARG}$ problem poses a much greater challenge than the downward $\text{FUNARG}$ problem. It concerns the handling of functions returned *upward* from a function. If a function is to be returned from another function, what do we do if it references a variable from its parent's scope after its parent has finished execution? Consider the following examples, which can be found in `/examples/curry_compose.alv`:
+The upward $\text{FUNARG}$ problem poses a much greater challenge than the downward $\text{FUNARG}$ problem. It concerns the handling of functions returned *upward* from a function. If a function is to be returned from another function, what do we do if it references a variable from its parent's scope after its parent has finished execution? Consider the following examples, which can be found in `/examples/curry.alv`:
 
 ```
 (def add (a b) (+ a b))
@@ -268,7 +272,7 @@ The function `add` is passed in to `curry` and then returned as part of a lambda
 
 Here we get to see `setf` in action. Instead of evaluating its value before binding it (as `set` does), `setf` defers evaluation until it is actually needed. Thus the whole history of `(curry add)` to `(plus 1)` to `increment` is preserved by `setf`. Try running `debug.funarg` at each stage of this demo to get a better idea of how these variables and functions are stored and remember each other.
 
-##### N.B. - $\text{ALVIN}$ has a basic garbage collector for functions, which goes through the `FUNARG` dictionary after each function call and deletes all functions with empty environments.
+##### N.B. - $\text{ALVIN}$ has a basic garbage collector for functions, which goes through the `FUNARG` dictionary after each function call and deletes all functions with empty Environments.
 
 ### Closures
 
@@ -297,7 +301,7 @@ This is a basic counter in $\text{ALVIN}$ using a lambda function and a `do` blo
 3
 ```
 
-Note that here we use `set`, not `setf`; for the closure to work, we must evaluate (ctr 0) immediately, so that subsequent calls can evaluate the function it returns (in this case a lambda function, but more often a named function).
+Note that here we use `set`, not `setf`; for the closure to work, we must evaluate (ctr 0) immediately, so that subsequent calls can evaluate the function it returns with its own `FUNARG` Environment already created. Here the utility of function IDs becomes apparent, as without them the two closures would conflict in the `FUNARG` dictionary.
 
 # Miscellaneous
 
