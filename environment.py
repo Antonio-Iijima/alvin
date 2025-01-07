@@ -1,4 +1,4 @@
-"""Environment data structure."""
+"""Environment data structure. FUNARG and ENV variables."""
 
 
 

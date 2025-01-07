@@ -10,7 +10,7 @@
   (cond
     ((== expr 't') t)
     ((== expr 'f') f)
-    ((> (len expr) 1) (cond                     
+    ((string? expr) (cond                     
                         ((== (car expr) '&') (& (b> (ref expr 1)) (b> (ref expr 2))))
                         ((== (car expr) '|') (| (b> (ref expr 1)) (b> (ref expr 2))))
                         ((== (car expr) '~') (~ (b> (ref expr 1))))
@@ -21,4 +21,4 @@
 
 
 
-(repeat 10 (show (b> (usrin b> ))))
+-- (repeat 10 (show (b> (usrin b> ))))

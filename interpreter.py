@@ -13,12 +13,14 @@ import main
 
 
 def isvariable(x) : return isinstance(x, str) and not(iskeyword(x) or isdatatype(x) or isnumber(x))
-def isdatatype(x) : return isinstance(x, (int, float, datatypes.String, datatypes.LinkedList, datatypes.Function))
-def isnumber(x)   : return isinstance(x, str) and x.replace(".","").removeprefix("-").isnumeric()
+def isdatatype(x) : return isinstance(x, (int, float, datatypes.String, datatypes.LinkedList, datatypes.Function)) or x == []
+def isnumber(x)   : return isinstance(x, (float, int)) or isinstance(x, str) and x.replace(".","").removeprefix("-").isnumeric()
 def isfunction(x) : return isinstance(x, datatypes.Function)
-def isatom(x)     : return not(isinstance(x, list))
-def isnull(x)     : return x == [] or isinstance(x, datatypes.EmptyList)
+def isatom(x)     : return isinstance(x, (int, float)) or isinstance(x, datatypes.String) and len(x) == 1
+def isnull(x)     : return x == [] or isinstance(x, datatypes.EmptyList) or isinstance(x, datatypes.String) and len(x) == 0
 def isbool(x)     : return x in ("#t","#f")
+def isstring(x)   : return isinstance(x, datatypes.String)
+def islist(x)     : return isinstance(x, datatypes.LinkedList)
 def iskeyword(x)  : return not(isdatatype(x)) and not(isinstance(x, list)) and x in KEYWORDS
 
 def cond(expr)   : return evaluate(expr[0][1]) if (expr[0][0] == "else" or evaluate(expr[0][0])) else cond(expr[1:])
@@ -27,9 +29,10 @@ def append(x, y) : return x.append(y)
 def cons(x, y)   : return y.cons(x)
 def car(x)       : return x.car()
 def cdr(x)       : return x.cdr()
-def eqv(x, y)    : return x == y
-def uneq(x, y)   : return x != y
+def merge(x, y)  : return x.merge(y)
 
+def eq(x, y)       : return x == y
+def uneq(x, y)     : return x != y
 def exponent(x, y) : return x ** y
 def leq(x, y)      : return x <= y
 def geq(x, y)      : return x >= y
@@ -50,16 +53,28 @@ def XOR(a, b)  : return bool(a) is not bool(b)
 def NOR(a, b)  : return not (bool(a) or bool(b))
 def NAND(a, b) : return not (bool(a) and bool(b))
 
-def evlist(x)   : return [evaluate(elem) for elem in x]
-def usrin(expr) : return datatypes.String(input(f"{' '.join(expr)} "))
-def boolean(x)  : return x == "#t"
 def elem(x, y)  : return x in y
-def numify(x)   : return int(x) if str(x).removeprefix("-").isnumeric() else float(x)
+def boolean(x)  : return x == "#t"
+def string(x)   : return x.make_String()
+def lst(x)      : return x.make_List()
 def show(expr)  : print(main.Python_to_ALVIN(expr))
+def evlist(x)   : return [evaluate(elem) for elem in x]
+def usrin(expr) : return datatypes.String(input(f"{' '.join(expr)} ").split())
+
+def predicate(x, pred): return pred(evaluate(x)) if isvariable(x) else pred(x)
+
+def iseqv(x, y):
+    if isvariable(x): x = evaluate(x)
+    if isvariable(y): y = evaluate(y)
+    return x == y
 
 def ref(literal, index):
     if isinstance(literal, (datatypes.String, datatypes.LinkedList)): return literal[int(index)]
     else: raise TypeError(f"unsupported type for 'ref': {type(literal)}")
+
+def setref(lst, i, item):
+    if isinstance(lst, datatypes.LinkedList): lst[i] = item
+    else: raise TypeError(f"unsupported type for 'setref': {type(lst)}")
 
 
 def repeat(number, body):
@@ -133,69 +148,82 @@ def alvin_eval(expr):
 
 
 BINARY = {
-    "=="     : eqv,        "eqv?" : eqv,
-    "+"      : add,        "-"    : subtract,
-    "*"      : multiply,   "/"    : f_divide,
-    "**"     : exponent,   "//"   : i_divide,
-    ">"      : greater,    "<"    : less,    
-    ">="     : geq,        "<="   : leq,
-    "!="     : uneq,       "%"    : mod,
-    "and"    : AND,        "or"   : OR,
-    "nor"    : NOR,        "xor"  : XOR,
-    "nand"   : NAND,       "cons" : cons,
-    "append" : append,     "elem" : elem
+    "+"      : add,         "-"    : subtract,
+    "*"      : multiply,    "/"    : f_divide,
+    "**"     : exponent,    "//"   : i_divide,
+    ">"      : greater,     "<"    : less,    
+    ">="     : geq,         "<="   : leq,
+    "!="     : uneq,        "%"    : mod,
+    "and"    : AND,         "or"   : OR,
+    "nor"    : NOR,         "xor"  : XOR,
+    "nand"   : NAND,        "cons" : cons,
+    "append" : append,      "elem" : elem,
+    "merge"  : merge,       "=="   : eq
     }
 
 
 UNARY = {
-    "not"   : NOT,        "++"    : increment,
-    "null?" : isnull,     "atom?" : isatom,
-    "car"   : car,        "cdr"   : cdr,
-    "len"   : len,        "sort"  : sorted,
-    "split" : split,      "show"  : show
+    "not"   : NOT,      "++"     : increment,
+    "car"   : car,      "cdr"    : cdr,
+    "len"   : len,      "sort"   : sorted,
+    "split" : split,    "show"   : show,
+    "list"  : lst,      "string" : string
     }
+
+
+PREDICATES = {
+    "null?"    : isnull,    "atom?" : isatom,
+    "string?"  : isstring,  "list?" : islist,
+    "number?"  : isnumber,  "bool?" : isbool
+}
 
 
 SPECIAL = ["cond", "update", "set", 
            "def", "lambda", "quote", 
            "del", "until", "do", 
-           "eval", "ref", "usrin",
-           "repeat", "let", "setf"]
+           "eval", "ref", "usrin", "eqv?",
+           "repeat", "let", "setf", "setref"]
 
 
-KEYWORDS = {}; KEYWORDS.update(BINARY); KEYWORDS.update(UNARY); KEYWORDS.update([(key, True) for key in SPECIAL])
+KEYWORDS = {}
+KEYWORDS.update(BINARY)
+KEYWORDS.update(UNARY)
+KEYWORDS.update(PREDICATES)
+KEYWORDS.update([(key, True) for key in SPECIAL])
 
 
 def evaluate(expr):
     """Evaluates complete ALVIN expressions."""
     
-    if   isnull(expr)     : return expr
+    if   isdatatype(expr) : return expr
     elif isbool(expr)     : return boolean(expr)
-    elif isnumber(expr)   : return numify(expr)
-    elif isdatatype(expr) : return expr
     elif isvariable(expr) : return environment.ENV.lookup(expr)
 
     elif iskeyword(expr[0]):
         operator = expr[0]
         
-        if   operator in BINARY   : return BINARY[operator](evaluate(expr[1]), evaluate(expr[2]))
-        elif operator == "until"  : return until(expr[1][0], expr[1][1], expr[2])
-        elif operator == "lambda" : return datatypes.Function("lambda", expr[1], expr[2])
-        elif operator in UNARY    : return UNARY[operator](evaluate(expr[1]))
-        elif operator == "ref"    : return ref(evaluate(expr[1]), expr[2])
-        elif operator == "def"    : environment.ENV.define(expr[1], expr[2], expr[3])
-        elif operator == "repeat" : return repeat(expr[1], expr[2])
-        elif operator == "do"     : return do(expr[1], expr[2])
-        elif operator == "update" : environment.ENV.update(expr[1], expr[2])
-        elif operator == "let"    : return let(expr[1], expr[2])
-        elif operator == "eval"   : return alvin_eval(expr[1])
-        elif operator == "set"    : environment.ENV.set(expr[1], expr[2])
-        elif operator == "setf"   : environment.ENV.set(expr[1], expr[2], f=True)
-        elif operator == "quote"  : return datatypes.String(expr[1])
-        elif operator == "usrin"  : return usrin(expr[1:])
-        elif operator == "cond"   : return cond(expr[1:])
-        elif operator == "del"    : environment.ENV.delete(expr[1])
-        else: print(f"What's this? {expr[0]}"); return expr
+        if   operator == "setref"   : return setref(evaluate(expr[1]), evaluate(expr[2]), evaluate(expr[3]))
+        elif operator in BINARY     : return BINARY[operator](evaluate(expr[1]), evaluate(expr[2]))
+        elif operator == "lambda"   : return datatypes.Function("lambda", expr[1], expr[2])
+        elif operator == "def"      : environment.ENV.define(expr[1], expr[2], expr[3])
+        elif operator in PREDICATES : return predicate(expr[1], PREDICATES[operator])
+        elif operator == "until"    : return until(expr[1][0], expr[1][1], expr[2])
+        elif operator == "setf"     : environment.ENV.set(expr[1], expr[2], f=True)
+        elif operator in UNARY      : return UNARY[operator](evaluate(expr[1]))
+        elif operator == "update"   : environment.ENV.update(expr[1], expr[2])
+        elif operator == "ref"      : return ref(evaluate(expr[1]), expr[2])
+        elif operator == "set"      : environment.ENV.set(expr[1], expr[2])
+        elif operator == "quote"    : return datatypes.String(expr[1])
+        elif operator == "del"      : environment.ENV.delete(expr[1])
+        elif operator == "repeat"   : return repeat(expr[1], expr[2])
+        elif operator == "eqv?"     : return iseqv(expr[1], expr[2])
+        elif operator == "let"      : return let(expr[1], expr[2])
+        elif operator == "do"       : return do(expr[1], expr[2])
+        elif operator == "eval"     : return alvin_eval(expr[1])
+        elif operator == "usrin"    : return usrin(expr[1:])
+        elif operator == "cond"     : return cond(expr[1:])
+       
+        else: print(f"Quid significat hoc? {expr[0]}"); return expr
 
     elif isfunction(expr[0]): return expr[0].eval(expr[1:])
     elif isvariable(expr[0]): return evaluate([evaluate(expr[0])] + expr[1:])

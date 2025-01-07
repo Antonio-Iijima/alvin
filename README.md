@@ -26,7 +26,9 @@ The most basic operations one can perform in $\text{ALVIN}$ are mathematical. Mo
 <operand>   ::= <literal> | <variable> | <expr>
 ```
 
-Note that this grammar only permits unary and binary operations, and that the only unary mathematical operator in $\text{ALVIN}$ is `++`. Unary minus does not technically exist in $\text{ALVIN}$, but negative numbers can be indicated by a `-`, e.g. `-3`. This is not internally considered an operator. The unexplained nonterminals `<literal>` and `<variable>` will be discussed shortly.
+Note that this grammar only permits unary and binary operations, and that the only unary mathematical operator in $\text{ALVIN}$ is `++`. Unary minus does not technically exist in $\text{ALVIN}$, but negative numbers can be indicated by a `-`, e.g. `-3`. This is not internally considered an operator. 
+
+`==` and `eqv?` have a subtly different operation. `==` compares the values of both its operands; `eqv?` directly compares the expressions themselves, with the only evaluation being to look up variables.
 
 ### Logical Operations
 
@@ -47,39 +49,50 @@ Note again that there is only one unary logical operator, `not`. Mathematical ex
 
 ### Literals
 
-There are three kinds or classes of literal in $\text{ALVIN}$: numbers (ints or floats), lists, or strings. The grammar for lists and strings is very simple:
+There are three kinds or classes of literal in $\text{ALVIN}$: numbers (ints or floats), Linked Lists, and strings. The grammar for lists and strings is very simple:
 
 ```
 <list>   ::= (<literal>*)
 <string> ::= '<char>*'
 ```
 
-A `<char>` can be any alphanumeric or special character. The unary `atom?` predicate returns `#t` if its argument is an atom and `#f` otherwise; `null?` works similarly for empty lists.
+A `<char>` can be any alphanumeric or special character. The list (or `LinkedList`) is implemented much the same as in $\text{LISP}$. A list is either an `EmptyList` or a cell containing a `head` and a `tail`. The `head` is a literal; the `tail` may be either a `LinkedList` or an `EmptyList`.
 
-The list (or `LinkedList`) is implemented much the same as in $\text{LISP}$. A list is either an `EmptyList` or a cell containing a `head` and a `tail`. The `head` is a literal; the `tail` may be either a `LinkedList` or an `EmptyList`.
+Several functions have been provided for manipulating lists and strings, many of which will be familiar from $\text{LISP}$. The following functions can be used for both strings and lists:
 
-Several functions have been provided for dealing with lists, many of which will be familiar from $\text{LISP}$:
 
-- `car` returns the head
-- `cdr` returns the tail
-- `cons` adds an element to the beginning of a list
-- `append` joins two lists together via repeated `cons`ing
-- `len` returns the length of the list
-- `split` returns a tuple of the first and second halves of the original list as lists.
-
-`ref` returns the element[s] at a given location of the list. The grammar rule is:
+- `car` returns the head (or the first element of the string)
+- `cdr` returns the tail (or the remaining elements)
+- `len` returns the length
+- `ref` returns the element at a given index
+- `elem` checks for the presence of a provided element
 
 ```
-<ref-expr> ::= (ref <list> <index>)
+<car>  ::= (car <list-or-str>)
+<car>  ::= (car <list-or-str>)
+<len>  ::= (len <list-or-str>)
+<ref>  ::= (ref <list-or-str> <index>)
+<elem> ::= (elem <element> <list-or-str>)
 ```
 
-`sort` returns the list sorted according to `<` or `>` as arguments:
+Strings support the following additional function:
+
+- `list` converts a `String` type into a `LinkedList`
+- `eval` evaluates a `String` as $\text{ALVIN}$ code; thus `(eval '(+ 1 2)')` returns 3
+
+Lists support the following additional functions:
+
+- `cons` returns a new `LinkedList` with the provided element as the `head` and the old list as the `tail`
+- `merge` combines two lists in alternating fashion; thus `(merge '(1 2)' '(a b)')` returns `(1 a 2 b)`
+- `setref` replaces the element at a given index with a provided new element
+- `string` converts a `LinkedList` type into a `String`
 
 ```
-<sort-expr> ::= (sort > <list>)
+<cons>   ::= (cons <element> <list>)
+<merge>  ::= (merge <list> <list>)
+<setref> ::= (setref <list> <index> <element>)
+<string> ::= (string <list>)
 ```
-The `eval` function is used to evaluate a literal as if it were $\text{ALVIN}$ code. Thus `(eval '(+ 1 2)')` returns 3.
-
 
 ### Variables
 
@@ -92,7 +105,7 @@ Variable binding in control structures and functions will be covered in the rele
 <update-expr> ::= (update <variable> <value>)
 ```
 
-`set` is used for variable declaration; `update` is used to modify a variable that has already been declared. Using `set` to reassign a previously declared variable will work, but is not recommended. Both `set` and `update` evaluate `<value>` before binding it to `<variable>`; therefore in the expression `(set i (+ 2 3))`, `i` is bound to 5, not `(+ 2 3)`. There is a variant of `set` called `setf` which does not evaluate first, and is used for functions.
+`set` is used for variable declaration; `update` is used to modify a variable that has already been declared. Using `set` to reassign a previously declared variable will work, but is not recommended. Both `set` and `update` evaluate `<value>` before binding it to `<variable>`; therefore in the expression `(set i (+ 2 3))`, `i` is bound to 5, not `(+ 2 3)`. 
 
 ##### N.B. - The `KEYWORDS` list can be displayed in an interactive interpreter session with the command `keywords`.
 
@@ -121,6 +134,7 @@ The grammar for `do` is the following:
 ```
 <do-expr> ::= (do (<expr>*) <final-expr>)
 ```
+
 `do` is slightly more complex than `repeat`. Instead of evaluating an expression *n* times, `do` sequentially evaluates an optional list of expressions, and then returns the value of one final expression. Thus in the case of `(do ((set a 3) (set b (* a 5)) (set a (- b 2))) (a b))`, the output is `(13 15)`. 
 
 ### `until`
@@ -167,6 +181,7 @@ The implementation of functions is one of the most fundamental and interesting  
 ## Declaration
 
 ### Named Functions
+
 Function declaration should be fairly familiar from $\text{LISP}$:
 
 ```
@@ -184,7 +199,7 @@ Anonymous, or $\lambda$ functions, have an identical syntax to $\text{LISP}$:
 <lambda-expr> ::= (lambda <parameters> <expr>)
 ```
 
-While it is technically possible to 'name' a lambda function, through the use of such a construction as `(set f (lambda (x) (+ x 1))`, if you wish to reuse a function it is better to use `def` to name it directly.
+While it is indeed possible to 'name' a lambda function, through the use of such a construction as `(set f (lambda (x) (+ x 1))`, if you wish to reuse a function it is generally better to use `def` to name it directly. Important exceptions, particularly closures and currying, will be covered in the following sections.
 
 ## Binding & Scope
 
@@ -270,7 +285,7 @@ The function `add` is passed in to `curry` and then returned as part of a lambda
 6
 ```
 
-Here we get to see `setf` in action. Instead of evaluating its value before binding it (as `set` does), `setf` defers evaluation until it is actually needed. Thus the whole history of `(curry add)` to `(plus 1)` to `increment` is preserved by `setf`. Try running `debug.funarg` at each stage of this demo to get a better idea of how these variables and functions are stored and remember each other.
+Here we get to see `setf` in action. Instead of evaluating its value before binding it (as `set` does), `setf` defers evaluation until it is actually needed. Thus the whole history of `(curry add)` to `(plus 1)` to `increment` - and consequently their `FUNARG` Environments - is preserved by `setf` and can be inspected using `debug.env`. The general rule, therefore, is to use `set` when the function's output will be reused (as in closures), and `setf` when the function itself will be reused (as in currying).
 
 ##### N.B. - $\text{ALVIN}$ has a basic garbage collector for functions, which goes through the `FUNARG` dictionary after each function call and deletes all functions with empty Environments.
 
@@ -303,28 +318,40 @@ This is a basic counter in $\text{ALVIN}$ using a lambda function and a `do` blo
 
 Note that here we use `set`, not `setf`; for the closure to work, we must evaluate (ctr 0) immediately, so that subsequent calls can evaluate the function it returns with its own `FUNARG` Environment already created. Here the utility of function IDs becomes apparent, as without them the two closures would conflict in the `FUNARG` dictionary.
 
-# Miscellaneous
+# Everything Else
 
 ## More Built-in Functions
 
+### Predicates
 
-### `usrin`
+Predicates are built-in functions identifiable by a terminal `?`. There are six of them in $\text{ALVIN}$:
 
-Get user input from the command line. An essential for interactive programs.
+- `null?`
+- `atom?`
+- `string?`
+- `list?`
+- `number?`
+- `bool?`
 
-### `del`
-Manually delete a variable or function.
+They are all unary functions and return `#t` or `#f` if their argument is of that type. The `atom`, which we have not yet mentioned, is either a number or a single-character `String`.
 
-### `show` and `quote`
+### Other Functions
 
-`show` prints the value of its input. `quote` prints its input as a literal.
+- `usrin` gets user input from the command line, with a specified string as a prompt; it is an essential for interactive programs
+- `del` allows the programmer to manually delete a variable or function
+- `show` prints the value of its input
+- `quote` prints its input as a literal
 
-### `eval`
+```
+<usrin> ::= (usrin <prompt>)
+<del>   ::= (del <variable>)
+<show>  ::= (show <expr>)
+<quote> ::= (quote <expr>)
+```
 
-Interpreter access from the interpreter. Use to evaluate lines of $\text{ALVIN}$ code.
+### Command line tools
 
-### `Python`
-
-When used in an interactive interpreter session, evaluates the proceeding expression using the Python interpreter and syntax.
+- `Python` evaluates the proceeding expression using the Python interpreter and syntax.
+- `help` displays a textbox with some helpful information
 
 ##

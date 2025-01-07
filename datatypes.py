@@ -92,16 +92,24 @@ class Function:
 
 class String:
     def __init__(self, contents: list) -> None:
-        self.contents = "".join(contents)
+        self.contents = "".join([str(item) for item in contents])
     
     def get_contents(self) -> str:
         return self.contents
 
     def car(self) -> str:
-        return self.contents[0]
+        if self.contents == "": raise IndexError("cannot take the car of an empty string")
+        else: return String([self.contents[0]])
     
     def cdr(self) -> "String":
-        return String(self.contents[1:])
+        if self.contents == "": raise IndexError("cannot take the cdr of an empty string")
+        else: return String(self.contents[1:])
+
+    def append(self, other: "String") -> "String":
+        return String(list(self.contents) + list(other))
+    
+    def make_List(self) -> "LinkedList":
+        return LinkedList().new(list(self))
 
     def __getitem__(self, index: int) -> str: 
         return self.contents[index]
@@ -119,7 +127,7 @@ class String:
         return isinstance(other, String) and self.contents == other.contents
 
     def __contains__(self, elem: str) -> bool: 
-        return str(elem) in self.contents
+        return isinstance(elem, String) and elem.contents in self.contents
 
 
 
@@ -164,22 +172,28 @@ class LinkedList:
     def append(self, other: "LinkedList") -> "LinkedList":
         if other.empty(): return LinkedList(self.head, self.tail)
         return LinkedList(self.head, self.tail.append(other))
-
-    def __getitem__(self, index: int) -> None:
-        return self.head if index == 0 else self.tail[index-1]
+    
+    def make_String(self) -> "String":
+        return String(list(self))
     
     def __list__(self) -> list:
         return [self.head] + list(self.tail)
 
+    def __getitem__(self, index: int) -> None:
+        return self.head if index == 0 else self.tail[index-1]
+    
     def __setitem__(self, index: int, item: any) -> None: 
         if index == 0: self.head = item
         else: self.tail[index-1] = item
 
-    def string(self) -> str:
+    def __string__(self) -> str:
         return str(self).removeprefix("(").removesuffix(")")
+    
+    def __eq__(self, other: "LinkedList") -> bool:
+        return isinstance(other, LinkedList) and (other.head, other.tail) == (self.head, self.tail)
 
     def __str__(self) -> str: 
-        tail = self.tail.string()
+        tail = self.tail.__string__()
         return f"({self.head})" if tail == "" else f"({self.head} {tail})"
     
 
@@ -220,6 +234,9 @@ class EmptyList(LinkedList):
 
     def __setitem__(self, index: int, item: any) -> IndexError: 
         raise IndexError("list index out of range")
+    
+    def __eq__(self, other):
+        return super().__eq__(other)
 
     def __str__(self) -> str:
         return "()"

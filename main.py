@@ -1,20 +1,4 @@
-"""
-ALVIN Read-Eval-Print-Loop.
-
-main.py takes two optional arguments, in arbitrary order:  
--i runs the interpreter with exception handling, printing the prompt (>> ) for each line.
--d runs the interpreter in debugging mode, which prints execution tracing messages while the 
-   interpreter is running, disables exception handling and exits to the default Python traceback on exceptions.
-
-main.py takes any number of files. If -i, it loads the files and starts the
-interpreter. If not, it runs the files in order and exits.
-
-e.g. 
-$ python3 main.py testfile.alv -i
-$ python3 main.py -i -d
-$ python3 main.py file1.alv file2.alv
-"""          
-
+"""Syntax conversion and REPL."""
 
 
 import sys
@@ -53,6 +37,11 @@ def match(expr: list[str], opening, closing=None) -> int:
         if not stack: return i
         else: i += 1
     
+def retype(x: str): 
+    if isinstance(x, str):
+        if x.removeprefix("-").isnumeric(): return int(x)
+        elif x.removeprefix("-").replace(".","").isnumeric(): return float(x)
+    return x
 
 def ALVIN_to_Python(s: str) -> list[str]:
     def ALVIN_to_list(s: str) -> list[str]: return s.replace("(", " ( ").replace(")", " ) ").replace("'", " ' ").split()
@@ -71,7 +60,7 @@ def ALVIN_to_Python(s: str) -> list[str]:
                 if contents == []: return [datatypes.EmptyList()] + lst_to_Python(expr[closing+1:])
                 else: return [datatypes.LinkedList().new(contents)] + lst_to_Python(expr[closing+1:])
             else: return [datatypes.String(contents)] + lst_to_Python(expr[closing+1:])
-        else: return [expr[0]] + lst_to_Python(expr[1:])
+        else: return [retype(expr[0])] + lst_to_Python(expr[1:])
 
     return lst_to_Python(ALVIN_to_list(s))[0]
 
@@ -129,8 +118,8 @@ def repl(stream=sys.stdin) -> bool:
     
 
 def text_box(text: str, centered=False) -> None:
-    text = text.strip().split("\n")
-    w = max(len(line.strip()) for line in text)
+    text = text.split("\n")
+    w = max(len(line) for line in text)
     
     bar, post = chr(9552), chr(9553)
     top = f"{chr(9556)}" + bar*(w+2) + f"{chr(9559)}"
@@ -138,7 +127,7 @@ def text_box(text: str, centered=False) -> None:
     
     print(f"\n{top}")
     for l in range(len(text)): 
-        text[l] = text[l].strip()
+        text[l] = text[l]
         space = w - len(text[l])
         if centered: text[l] = f"{post} {' '*(space//2)}{text[l]}{' '*(space//2)} {post}"
         else: text[l] = f"{post} {text[l]}{' '*space} {post}"
@@ -148,11 +137,11 @@ def text_box(text: str, centered=False) -> None:
 
 def help() -> None: 
     text_box("""
-Loosely based on the implementation of LISP outlined in
-Paul Graham's essay, "The Roots of LISP", and developed
+ALVIN is loosely based on the implementation of LISP outlined
+in Paul Graham's essay, "The Roots of LISP", and was developed
 over the course of CSCI 370: Programming Languages.
         
-See program comments for further functionality details.
+Documentation can be found at <link>
 
 >> clear     : clear the terminal 
 >> exit/quit : exit the interpreter
@@ -163,8 +152,8 @@ See program comments for further functionality details.
 
 def welcome() -> None:
     clear()
-    text_box("""Welcome to ALVIN
-ALVIN is a Lisp Variant Implementation""", centered=True)
+    text_box("""Welcome to ALVIN,
+a LISP Variant Implementation""", centered=True)
 
     print("Enter 'help' to show further information")
 
