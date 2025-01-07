@@ -1,4 +1,4 @@
-"""Function and Literal classes."""
+"""Function and literal classes."""
 
 
 
@@ -6,31 +6,6 @@ import random
 import environment
 import interpreter
 import main
-
-
-
-##### Number #####
-
-
-
-class Number:
-    def __init__(self, value):
-        self.value =  int(value) if str(value).isnumeric() else float(value)
-
-    def __add__(self, other): return self.value + other.value
-    def __sub__(self, other): return self.value - other.value
-    def __mul__(self, other): return self.value * other.value
-    def __matmul__(self, other): raise NotImplementedError("type Number does not yet support __matmul__")
-    def __truediv__(self, other): return self.value / other.value
-    def __floordiv__(self, other): return self.value // other.value
-    def __mod__(self, other): return self.value % other.value
-    def __divmod__(self, other): raise NotImplementedError("type Number does not yet support __divmod__")
-    def __pow__(self, other): return self.value ** other.value
-    def __lshift__(self, other): raise NotImplementedError("type Number does not yet support bitwise shifting")
-    def __rshift__(self, other): raise NotImplementedError("type Number does not yet support bitwise shifting")
-    def __and__(self, other): return bool(self.value) and bool(other.value)
-    def __xor__(self, other): return bool(self.value) != bool(other.value)
-    def __or__(self, other): return bool(self.value) or bool(other.value)
 
 
 
@@ -43,34 +18,35 @@ class Function:
         self.name = name
         self.parameters = [] or parameters
         self.body = [] or body
-        self.id = None; self.refresh_id()
+        self.id = "BlankId"; self.refresh_id()
         
     def eval(self, args: list) -> any:
         def logic(body: list) -> any:
-            environment.ENV.extend(environment.FUNARG[self.id])
-            value = interpreter.evaluate(body)
-            environment.ENV.end_scope()
-            if isinstance(value, Function):
-                value.id = self.id; value.refresh_id(); return value
-            else: return value
+            return interpreter.evaluate(body)
 
         if len(self.parameters) != len(args): 
             raise RuntimeError(f"{len(self.parameters)} arguments were expected but {len(args)} were given")
 
         self.refresh_id()
-
         environment.FUNARG[self.id].match_arguments(self.parameters, interpreter.evlist(args))
-        value = environment.ENV.runlocal(logic, [self.body])
-        
+      
+        environment.ENV.extend(environment.FUNARG.get(self.id, environment.Environment(name="funarg")))
+        try:
+            value = environment.ENV.runlocal(logic, [self.body])
+        finally:
+            environment.ENV.end_scope()
+
+        if isinstance(value, Function): value.id = self.id; value.refresh_id()
+       
         self.garbage_collect()
-        
+       
         return value
 
     def refresh_id(self) -> None: 
         def generate_id(length: int): return ''.join(random.choices([str(i) for i in range(10)], k=length))
         
         old_id = self.id; self.id = f"id:{generate_id(15)}.{self.name}"
-        environment.FUNARG[self.id] = environment.FUNARG.pop(old_id) if old_id in environment.FUNARG else environment.Environment(name="funarg")
+        environment.FUNARG[self.id] = environment.FUNARG.pop(old_id, environment.Environment(name="funarg"))
 
     def garbage_collect(self) -> None:
         keys = list(environment.FUNARG.keys())
@@ -111,8 +87,9 @@ class String:
     def make_List(self) -> "LinkedList":
         return LinkedList().new(list(self))
 
-    def __getitem__(self, index: int) -> str: 
-        return self.contents[index]
+    def __getitem__(self, index: int) -> "String": 
+        print(self.contents, 'at', index)
+        return String([self.contents[index]])
 
     def __len__(self) -> int: 
         return len(self.contents)
@@ -179,7 +156,7 @@ class LinkedList:
     def __list__(self) -> list:
         return [self.head] + list(self.tail)
 
-    def __getitem__(self, index: int) -> None:
+    def __getitem__(self, index: int) -> any:
         return self.head if index == 0 else self.tail[index-1]
     
     def __setitem__(self, index: int, item: any) -> None: 

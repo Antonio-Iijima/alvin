@@ -1,24 +1,22 @@
 (def t (a b) a)
 (def f (a b) b)
-(def & (a b) (a b f))
-(def | (a b) (a t b))
-(def ~ (a) (a f t))
-(def ~| (a b) (~ (| a b)))
-(def ~& (a b) (~ (& a b)))
+(def AND (a b) (a b f))
+(def OR (a b) (a t b))
+(def NOT (a) (a f t))
+(def NOR (a b) (NOT (OR a b)))
+(def NAND (a b) (NOT (AND a b)))
 
 (def b> (expr)
   (cond
     ((== expr 't') t)
-    ((== expr 'f') f)
-    ((string? expr) (cond                     
-                        ((== (car expr) '&') (& (b> (ref expr 1)) (b> (ref expr 2))))
-                        ((== (car expr) '|') (| (b> (ref expr 1)) (b> (ref expr 2))))
-                        ((== (car expr) '~') (~ (b> (ref expr 1))))
-                        ((== (car expr) '~|') (~| (ref expr 1) (ref expr 2)))
-                        ((== (car expr) '~&') (~& (ref expr 1) (ref expr 2)))
-                        (else expr)))
+    ((== expr 'f') f)             
+    ((== (car expr) '&') (AND (b> (ref expr 1)) (b> (ref expr 2))))
+    ((== (car expr) '|') (OR (b> (ref expr 1)) (b> (ref expr 2))))
+    ((== (car expr) '~') (NOT (b> (ref expr 1))))
+    ((== (car expr) '~|') (NOR (ref expr 1) (ref expr 2)))
+    ((== (car expr) '~&') (NAND (ref expr 1) (ref expr 2)))
     (else expr)))
 
 
 
--- (repeat 10 (show (b> (usrin b> ))))
+(repeat 10 (show (b> (usrin b> ))))

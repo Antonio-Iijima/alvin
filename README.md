@@ -333,7 +333,7 @@ Predicates are built-in functions identifiable by a terminal `?`. There are six 
 - `number?`
 - `bool?`
 
-They are all unary functions and return `#t` or `#f` if their argument is of that type. The `atom`, which we have not yet mentioned, is either a number or a single-character `String`.
+They are all unary, and return `#t` or `#f` if their argument is of the specified type. `null?` applies to both lists and strings, and identifies either an `EmptyList` or a sting with length 0 (`''`). The `atom`, which we have not yet mentioned, is either a number or a single-character `String`.
 
 ### Other Functions
 
@@ -354,4 +354,6 @@ They are all unary functions and return `#t` or `#f` if their argument is of tha
 - `python` evaluates the proceeding expression using the Python interpreter and syntax.
 - `help` displays a textbox with some helpful information
 
-##
+## Known Bugs
+
+1. There is currently a bug that can be found running the `examples/boolexpr.alv` file, where apparently the variable `expr` is either improperly passed or improperly accessed.

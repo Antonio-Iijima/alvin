@@ -13,9 +13,12 @@ import interpreter
 
 class Environment:
     """Environment data structure, represented as a stack of dictionaries."""
-    def __init__(self, name="") -> None:
-        self.env = [{}]
-        self.name = name
+    def __init__(self, name=None, env=None) -> None:
+        self.env = env or [{}]
+        self.name = name or ""
+
+    def copy(self) -> "Environment":
+        return Environment(self.name, self.env)
 
     def is_empty(self) -> bool:
         return self.env == [{}]
@@ -27,7 +30,7 @@ class Environment:
     def end_scope(self) -> None:
         """End current scope."""
         self.env.pop(0)
-
+        
     def find_scope(self, var: str, scope=0) -> int:
         """Find nearest scope in which var has been declared."""
         if scope == len(self.env): return -1
@@ -80,14 +83,12 @@ class Environment:
         else: return self.contains_value(var, scope+1)        
 
     def runlocal(self, logic: callable, args: list) -> any:
+        self.begin_scope()
         try:
-            self.begin_scope()
             value = logic(*args)
+        finally: 
             self.end_scope()
-            return value
-        except Exception as e:
-            self.end_scope()
-            raise e
+        return value
 
     def extend(self, other: "Environment") -> None:
         """Add another environment as lowest scope to current environment."""
