@@ -351,7 +351,7 @@ They are all unary functions and return `#t` or `#f` if their argument is of tha
 
 ### Command line tools
 
-- `Python` evaluates the proceeding expression using the Python interpreter and syntax.
+- `python` evaluates the proceeding expression using the Python interpreter and syntax.
 - `help` displays a textbox with some helpful information
 
 ##
