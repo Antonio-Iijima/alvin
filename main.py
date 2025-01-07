@@ -141,7 +141,8 @@ ALVIN is loosely based on the implementation of LISP outlined
 in Paul Graham's essay, "The Roots of LISP", and was developed
 over the course of CSCI 370: Programming Languages.
         
-Documentation can be found at <link>
+Documentation can be found on GitHub:
+https://github.com/Antonio-Iijima/alvin
 
 >> clear     : clear the terminal 
 >> exit/quit : exit the interpreter
