@@ -2,11 +2,11 @@
 
 ### What is $\text{ALVIN}$?
 
-$\text{ALVIN}$ is a $\text{LISP}$ variant implementation. The idea for this project can be credited to the implementation of $\text{LISP}$ outlined in Paul Graham's essay *The Roots of Lisp*. It was developed in large part over the course of __CSCI 370: Programming Languages__ under Dr. Saverio Perugini.
+$\text{ALVIN}$ is a $\text{Lisp}$ variant implementation. The idea for this project can be credited to the implementation of $\text{Lisp}$ outlined in Paul Graham's essay *The Roots of Lisp*. It was developed in large part over the course of __CSCI 370: Programming Languages__ under Dr. Saverio Perugini.
 
 ### Basic Syntax
 
-$\text{ALVIN}$ uses a $\text{LISP}$-like syntax: all expressions are contained within parentheses, and all operators, functions, and keywords are prefix. Most basic arithmetic expressions, e.g. `(+ 1 3)`, are the same as in $\text{LISP}$, as are function calls, e.g. `(f 1 2)`. The following documentation attempts to provide an overview of the entire language.
+$\text{ALVIN}$ uses a $\text{Lisp}$-like syntax: all expressions are contained within parentheses, and all operators, functions, and keywords are prefix. Most basic arithmetic expressions, e.g. `(+ 1 3)`, are the same as in $\text{Lisp}$, as are function calls, e.g. `(f 1 2)`. The following documentation attempts to provide an overview of the entire language.
 
 ##### N.B. - The provided grammars adhere to a very informal EBNF. Assume `(` and `)` are literal, `*` after a nonterminal indicates 0 or more occurrences, and `|` is the metacharacter 'or' unless otherwise specified.
 
@@ -16,7 +16,7 @@ $\text{ALVIN}$ uses a $\text{LISP}$-like syntax: all expressions are contained w
 
 ### Mathematical Operations
 
-The most basic operations one can perform in $\text{ALVIN}$ are mathematical. Most operators are functionally identical to their $\text{LISP}$ counterparts, with the additions of `++` (unary increment), `%` (modulus), `**` (exponentiation), and `//` (integer division). A basic grammar for these expresisons would be as follows:
+The most basic operations one can perform in $\text{ALVIN}$ are mathematical. Most operators are functionally identical to their $\text{Lisp}$ counterparts, with the additions of `++` (unary increment), `%` (modulus), `**` (exponentiation), and `//` (integer division). A basic grammar for these expresisons would be as follows:
 
 ```
 <math-expr> ::= (<binary> | <unary>)
@@ -56,9 +56,9 @@ There are three kinds or classes of literal in $\text{ALVIN}$: numbers (ints or 
 <string> ::= '<char>*'
 ```
 
-A `<char>` can be any alphanumeric or special character. The list (or `LinkedList`) is implemented much the same as in $\text{LISP}$. A list is either an `EmptyList` or a cell containing a `head` and a `tail`. The `head` is a literal; the `tail` may be either a `LinkedList` or an `EmptyList`.
+A `<char>` can be any alphanumeric or special character. The list (or `LinkedList`) is implemented much the same as in $\text{Lisp}$. A list is either an `EmptyList` or a cell containing a `head` and a `tail`. The `head` is a literal; the `tail` may be either a `LinkedList` or an `EmptyList`.
 
-Several functions have been provided for manipulating lists and strings, many of which will be familiar from $\text{LISP}$. The following functions can be used for both strings and lists:
+Several functions have been provided for manipulating lists and strings, many of which will be familiar from $\text{Lisp}$. The following functions can be used for both strings and lists:
 
 
 - `car` returns the head (or the first element of the string)
@@ -152,7 +152,7 @@ This is the most detailed iteration structure. The `<state>` is a tuple of a `<c
 
 ## Conditionals
 
-`cond` is the only structure which allows conditional evaluation. Its form is also borrowed from $\text{LISP}$, and its grammar is relatively straightforward:
+`cond` is the only structure which allows conditional evaluation. Its form is also borrowed from $\text{Lisp}$, and its grammar is relatively straightforward:
 
 ```
 <cond>        ::= (cond <body>)
@@ -182,7 +182,7 @@ The implementation of functions is one of the most fundamental and interesting  
 
 ### Named Functions
 
-Function declaration should be fairly familiar from $\text{LISP}$:
+Function declaration should be fairly familiar from $\text{Lisp}$:
 
 ```
 <function-expr> ::= (def <name> <parameters> <expr>)
@@ -193,7 +193,7 @@ Function `<name>`s are strings, same as regular variables. Parameters are option
 
 ### Anonymous Functions
 
-Anonymous, or $\lambda$ functions, have an identical syntax to $\text{LISP}$:
+Anonymous, or $\lambda$ functions, have an identical syntax to $\text{Lisp}$:
 
 ```
 <lambda-expr> ::= (lambda <parameters> <expr>)

@@ -137,8 +137,8 @@ def text_box(text: str, centered=False) -> None:
 
 def help() -> None: 
     text_box("""
-ALVIN is loosely based on the implementation of LISP outlined
-in Paul Graham's essay, "The Roots of LISP", and was developed
+ALVIN is loosely based on the implementation of Lisp outlined
+in Paul Graham's essay, "The Roots of Lisp", and was developed
 over the course of CSCI 370: Programming Languages.
         
 Documentation can be found on GitHub:
@@ -154,7 +154,7 @@ https://github.com/Antonio-Iijima/alvin
 def welcome() -> None:
     clear()
     text_box("""Welcome to ALVIN,
-a LISP Variant Implementation""", centered=True)
+a Lisp Variant Implementation""", centered=True)
 
     print("Enter 'help' to show further information")
 
