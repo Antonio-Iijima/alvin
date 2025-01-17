@@ -1,6 +1,6 @@
 """Function and literal classes."""
 
-
+ 
 
 import random
 import environment
