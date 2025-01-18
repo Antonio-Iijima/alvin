@@ -78,26 +78,12 @@ def setref(lst, i, item):
 
 
 def repeat(number, body):
-    """Syntax: (repeat <number> <body>)
-    
-    <body> is evaluated on each iteration of <number>.
-    
-    e.g. (repeat 3 (show (* 9 7)))"""
-
     n = evaluate(number)
     for _ in range(n):
         evaluate(body)
 
 
 def until(cond, inc, body):
-    """Syntax: (until (<cond> <inc) <body>)
-    
-    <cond> is the variable state in which the <until> statement terminates.\n
-    <inc>  is a statement whose value is assigned to the variable in <cond>.\n
-    <body> is evaluated on each iteration.
-    
-    e.g. (until ((== i 6) (update i (++ i))) (show (** i 2)))"""
-
     def logic(cond, inc, body):
         while not(evaluate(cond)):
             evaluate(body)
@@ -107,13 +93,6 @@ def until(cond, inc, body):
 
 
 def let(bindings, body):
-    """Syntax: (let (<bindings>) <body>)
-    
-    <bindings> is a list of (<variable> <value>) associations.\n
-    <body> is subsequently evaluated in the environment created by the <bindings>.
-    
-    e.g. (let ((a 1) (b 2)) (show (+ a b)))"""
-    
     def logic(bindings, body):
         for pair in bindings: environment.ENV.set(pair[0], pair[1])
         return evaluate(body)
@@ -122,12 +101,6 @@ def let(bindings, body):
 
 
 def do(exprlist, body):
-    """Syntax: (do <exprlist> <body>)
-    
-    <exprlist> is a list of expressions to be evaluated before <body> is returned.
-    
-    e.g. (do ((set a 3) (set b (* a 5)) (set a (- b 2))) (show (a b)))"""
-
     def logic(exprlist, body):
         for expr in exprlist: evaluate(expr)
         return evaluate(body)
