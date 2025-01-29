@@ -37,11 +37,13 @@ def match(expr: list[str], opening, closing=None) -> int:
         if not stack: return i
         else: i += 1
     
+
 def retype(x: str): 
     if isinstance(x, str):
         if x.removeprefix("-").isnumeric(): return int(x)
         elif x.removeprefix("-").replace(".","").isnumeric(): return float(x)
     return x
+
 
 def ALVIN_to_Python(s: str) -> list[str]:
     def ALVIN_to_list(s: str) -> list[str]: return s.replace("(", " ( ").replace(")", " ) ").replace("'", " ' ").split()
