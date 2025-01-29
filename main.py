@@ -172,8 +172,10 @@ def close() -> None:
 def show_keywords() -> None:
     display = """"""
     keys = list(interpreter.KEYWORDS.keys())
+    offset = max(len(key) for key in keys) + 2
+
     for c in range(len(keys)): 
-        display += f"{keys[c]}{' '* (10-len(keys[c]))}"
+        display += f"{keys[c]}{' '* (offset-len(keys[c]))}"
         if (c+1) % 3 == 0: display += "\n"
         
     text_box(display)
