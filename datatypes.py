@@ -6,6 +6,7 @@ import random
 import environment
 import interpreter
 import main
+import copy
 
 
 
@@ -18,35 +19,49 @@ class Function:
         self.name = name
         self.parameters = [] or parameters
         self.body = [] or body
-        self.id = "BlankId"; self.refresh_id()
+        self.id = self.generate_id()
+        environment.FUNARG[self.id] = environment.Environment(name="funarg")
         
     def eval(self, args: list) -> any:
-        def logic(body: list) -> any:
-            return interpreter.evaluate(body)
-
         if len(self.parameters) != len(args): 
             raise RuntimeError(f"{len(self.parameters)} arguments were expected but {len(args)} were given")
 
-        self.refresh_id()
-        environment.FUNARG[self.id].match_arguments(self.parameters, interpreter.evlist(args))
-      
-        environment.ENV.extend(environment.FUNARG.get(self.id, environment.Environment(name="funarg")))
-        try:
-            value = environment.ENV.runlocal(logic, [self.body])
-        finally:
-            environment.ENV.end_scope()
+#        self.refresh_id(separate=True)
+#        print(self.parameters, environment.FUNARG[self.id])
 
-        if isinstance(value, Function): value.id = self.id; value.refresh_id()
+        environment.FUNARG[self.id].begin_scope()
+        environment.FUNARG[self.id].match_arguments(self.parameters, args)
+        size = len(environment.ENV)
+        environment.ENV.extend(environment.FUNARG[self.id])
+
+        value = interpreter.evaluate(self.body)
+
+        print(f"""
+before: {size}
+after : {len(environment.ENV)}
+funarg: {len(environment.FUNARG[self.id])}
+""")
+
+        environment.ENV.end_scope(number=len(environment.ENV)-size)
+
+        print("env   : ", len(environment.ENV))
+        print("funarg: ", len(environment.FUNARG[self.id]), "\n\n")
+
+
+        if isinstance(value, Function): 
+            environment.FUNARG[value.id] = environment.FUNARG[self.id]
+            environment.FUNARG[value.id].begin_scope()
        
-        self.garbage_collect()
+    #    self.garbage_collect()
        
         return value
 
-    def refresh_id(self) -> None: 
-        def generate_id(length: int): return ''.join(random.choices([str(i) for i in range(10)], k=length))
-        
-        old_id = self.id; self.id = f"id:{generate_id(15)}.{self.name}"
-        environment.FUNARG[self.id] = environment.FUNARG.pop(old_id, environment.Environment(name="funarg"))
+    def generate_id(self, length=15): return f"id:{''.join(random.choices([str(i) for i in range(10)], k=length))}.{self.name}"
+
+    def refresh_id(self, separate=False) -> None: 
+        new_id = self.generate_id()
+        environment.FUNARG[new_id] = environment.FUNARG.pop(self.id) if separate else environment.FUNARG.get(self.id)
+        self.id = new_id
 
     def garbage_collect(self) -> None:
         keys = list(environment.FUNARG.keys())

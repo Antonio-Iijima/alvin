@@ -169,10 +169,10 @@ def close() -> None:
 def show_keywords() -> None:
     display = """"""
 
+    predicate = list(interpreter.PREDICATE.keys())
     all_keys  = list(interpreter.KEYWORDS.keys())
     binary    = list(interpreter.BINARY.keys())
     unary     = list(interpreter.UNARY.keys())
-    predicate = list(interpreter.PREDICATE.keys())
     special   = interpreter.SPECIAL
 
     categories = [binary, unary, predicate, special]

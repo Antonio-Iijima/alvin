@@ -166,7 +166,7 @@ KEYWORDS.update([(key, True) for key in SPECIAL])
 
 
 def evaluate(expr):
-    #print(f"Evaluating {expr}")
+    #print(f"Evaluating {expr}\n\nwith FUNARGS\n{environment.FUNARG}\n\n\n")
     """Evaluates complete ALVIN expressions."""
     
     if   isdatatype(expr) : return expr

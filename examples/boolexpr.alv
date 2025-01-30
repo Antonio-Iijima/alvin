@@ -12,11 +12,13 @@
     ((== expr 'f') f)             
     ((== (car expr) '&') (AND (b> (ref expr 1)) (b> (ref expr 2))))
     ((== (car expr) '|') (OR (b> (ref expr 1)) (b> (ref expr 2))))
-    ((== (car expr) '~') (NOT (b> (ref expr 1))))
-    ((== (car expr) '~|') (NOR (ref expr 1) (ref expr 2)))
-    ((== (car expr) '~&') (NAND (ref expr 1) (ref expr 2)))
+    ((== (car expr) '~') 
+      (cond
+        ((== (ref expr 1) '|') (NOR (b> (ref expr 2)) (b> (ref expr 3))))
+        ((== (ref expr 1) '&') (NAND (b> (ref expr 2)) (b> (ref expr 3))))
+        (else (NOT (b> (ref expr 1))))))
     (else expr)))
 
 
 
-(repeat 10 (show (b> (usrin b> ))))
+(repeat 10 (show (b> (usrin boolexpr> ))))

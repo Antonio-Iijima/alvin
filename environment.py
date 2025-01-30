@@ -27,9 +27,9 @@ class Environment:
         """Begin new scope."""
         self.env = [{}] + self.env
 
-    def end_scope(self) -> None:
+    def end_scope(self, number=1) -> None:
         """End current scope."""
-        self.env.pop(0)
+        self.env = self.env[number:]
         
     def find_scope(self, var: str, scope=0) -> int:
         """Find nearest scope in which var has been declared."""
@@ -39,6 +39,7 @@ class Environment:
 
     def set(self, var: str, val: any, scope=0, f=False) -> None: 
         """Assign val to var in the given scope (default current)."""
+        if var in self.env[scope]: raise KeyError(f"Variable {var} already present in FUNARG: {self.env}")
         self.env[scope][var] = val if f else interpreter.evaluate(val)
 
     def define(self, name: str, parameters: list, body: list) -> None:
@@ -57,7 +58,7 @@ class Environment:
         if scope == -1: raise ValueError(f"cannot delete variable {var} before assignment.")
         self.env[scope].pop(var)
 
-    def match_arguments(self, parameters: list, args: list, scope=0) -> None:
+    def match_arguments(self, parameters: list, args: list) -> None:
         """Matches a list of parameters with a list of arguments for use in functions."""
         for i in range(len(parameters)): self.set(parameters[i], args[i])
 
