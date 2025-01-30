@@ -168,12 +168,28 @@ def close() -> None:
 
 def show_keywords() -> None:
     display = """"""
-    keys = list(interpreter.KEYWORDS.keys())
-    offset = max(len(key) for key in keys) + 2
 
-    for c in range(len(keys)): 
-        display += f"{keys[c]}{' '* (offset-len(keys[c]))}"
-        if (c+1) % 3 == 0: display += "\n"
+    all_keys = list(interpreter.KEYWORDS.keys())
+    binary = list(interpreter.BINARY.keys())
+    unary = list(interpreter.UNARY.keys())
+    predicate = list(interpreter.PREDICATE.keys())
+    special = interpreter.SPECIAL
+
+    categories = [binary, unary, predicate, special]
+
+    offset = max(len(key) for key in all_keys) + 2
+
+    for section in range(len(categories)):
+        if section > 0: display += "\n\n"
+
+        if   section == 0: display += "BINARY"
+        elif section == 1: display += "UNARY"
+        elif section == 2: display += "PREDICATE"
+        elif section == 3: display += "SPECIAL"
+
+        for column in range(len(categories[section])):
+            if column % 3 == 0: display += "\n"
+            display += f"{categories[section][column]}{' ' * (offset-len(categories[section][column]))}"
         
     text_box(display)
 
