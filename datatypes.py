@@ -23,36 +23,26 @@ class Function:
         environment.FUNARG[self.id] = environment.Environment(name="funarg")
         
     def eval(self, args: list) -> any:
+        def logic(args):
+            environment.FUNARG[self.id].match_arguments(self.parameters, args)
+            environment.ENV.extend(environment.FUNARG[self.id])
+
+            try:
+                value = interpreter.evaluate(self.body)
+            finally:
+                environment.ENV.end_scope(number=len(environment.FUNARG[self.id]))
+
+            return value
+
         if len(self.parameters) != len(args): 
             raise RuntimeError(f"{len(self.parameters)} arguments were expected but {len(args)} were given")
+        
+        value = environment.FUNARG[self.id].runlocal(logic, [args])
 
-#        self.refresh_id(separate=True)
-#        print(self.parameters, environment.FUNARG[self.id])
+        if isinstance(value, Function):
+            environment.FUNARG[value.id] = environment.FUNARG[value.id].merge(environment.FUNARG[self.id])
 
-        environment.FUNARG[self.id].begin_scope()
-        environment.FUNARG[self.id].match_arguments(self.parameters, args)
-        size = len(environment.ENV)
-        environment.ENV.extend(environment.FUNARG[self.id])
-
-        value = interpreter.evaluate(self.body)
-
-        print(f"""
-before: {size}
-after : {len(environment.ENV)}
-funarg: {len(environment.FUNARG[self.id])}
-""")
-
-        environment.ENV.end_scope(number=len(environment.ENV)-size)
-
-        print("env   : ", len(environment.ENV))
-        print("funarg: ", len(environment.FUNARG[self.id]), "\n\n")
-
-
-        if isinstance(value, Function): 
-            environment.FUNARG[value.id] = environment.FUNARG[self.id]
-            environment.FUNARG[value.id].begin_scope()
-       
-    #    self.garbage_collect()
+#        self.garbage_collect()
        
         return value
 
@@ -103,7 +93,6 @@ class String:
         return LinkedList().new(list(self))
 
     def __getitem__(self, index: int) -> "String": 
-        print(self.contents, 'at', index)
         return String([self.contents[index]])
 
     def __len__(self) -> int: 

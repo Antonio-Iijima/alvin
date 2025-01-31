@@ -94,6 +94,13 @@ class Environment:
     def extend(self, other: "Environment") -> None:
         """Add another environment as lowest scope to current environment."""
         self.env = other.env + self.env
+
+    def merge(self, other: "Environment") -> "Environment":
+        """Return an Environment comprising both self and other."""
+        return Environment(env=self.env+other.env)
+    
+    def trim(self):
+        self.env = list(scope for scope in self.env if scope != {})
        
     def __len__(self) -> int: 
         return len(self.env)

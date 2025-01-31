@@ -68,9 +68,11 @@ def iseqv(x, y):
     if isvariable(y): y = evaluate(y)
     return x == y
 
+
 def ref(literal, index):
     if isinstance(literal, (datatypes.String, datatypes.LinkedList)): return literal[int(index)]
     else: raise TypeError(f"unsupported type for 'ref': {type(literal)}")
+
 
 def setref(lst, i, item):
     if isinstance(lst, datatypes.LinkedList): lst[i] = item

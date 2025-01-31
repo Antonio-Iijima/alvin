@@ -6,19 +6,20 @@
 (def NOR (a b) (NOT (OR a b)))
 (def NAND (a b) (NOT (AND a b)))
 
-(def b> (expr)
+(def eval1 (expr)
   (cond
     ((== expr 't') t)
-    ((== expr 'f') f)             
-    ((== (car expr) '&') (AND (b> (ref expr 1)) (b> (ref expr 2))))
-    ((== (car expr) '|') (OR (b> (ref expr 1)) (b> (ref expr 2))))
+    ((== expr 'f') f)
+    ((== (car expr) '&') (AND (eval1 (ref expr 1)) (eval1 (ref expr 2))))
+    ((== (car expr) '|') (OR (eval1 (ref expr 1)) (eval1 (ref expr 2))))
     ((== (car expr) '~') 
       (cond
-        ((== (ref expr 1) '|') (NOR (b> (ref expr 2)) (b> (ref expr 3))))
-        ((== (ref expr 1) '&') (NAND (b> (ref expr 2)) (b> (ref expr 3))))
-        (else (NOT (b> (ref expr 1))))))
+        ((== (ref expr 1) '|') (NOR (eval1 (ref expr 2)) (eval1 (ref expr 3))))
+        ((== (ref expr 1) '&') (NAND (eval1 (ref expr 2)) (eval1 (ref expr 3))))
+        (else (NOT (eval1 (ref expr 1))))))
+    ((list? (car expr)) (eval1 (cons (eval1 (car expr)) (eval1 (cdr expr)))))
     (else expr)))
 
 
 
-(repeat 10 (show (b> (usrin boolexpr> ))))
+-- (repeat 10 (show (eval1 (usrin boolexpr> ))))
