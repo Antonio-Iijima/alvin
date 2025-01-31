@@ -60,7 +60,7 @@ class Environment:
 
     def match_arguments(self, parameters: list, args: list) -> None:
         """Matches a list of parameters with a list of arguments for use in functions."""
-        for i in range(len(parameters)): self.set(parameters[i], args[i])
+        for var, val in zip(parameters, args): self.env[0][var] = val
 
     def lookup(self, var: str, scope=0) -> any:
         """Finds nearest declaration of var."""

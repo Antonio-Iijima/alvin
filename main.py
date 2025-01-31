@@ -109,14 +109,14 @@ def repl(stream=sys.stdin) -> bool:
     expression = ""
     for line in stream:
         expression += line.strip()
-        if not is_complete(expression): continue
-        else: 
+        if is_complete(expression):
             if dFlag: interpret(expression)
             else:
                 try: interpret(expression)
                 except Exception as e: print(f"{type(e).__name__}: {e}")
             if iFlag: print(">>", flush=True, end=" ")
             expression = ""
+        else: continue
     
 
 def text_box(text: str, centered=False) -> None:
@@ -205,11 +205,10 @@ def show_keywords() -> None:
 ##### Main #####
 
 
-
-iFlag = True if '-i' in sys.argv else False
-dFlag = True if '-d' in sys.argv else False
     
 if __name__ == "__main__":
+    iFlag = True if '-i' in sys.argv else False
+    dFlag = True if '-d' in sys.argv else False
     if iFlag: sys.argv.remove("-i")
     if dFlag: sys.argv.remove("-d")
 

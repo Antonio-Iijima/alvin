@@ -33,7 +33,7 @@ class Function:
 
             return value
     
-        args = args or []
+        args = [] if args == None else interpreter.evlist(args) 
 
         if len(self.parameters) != len(args): 
             raise RuntimeError(f"{len(self.parameters)} arguments were expected but {len(args)} were given")
@@ -43,7 +43,7 @@ class Function:
         if isinstance(value, Function):
             environment.FUNARG[value.id] = environment.FUNARG[self.id].clone()
             environment.FUNARG[value.id].match_arguments(self.parameters, args)
-
+        print(environment.FUNARG)
         return value
 
     def generate_id(self, length=15): return f"id:{''.join(random.choices([str(i) for i in range(10)], k=length))}.{self.name}"
