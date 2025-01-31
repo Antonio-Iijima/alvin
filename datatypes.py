@@ -30,7 +30,7 @@ class Function:
             try:
                 value = interpreter.evaluate(self.body)
             finally:
-                environment.ENV.end_scope(number=len(environment.FUNARG[self.id]))
+                environment.ENV.end_scope(len(environment.FUNARG[self.id]))
 
             return value
 
@@ -40,7 +40,7 @@ class Function:
         value = environment.FUNARG[self.id].runlocal(logic, [args])
 
         if isinstance(value, Function):
-            environment.FUNARG[value.id] = environment.FUNARG[value.id].merge(environment.FUNARG[self.id])
+            environment.FUNARG[value.id] = environment.FUNARG[self.id]
 
 #        self.garbage_collect()
        
