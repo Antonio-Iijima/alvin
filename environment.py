@@ -4,6 +4,7 @@
 
 import datatypes
 import interpreter
+import copy
 
 
 
@@ -17,11 +18,11 @@ class Environment:
         self.env = env or [{}]
         self.name = name or ""
 
-    def copy(self) -> "Environment":
-        return Environment(self.name, self.env)
-
     def is_empty(self) -> bool:
         return self.env == [{}]
+
+    def clone(self):
+        return Environment(env=copy.deepcopy(self.env))
 
     def begin_scope(self) -> None:
         """Begin new scope."""
@@ -37,10 +38,9 @@ class Environment:
         elif var in self.env[scope]: return scope
         else: return self.find_scope(var, scope+1)
 
-    def set(self, var: str, val: any, scope=0, f=False) -> None: 
+    def set(self, var: str, val: any, scope=0) -> None: 
         """Assign val to var in the given scope (default current)."""
-        if var in self.env[scope]: raise KeyError(f"Variable {var} already present in FUNARG: {self.env}")
-        self.env[scope][var] = val if f else interpreter.evaluate(val)
+        self.env[scope][var] = interpreter.evaluate(val)
 
     def define(self, name: str, parameters: list, body: list) -> None:
         """Define a named function."""
@@ -69,21 +69,9 @@ class Environment:
         elif self.env[scope][var] == "###": NameError(f"unbound variable {var} in expression.")
         else: return self.env[scope][var]
 
-    def contains_value(self, val: any, scope=0) -> any:
-        "Recursive membership function. If true returns the variable, otherwise ###."
-        if scope == len(self.env): return "###"
-        for key in self.env[scope]:
-            if self.env[scope][key] == val: return key
-        else: return self.contains_value(val, scope+1)
-
-    def contains_variable(self, var: str, scope=0) -> any:
-        "Recursive membership function. If true returns the value, otherwise ###."
-        if scope == len(self.env): return "###"
-        for key in self.env[scope]:
-            if key == var: return self.env[scope][key]
-        else: return self.contains_value(var, scope+1)        
 
     def runlocal(self, logic: callable, args: list) -> any:
+        """Run any function in a local scope which is destroyed when the function returns."""
         self.begin_scope()
         try:
             value = logic(*args)

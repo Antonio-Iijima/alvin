@@ -6,7 +6,6 @@ import random
 import environment
 import interpreter
 import main
-import copy
 
 
 
@@ -15,14 +14,14 @@ import copy
 
 
 class Function:
-    def __init__(self, name='lambda', parameters=None, body=None) -> None:
-        self.name = name
-        self.parameters = [] or parameters
-        self.body = [] or body
+    def __init__(self, name=None, parameters=None, body=None) -> None:
+        self.name = name or 'lambda'
+        self.parameters = parameters or []
+        self.body = body or []
         self.id = self.generate_id()
         environment.FUNARG[self.id] = environment.Environment(name="funarg")
         
-    def eval(self, args: list) -> any:
+    def eval(self, args=None) -> any:
         def logic(args):
             environment.FUNARG[self.id].match_arguments(self.parameters, args)
             environment.ENV.extend(environment.FUNARG[self.id])
@@ -33,6 +32,8 @@ class Function:
                 environment.ENV.end_scope(len(environment.FUNARG[self.id]))
 
             return value
+    
+        args = args or []
 
         if len(self.parameters) != len(args): 
             raise RuntimeError(f"{len(self.parameters)} arguments were expected but {len(args)} were given")
@@ -40,23 +41,12 @@ class Function:
         value = environment.FUNARG[self.id].runlocal(logic, [args])
 
         if isinstance(value, Function):
-            environment.FUNARG[value.id] = environment.FUNARG[self.id]
+            environment.FUNARG[value.id] = environment.FUNARG[self.id].clone()
+            environment.FUNARG[value.id].match_arguments(self.parameters, args)
 
-#        self.garbage_collect()
-       
         return value
 
     def generate_id(self, length=15): return f"id:{''.join(random.choices([str(i) for i in range(10)], k=length))}.{self.name}"
-
-    def refresh_id(self, separate=False) -> None: 
-        new_id = self.generate_id()
-        environment.FUNARG[new_id] = environment.FUNARG.pop(self.id) if separate else environment.FUNARG.get(self.id)
-        self.id = new_id
-
-    def garbage_collect(self) -> None:
-        keys = list(environment.FUNARG.keys())
-        for id in keys:
-            if environment.FUNARG[id].is_empty(): environment.FUNARG.pop(id)
 
     def __str__(self) -> str:
         if self.name == 'lambda':

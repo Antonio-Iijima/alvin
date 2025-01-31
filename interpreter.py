@@ -157,7 +157,7 @@ SPECIAL = ["cond", "update", "set",
            "def", "lambda", "quote", 
            "del", "until", "do", 
            "eval", "ref", "usrin", "eqv?",
-           "repeat", "let", "setf", "setref"]
+           "repeat", "let", "setref"]
 
 
 KEYWORDS = {}
@@ -168,7 +168,6 @@ KEYWORDS.update([(key, True) for key in SPECIAL])
 
 
 def evaluate(expr):
-    #print(f"Evaluating {expr}\n\nwith FUNARGS\n{environment.FUNARG}\n\n\n")
     """Evaluates complete ALVIN expressions."""
     
     if   isdatatype(expr) : return expr
@@ -184,7 +183,6 @@ def evaluate(expr):
         elif operator == "def"     : environment.ENV.define(expr[1], expr[2], expr[3])
         elif operator in PREDICATE : return predicate(expr[1], PREDICATE[operator])
         elif operator == "until"   : return until(expr[1][0], expr[1][1], expr[2])
-        elif operator == "setf"    : environment.ENV.set(expr[1], expr[2], f=True)
         elif operator in UNARY     : return UNARY[operator](evaluate(expr[1]))
         elif operator == "update"  : environment.ENV.update(expr[1], expr[2])
         elif operator == "ref"     : return ref(evaluate(expr[1]), expr[2])

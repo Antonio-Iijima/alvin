@@ -120,6 +120,7 @@ def repl(stream=sys.stdin) -> bool:
     
 
 def text_box(text: str, centered=False) -> None:
+
     text = text.split("\n")
     w = max(len(line) for line in text)
     
@@ -131,7 +132,7 @@ def text_box(text: str, centered=False) -> None:
     for l in range(len(text)): 
         text[l] = text[l]
         space = w - len(text[l])
-        if centered: text[l] = f"{post} {' '*(space//2)}{text[l]}{' '*(space//2)} {post}"
+        if centered: text[l] = f"{post} {' '*(space//2)}{text[l]}{' '*((space//2)+(space%2))} {post}"
         else: text[l] = f"{post} {text[l]}{' '*space} {post}"
         print(text[l])
     print(f"{bottom}\n")
@@ -187,11 +188,17 @@ def show_keywords() -> None:
         elif section == 2: display += "PREDICATE"
         elif section == 3: display += "SPECIAL"
 
+        display += "\n"
+
         for column in range(len(categories[section])):
             if column % 3 == 0: display += "\n"
             display += f"{categories[section][column]}{' ' * (offset-len(categories[section][column]))}"
+
+        line_len = len(categories[section]) % 3
+        if line_len > 0:
+            display += ' ' * ((3 - line_len) * offset)
         
-    text_box(display)
+    text_box(display, centered=True)
 
 
 
