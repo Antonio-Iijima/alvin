@@ -2,11 +2,11 @@
 
 ### What is $\text{ALVIN}$?
 
-$\text{ALVIN}$ is a $\text{Lisp}$ variant implementation. The idea for this project can be credited to the implementation of $\text{Lisp}$ outlined in Paul Graham's essay *The Roots of Lisp*. It was developed in large part over the course of __CSCI 370: Programming Languages__ under Dr. Saverio Perugini.
+$\text{ALVIN}$ is a $\text{Lisp}$ variant implementation. The idea for this project can be credited to the implementation of $\text{Lisp}$ outlined in the essay *The Roots of Lisp*. It was developed in large part over the course of __CSCI 370: Programming Languages__ under Dr. Saverio Perugini.
 
 ### Basic Syntax
 
-$\text{ALVIN}$ uses a $\text{Lisp}$-like syntax: all expressions are contained within parentheses, and all operators, functions, and keywords are prefix. Most basic arithmetic expressions, e.g. `(+ 1 3)`, are the same as in $\text{Lisp}$, as are function calls, e.g. `(f 1 2)`. The following documentation attempts to provide an overview of the entire language.
+$\text{ALVIN}$ uses a $\text{Lisp}$-like syntax: all expressions are fully parenthesized and use prefix notation (often referred to as Cambridge Polish Notation). The following documentation attempts to provide an overview of the entire language.
 
 ##### N.B. - The provided grammars adhere to a very informal EBNF. Assume `(` and `)` are literal, `*` after a nonterminal indicates 0 or more occurrences, and `|` is the metacharacter 'or' unless otherwise specified.
 
@@ -49,31 +49,22 @@ Note again that there is only one unary logical operator, `not`. Mathematical ex
 
 ### Literals
 
-There are three kinds or classes of literal in $\text{ALVIN}$: numbers (ints or floats), Linked Lists, and strings. The grammar for lists and strings is very simple:
+There are three kinds or classes of literal in $\text{ALVIN}$: numbers (ints or floats), Linked Lists, and Strings. The grammar for lists and strings is very simple:
 
 ```
 <list>   ::= (<literal>*)
 <string> ::= '<char>*'
 ```
 
-A `<char>` can be any alphanumeric or special character. The list (or `LinkedList`) is implemented much the same as in $\text{Lisp}$. A list is either an `EmptyList` or a cell containing a `head` and a `tail`. The `head` is a literal; the `tail` may be either a `LinkedList` or an `EmptyList`.
+A `<char>` can be any alphanumeric or special character. The list (or `LinkedList`) is implemented much the same as in $\text{Lisp}$. It is either an `EmptyList` or a cell containing a `head` and a `tail`. The `head` is a literal; the `tail` may be either a `LinkedList` or an `EmptyList`.
 
 Several functions have been provided for manipulating lists and strings, many of which will be familiar from $\text{Lisp}$. The following functions can be used for both strings and lists:
-
 
 - `car` returns the head (or the first element of the string)
 - `cdr` returns the tail (or the remaining elements)
 - `len` returns the length
 - `ref` returns the element at a given index
-- `elem` checks for the presence of a provided element
-
-```
-<car>  ::= (car <list-or-str>)
-<car>  ::= (car <list-or-str>)
-<len>  ::= (len <list-or-str>)
-<ref>  ::= (ref <list-or-str> <index>)
-<elem> ::= (elem <element> <list-or-str>)
-```
+- `elem` checks for the presence of an element passed as the first argument
 
 Strings support the following additional function:
 
@@ -98,14 +89,14 @@ Lists support the following additional functions:
 
 Variables are taken from the set of all strings of characters excluding those reserved in the set `KEYWORDS`, which contains all the reserved words in the language. Thus not only `a`, `x`, and `this_is_a_really_long_example_variable_name`, but also `&` and `~` can be used as variable names.
 
-Variable binding in control structures and functions will be covered in the relevant sections. The only other way for the user to bind variables is through the use of `set` and `update`. The grammar:
+Variable binding is done through the use of `set` and `update`. The grammars:
 
 ```
 <set-expr>    ::= (set <variable> <value>)
 <update-expr> ::= (update <variable> <value>)
 ```
 
-`set` is used for variable declaration; `update` is used to modify a variable that has already been declared. Using `set` to reassign a previously declared variable will work, but is not recommended. Both `set` and `update` evaluate `<value>` before binding it to `<variable>`; therefore in the expression `(set i (+ 2 3))`, `i` is bound to 5, not `(+ 2 3)`. 
+`set` is used for variable declaration; `update` is used to modify a variable that has already been declared. Using `set` to reassign a previously declared variable will work, but for readability purposes it is typically better to use `update`. Both `set` and `update` evaluate `<value>` before binding it to `<variable>`; therefore in the expression `(set i (+ 2 3))`, `i` is bound to 5, not `(+ 2 3)`. 
 
 ##### N.B. - The `KEYWORDS` list can be displayed in an interactive interpreter session with the command `keywords`.
 
