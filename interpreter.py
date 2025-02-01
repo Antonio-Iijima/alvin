@@ -55,11 +55,18 @@ def NAND(a, b) : return not (bool(a) and bool(b))
 
 def elem(x, y)  : return x in y
 def boolean(x)  : return x == "#t"
-def lst(x)      : return x.make_List()
-def string(x)   : return x.make_String()
+def lst(x)      : return x.make_List() if isinstance(x, datatypes.String) else datatypes.LinkedList().new(list(str(x)))
+def string(x)   : return x.make_String() if isinstance(x, datatypes.LinkedList) else datatypes.String(list(str(x)))
 def show(expr)  : print(main.Python_to_ALVIN(expr))
 def evlist(x)   : return [evaluate(elem) for elem in x]
-def usrin(expr) : return datatypes.String(input(f"{' '.join(expr)} ").split())
+
+
+def usrin(expr):
+    text = input(f"{' '.join(expr)} ")
+    if text.startswith("(") and text.endswith(")"):
+        return datatypes.LinkedList().new(text.removeprefix("(").removesuffix(")").split())
+    return datatypes.String(text.split())
+
 
 def predicate(x, f): return f(evaluate(x)) if isvariable(x) else f(x)
 

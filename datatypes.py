@@ -36,14 +36,14 @@ class Function:
         args = [] if args == None else interpreter.evlist(args) 
 
         if len(self.parameters) != len(args): 
-            raise RuntimeError(f"{len(self.parameters)} arguments were expected but {len(args)} were given")
+            raise RuntimeError(f"{self.name} takes {len(self.parameters)} arguments but {len(args)} were given")
         
         value = environment.FUNARG[self.id].runlocal(logic, [args])
 
         if isinstance(value, Function):
             environment.FUNARG[value.id] = environment.FUNARG[self.id].clone()
             environment.FUNARG[value.id].match_arguments(self.parameters, args)
-        print(environment.FUNARG)
+            
         return value
 
     def generate_id(self, length=15): return f"id:{''.join(random.choices([str(i) for i in range(10)], k=length))}.{self.name}"
@@ -81,6 +81,9 @@ class String:
     
     def make_List(self) -> "LinkedList":
         return LinkedList().new(list(self))
+    
+    def make_String(self) -> "String":
+        return self
 
     def __getitem__(self, index: int) -> "String": 
         return String([self.contents[index]])
@@ -144,6 +147,9 @@ class LinkedList:
         if other.empty(): return LinkedList(self.head, self.tail)
         return LinkedList(self.head, self.tail.append(other))
     
+    def make_List(self) -> "LinkedList":
+        return self
+
     def make_String(self) -> "String":
         return String(list(self))
     
