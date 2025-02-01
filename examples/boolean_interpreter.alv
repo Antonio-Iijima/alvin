@@ -4,11 +4,13 @@
 (def OR (a b) (a t b))
 (def NOT (a) (a f t))
 
+-- flip t and f
 (def invert (x)
   (cond
     ((== 't' x) 'f')
     (else 't')))
 
+-- eliminate all ~ expressions
 (def prep (expr)
   (cond
     ((null? expr) expr)
