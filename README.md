@@ -346,5 +346,3 @@ They are all unary, and return `#t` or `#f` if their argument is of the specifie
 - `help` displays a textbox with some helpful information
 
 ## Known Bugs
-
-1. There is currently a bug that can be found running the `examples/boolexpr.alv` file, where apparently the variable `expr` is either improperly passed or improperly accessed.

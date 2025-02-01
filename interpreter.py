@@ -70,14 +70,25 @@ def usrin(expr):
 
 def predicate(x, f): return f(evaluate(x)) if isvariable(x) else f(x)
 
+
 def iseqv(x, y):
     if isvariable(x): x = evaluate(x)
     if isvariable(y): y = evaluate(y)
     return x == y
 
 
-def ref(literal, index):
-    if isinstance(literal, (datatypes.String, datatypes.LinkedList)): return literal[int(index)]
+def get_slice(index: str) -> tuple:
+    if isinstance(index, int): return (index, None)
+    else:
+        index = index.partition(":")
+        start = 0 if index[0] == '' else int(index[0])
+        end = "ad finem" if index[2] == '' else int(index[2])
+        return (start, end)
+
+
+def ref(literal, index: str):
+    start, stop = get_slice(index)
+    if isinstance(literal, (datatypes.String, datatypes.LinkedList)): return literal[start] if stop == None else literal[start:] if stop == "ad finem" else literal[start:stop]
     else: raise TypeError(f"unsupported type for 'ref': {type(literal)}")
 
 
@@ -121,7 +132,7 @@ def alvin_eval(expr):
     """Interpreter access from the command line."""
     if isinstance(expr, datatypes.String): return evaluate(expr.get_contents())
     elif isinstance(expr, datatypes.LinkedList): return evaluate(list(expr))
-    else: raise ValueError(f"cannot apply eval to non-literal expression {expr}")
+    else: return evaluate(expr)
 
 
 

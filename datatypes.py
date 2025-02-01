@@ -77,7 +77,7 @@ class String:
         else: return String(self.contents[1:])
 
     def append(self, other: "String") -> "String":
-        return String(list(self.contents) + list(other))
+        return String(list(self.contents) + list(other.contents))
     
     def make_List(self) -> "LinkedList":
         return LinkedList().new(list(self))
@@ -110,8 +110,6 @@ class String:
 
 
 class LinkedList:
-    NIL = None
-
     def __init__(self, head=None, tail=None) -> None:
         self.head = head
         self.tail = tail or EmptyList()
@@ -195,7 +193,7 @@ class EmptyList(LinkedList):
         return 0
 
     def merge(self, other: "LinkedList") -> "LinkedList":
-        return LinkedList.NIL if other.empty() else LinkedList(other.car(), other.cdr())
+        return None if other.empty() else LinkedList(other.car(), other.cdr())
     
     def __contains__(self, obj: any) -> bool:
         return False
