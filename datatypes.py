@@ -62,9 +62,13 @@ class Function:
 
 
 class String:
-    def __init__(self, contents: list) -> None:
-        self.contents = "".join([item.contents if isinstance(item, String) else str(item) for item in contents])
-    
+    def __init__(self, contents=None) -> None:
+        if isinstance(contents, str): self.contents = contents
+        if isinstance(contents, list): self.contents = "".join(String(item).contents for item in contents)
+        elif isinstance(contents, String): self.contents = contents.contents
+        elif isinstance(contents, LinkedList): self.contents = String(list(contents)).contents
+        else: self.contents = str(contents)
+        
     def get_contents(self) -> str:
         return self.contents
 
@@ -79,12 +83,6 @@ class String:
     def append(self, other: "String") -> "String":
         return String(list(self.contents) + list(other.contents))
     
-    def make_List(self) -> "LinkedList":
-        return LinkedList().new(list(self))
-    
-    def make_String(self) -> "String":
-        return self
-
     def __getitem__(self, index: int) -> "String": 
         return String([self.contents[index]])
 
@@ -111,15 +109,11 @@ class String:
 
 class LinkedList:
     def __init__(self, head=None, tail=None) -> None:
-        self.head = LinkedList().new(head) if isinstance(head, list) else head
-        self.tail = tail or EmptyList()
-
-    def new(self, contents: list|None) -> "LinkedList":
-        if isinstance(contents, String): return LinkedList().new(contents.contents.split())
-        elif contents in (None, []): return EmptyList()
-        elif isinstance(contents, list): return LinkedList(contents[0], LinkedList().new(contents[1:]))
-        elif isinstance(contents, LinkedList): return contents
-        else: raise TypeError(f"cannot create Linked List from type {type(contents)}")
+        if len(head) == 1: self.head, self.tail = LinkedList(head[0]) if isinstance(head[0], list) else head[0], EmptyList()
+        elif isinstance(head, (list, str, String)): self.head, self.tail = LinkedList(head[0]) if isinstance(head[0], list) else head[0], LinkedList(head[1:])
+        elif isinstance(head, LinkedList): self.head, self.tail = head.head, head.tail
+        elif isinstance(head, str): self.head = head
+        else: raise TypeError(f"cannot create Linked List from type {type(head)}")
   
     def empty(self) -> bool:
         return False
@@ -145,13 +139,7 @@ class LinkedList:
     def append(self, other: "LinkedList") -> "LinkedList":
         if other.empty(): return LinkedList(self.head, self.tail)
         return LinkedList(self.head, self.tail.append(other))
-    
-    def make_List(self) -> "LinkedList":
-        return self
-
-    def make_String(self) -> "String":
-        return String(list(self))
-    
+        
     def __list__(self) -> list:
         return [self.head] + list(self.tail)
 

@@ -12,7 +12,7 @@ import main
 
 
 
-def isbool(x)     : return x in ("#t","#f")
+def isbool(x)     : return x in ("#t","#f") or isinstance(x, bool)
 def isstring(x)   : return isinstance(x, datatypes.String)
 def isfunction(x) : return isinstance(x, datatypes.Function)
 def islist(x)     : return isinstance(x, datatypes.LinkedList)
@@ -24,7 +24,7 @@ def isdatatype(x) : return isinstance(x, (int, float, datatypes.String, datatype
 def isnumber(x)   : return isinstance(x, (float, int)) or (isinstance(x, str) and x.replace(".","").removeprefix("-").isnumeric())
 
 def cond(expr)   : return evaluate(expr[0][1]) if (expr[0][0] == "else" or evaluate(expr[0][0])) else cond(expr[1:])
-def split(x)     : return [x[:len(x)//2], x[len(x)//2:]]
+def split(x)     : return datatypes.LinkedList([c for c in x])
 def append(x, y) : return x.append(y)
 def cons(x, y)   : return y.cons(x)
 def car(x)       : return x.car()
@@ -55,17 +55,13 @@ def NAND(a, b) : return not (bool(a) and bool(b))
 
 def elem(x, y)  : return x in y
 def boolean(x)  : return x == "#t"
-def lst(x)      : return datatypes.LinkedList().new(x)
 def string(x)   : return datatypes.String(x)
+def lst(x)      : return datatypes.LinkedList(x)
 def show(expr)  : print(main.Python_to_ALVIN(expr))
 def evlist(x)   : return [evaluate(elem) for elem in x]
 
 
-def usrin(expr):
-    text = input(f"{' '.join(expr)} ")
-    if text.startswith("(") and text.endswith(")"):
-        return datatypes.LinkedList().new(text.removeprefix("(").removesuffix(")").split())
-    return datatypes.String(text.split())
+def usrin(expr): return datatypes.String(input(f"{' '.join(expr)} "))
 
 
 def predicate(x, f): return f(evaluate(x)) if isvariable(x) else f(x)
@@ -204,17 +200,17 @@ def evaluate(expr):
         elif operator == "update"  : environment.ENV.update(expr[1], expr[2])
         elif operator == "ref"     : return ref(evaluate(expr[1]), expr[2])
         elif operator == "set"     : environment.ENV.set(expr[1], expr[2])
+        elif operator == "string"  : return string(evaluate(expr[1:]))
         elif operator == "quote"   : return datatypes.String(expr[1])
         elif operator == "del"     : environment.ENV.delete(expr[1])
         elif operator == "repeat"  : return repeat(expr[1], expr[2])
+        elif operator == "list"    : return lst(evaluate(expr[1:]))
         elif operator == "eq"      : return iseq(expr[1], expr[2])
         elif operator == "let"     : return let(expr[1], expr[2])
         elif operator == "do"      : return do(expr[1], expr[2])
         elif operator == "eval"    : return alvin_eval(expr[1])
         elif operator == "usrin"   : return usrin(expr[1:])
         elif operator == "cond"    : return cond(expr[1:])
-        elif operator == "list"    : return lst(expr[1:])
-        elif operator == "string"  : return string(expr[1:])
        
         else: print(f"Quid significat hoc? {expr[0]}"); return expr
 

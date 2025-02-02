@@ -42,6 +42,7 @@ def retype(x: str):
     if isinstance(x, str):
         if x.removeprefix("-").isnumeric(): return int(x)
         elif x.removeprefix("-").replace(".","").isnumeric(): return float(x)
+        elif x in ("#t", "#f"): return x == "#t"
     return x
 
 
@@ -60,7 +61,7 @@ def ALVIN_to_Python(s: str) -> list[str]:
             if len(contents) == 1 and isinstance(contents[0], list): 
                 contents = contents[0]
                 if contents == []: return [datatypes.EmptyList()] + lst_to_Python(expr[closing+1:])
-                else: return [datatypes.LinkedList().new(contents)] + lst_to_Python(expr[closing+1:])
+                else: return [datatypes.LinkedList(contents)] + lst_to_Python(expr[closing+1:])
             else: return [datatypes.String(contents)] + lst_to_Python(expr[closing+1:])
         else: return [retype(expr[0])] + lst_to_Python(expr[1:])
 

@@ -14,11 +14,12 @@
 (def prep (expr)
   (cond
     ((null? expr) expr)
-    ((== '~' (car expr)) (append (invert (ref expr 1)) (prep (ref expr 2:))))
-    (else (append (car expr) (prep (cdr expr))))))
+    ((== '~' (car expr)) (append (invert (ref expr 1)) (prep (ref expr 3:))))
+    (else (append (car expr) (prep (ref expr 2:))))))
 
 (def eval1 (expr)
   (cond
+    ((null? expr) expr)
     ((== expr 't') t)
     ((== expr 'f') f)
     ((== (ref expr 1) '&') (AND (eval1 (car expr)) (eval1 (ref expr 2:))))
@@ -26,4 +27,5 @@
     ((== (ref expr 1) '=') (set (car expr) (eval1 (ref expr 2:))))
     (else expr)))
 
-(repeat 10 (show (eval1 (prep (usrin boolexpr> )))))
+
+(until (#f ()) (show (eval1 (prep (usrin boolexpr> )))))
