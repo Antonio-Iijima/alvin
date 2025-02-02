@@ -63,7 +63,7 @@ class Function:
 
 class String:
     def __init__(self, contents: list) -> None:
-        self.contents = "".join([str(item) for item in contents])
+        self.contents = "".join([item.contents if isinstance(item, String) else str(item) for item in contents])
     
     def get_contents(self) -> str:
         return self.contents
@@ -111,11 +111,12 @@ class String:
 
 class LinkedList:
     def __init__(self, head=None, tail=None) -> None:
-        self.head = head
+        self.head = LinkedList().new(head) if isinstance(head, list) else head
         self.tail = tail or EmptyList()
 
     def new(self, contents: list|None) -> "LinkedList":
-        if contents in (None, []): return EmptyList()
+        if isinstance(contents, String): return LinkedList().new(contents.contents.split())
+        elif contents in (None, []): return EmptyList()
         elif isinstance(contents, list): return LinkedList(contents[0], LinkedList().new(contents[1:]))
         elif isinstance(contents, LinkedList): return contents
         else: raise TypeError(f"cannot create Linked List from type {type(contents)}")

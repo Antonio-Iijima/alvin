@@ -55,8 +55,8 @@ def NAND(a, b) : return not (bool(a) and bool(b))
 
 def elem(x, y)  : return x in y
 def boolean(x)  : return x == "#t"
-def lst(x)      : return x.make_List() if isinstance(x, datatypes.String) else datatypes.LinkedList().new(list(str(x)))
-def string(x)   : return x.make_String() if isinstance(x, datatypes.LinkedList) else datatypes.String(list(str(x)))
+def lst(x)      : return datatypes.LinkedList().new(x)
+def string(x)   : return datatypes.String(x)
 def show(expr)  : print(main.Python_to_ALVIN(expr))
 def evlist(x)   : return [evaluate(elem) for elem in x]
 
@@ -71,7 +71,7 @@ def usrin(expr):
 def predicate(x, f): return f(evaluate(x)) if isvariable(x) else f(x)
 
 
-def iseqv(x, y):
+def iseq(x, y):
     if isvariable(x): x = evaluate(x)
     if isvariable(y): y = evaluate(y)
     return x == y
@@ -145,7 +145,6 @@ UNARY = {
     "car"   : car,      "cdr"    : cdr,
     "len"   : len,      "sort"   : sorted,
     "split" : split,    "show"   : show,
-    "list"  : lst,      "string" : string
     }
 
 
@@ -173,8 +172,8 @@ PREDICATE = {
 
 SPECIAL = ["cond", "update", "set", 
            "def", "lambda", "quote", 
-           "del", "until", "do", 
-           "eval", "ref", "usrin", "eqv?",
+           "del", "until", "do", "list", "string",
+           "eval", "ref", "usrin", "eq",
            "repeat", "let", "setref"]
 
 
@@ -208,12 +207,14 @@ def evaluate(expr):
         elif operator == "quote"   : return datatypes.String(expr[1])
         elif operator == "del"     : environment.ENV.delete(expr[1])
         elif operator == "repeat"  : return repeat(expr[1], expr[2])
-        elif operator == "eqv?"    : return iseqv(expr[1], expr[2])
+        elif operator == "eq"      : return iseq(expr[1], expr[2])
         elif operator == "let"     : return let(expr[1], expr[2])
         elif operator == "do"      : return do(expr[1], expr[2])
         elif operator == "eval"    : return alvin_eval(expr[1])
         elif operator == "usrin"   : return usrin(expr[1:])
         elif operator == "cond"    : return cond(expr[1:])
+        elif operator == "list"    : return lst(expr[1:])
+        elif operator == "string"  : return string(expr[1:])
        
         else: print(f"Quid significat hoc? {expr[0]}"); return expr
 

@@ -1,0 +1,9 @@
+(def null. (x) (eq x '()'))
+(def and. (x y) (and x y))
+(def not. (x) (not x))
+(def append. (x y) (append x y))
+(def pair. (x y) 
+  (cond
+    ((and. (null. x) (null. y)) #f)
+    ((and. (not. (atom x)) (not. (atom y)))
+        (cons (list. (car x) (car y))))))
