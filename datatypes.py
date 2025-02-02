@@ -109,11 +109,11 @@ class String:
 
 class LinkedList:
     def __init__(self, head=None, tail=None) -> None:
-        if len(head) == 1: self.head, self.tail = LinkedList(head[0]) if isinstance(head[0], list) else head[0], EmptyList()
-        elif isinstance(head, (list, str, String)): self.head, self.tail = LinkedList(head[0]) if isinstance(head[0], list) else head[0], LinkedList(head[1:])
-        elif isinstance(head, LinkedList): self.head, self.tail = head.head, head.tail
-        elif isinstance(head, str): self.head = head
-        else: raise TypeError(f"cannot create Linked List from type {type(head)}")
+        if tail == None:
+            if isinstance(head, list): self.head, self.tail = LinkedList(head[0]) if isinstance(head[0], list) else head[0], EmptyList() if len(head) == 1 else LinkedList(head[1:])
+            elif isinstance(head, LinkedList): self.head, self.tail = head.head, head.tail
+            else: self.head, self.tail = head, EmptyList()
+        else: self.head, self.tail = head, tail
   
     def empty(self) -> bool:
         return False

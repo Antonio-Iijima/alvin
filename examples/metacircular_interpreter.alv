@@ -1,7 +1,18 @@
 (def null. (x) (eq x '()'))
-(def and. (x y) (and x y))
-(def not. (x) (not x))
-(def append. (x y) (append x y))
+
+(def and. (x y)
+  (cond (x (cond (y #t) 
+                 (else #f)))
+        (else #f)))
+
+(def not. (x)
+  (cond (x #f)
+        (else #t)))
+
+(def append. (x y)
+  (cond ((null. x) y)
+        (else (cons (car x) (append. (cdr x) y)))))
+
 (def pair. (x y) 
   (cond
     ((and. (null. x) (null. y)) #f)
