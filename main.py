@@ -208,6 +208,7 @@ def show_keywords() -> None:
 
     
 if __name__ == "__main__":
+    sys.setrecursionlimit(10**5)
     iFlag = True if '-i' in sys.argv else False
     dFlag = True if '-d' in sys.argv else False
     if iFlag: sys.argv.remove("-i")
