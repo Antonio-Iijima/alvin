@@ -12,11 +12,11 @@ import main
 
 
 
-def isbool(x)     : return x in ("#t","#f") or isinstance(x, bool)
 def isstring(x)   : return isinstance(x, datatypes.String)
 def isfunction(x) : return isinstance(x, datatypes.Function)
 def islist(x)     : return isinstance(x, datatypes.LinkedList)
 def iskeyword(x)  : return isinstance(x, str) and x in KEYWORDS
+def isbool(x)     : return x in ("#t","#f") or isinstance(x, bool)
 def isvariable(x) : return isinstance(x, str) and not(iskeyword(x) or isdatatype(x) or isnumber(x))
 def isatom(x)     : return isinstance(x, (int, float)) or (isinstance(x, datatypes.String) and len(x) == 1)
 def isnull(x)     : return x == [] or isinstance(x, datatypes.EmptyList) or isinstance(x, datatypes.String) and len(x) == 0
@@ -53,12 +53,12 @@ def XOR(a, b)  : return bool(a) is not bool(b)
 def NOR(a, b)  : return not (bool(a) or bool(b))
 def NAND(a, b) : return not (bool(a) and bool(b))
 
-def elem(x, y)  : return x in y
-def boolean(x)  : return x == "#t"
-def string(x)   : return datatypes.String(x)
-def lst(x)      : return datatypes.LinkedList(x)
-def show(expr)  : print(main.Python_to_ALVIN(expr))
 def evlist(x)   : return [evaluate(elem) for elem in x]
+def show(expr)  : print(main.Python_to_ALVIN(expr))
+def lst(x)      : return datatypes.LinkedList(x)
+def string(x)   : return datatypes.String(x)
+def boolean(x)  : return x == "#t"
+def elem(x, y)  : return x in y
 
 
 def usrin(expr): return datatypes.String(input(f"{' '.join(expr)} "))
