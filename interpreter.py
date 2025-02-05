@@ -5,7 +5,7 @@
 import datatypes
 import environment
 import main
-
+import re
 
 
 ##### Subsidiary functions #####
@@ -21,7 +21,7 @@ def isvariable(x) : return isinstance(x, str) and not(iskeyword(x) or isdatatype
 def isatom(x)     : return isinstance(x, (int, float)) or (isinstance(x, datatypes.String) and len(x) == 1)
 def isnull(x)     : return x == [] or isinstance(x, datatypes.EmptyList) or isinstance(x, datatypes.String) and len(x) == 0
 def isdatatype(x) : return isinstance(x, (int, float, datatypes.String, datatypes.LinkedList, datatypes.Function)) or x == []
-def isnumber(x)   : return isinstance(x, (float, int)) or (isinstance(x, str) and x.replace(".","").removeprefix("-").isnumeric())
+def isnumber(x)   : return re.match(r"^[0-9]*[.]?[0-9]+$", str(x))
 
 def cond(expr)   : return evaluate(expr[0][1]) if (expr[0][0] == "else" or evaluate(expr[0][0])) else cond(expr[1:])
 def split(x)     : return datatypes.LinkedList([c for c in x])
