@@ -32,8 +32,13 @@ class Function:
                 environment.ENV.end_scope(len(environment.FUNARG[self.id]))
 
             return value
+<<<<<<< Updated upstream
     
         args = [] if args == None else interpreter.evlist(args) 
+=======
+        
+        args = [] if args == None else interpreter.evlist(args)
+>>>>>>> Stashed changes
 
         if len(self.parameters) != len(args): 
             raise RuntimeError(f"{self.name} takes {len(self.parameters)} arguments but {len(args)} were given")
@@ -50,7 +55,7 @@ class Function:
 
     def __str__(self) -> str:
         if self.name == 'lambda':
-            return f"<lambda {main.Python_to_ALVIN(self.parameters)} {main.Python_to_ALVIN(self.body)}>"
+            return f"<lambda {main.Python_to_Alvin(self.parameters)} {main.Python_to_Alvin(self.body)}>"
         return f"<{self.name}>"
     
     def __repr__(self) -> str: return str(self)

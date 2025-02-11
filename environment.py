@@ -40,6 +40,7 @@ class Environment:
 
     def set(self, var: str, val: any, scope=0) -> None: 
         """Assign val to var in the given scope (default current)."""
+        self.garbage_collect(var)
         self.env[scope][var] = interpreter.evaluate(val)
 
     def define(self, name: str, parameters: list, body: list) -> None:
@@ -56,6 +57,7 @@ class Environment:
         """Delete closest declaration of var."""
         scope = self.find_scope(var)
         if scope == -1: raise ValueError(f"cannot delete variable {var} before assignment.")
+        self.garbage_collect(var)
         self.env[scope].pop(var)
 
     def match_arguments(self, parameters: list, args: list) -> None:
@@ -83,6 +85,12 @@ class Environment:
         """Add another environment as lowest scope to current environment."""
         self.env = other.env + self.env
 
+<<<<<<< Updated upstream
+=======
+    def garbage_collect(self, var: str, scope=0) -> None:
+        current = self.env[scope].get(var, None); isinstance(current, datatypes.Function) and FUNARG.pop(current.id) 
+
+>>>>>>> Stashed changes
     def __len__(self) -> int: 
         return len(self.env)
 
@@ -100,3 +108,5 @@ class Environment:
 
 ENV = Environment(name="env")
 FUNARG = {}
+RELOAD = False
+LINES = len(open("extensions.py").readlines())
