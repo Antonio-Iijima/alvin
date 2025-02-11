@@ -15,22 +15,12 @@ import importlib
 
 
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-def is_complete(expr: list[str]|str): return expr.count("(") == expr.count(")") and expr.count("'") % 2 == 0
-=======
 def is_complete(expr: list[str]|str): return expr.count("(") == expr.count(")")
 
->>>>>>> Stashed changes
-=======
-def is_complete(expr: list[str]|str): return expr.count("(") == expr.count(")")
-
->>>>>>> Stashed changes
 
 def syntax_check(expr: list[str]) -> None:
     here = f"in {' '.join(expr)}"
     if not is_complete(expr):
-        if expr.count("'") % 2 == 1: raise SyntaxError(f"unmatched quote {here}")
         if expr.count("(") > expr.count(")"): raise SyntaxError(f"unmatched opening parenthesis {here}")
         else: raise SyntaxError(f"unmatched closing parenthesis {here}")
     for i in range(len(expr)-1):
@@ -55,35 +45,6 @@ def retype(x: str) -> int|float|bool|str|list:
     return x
 
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-def ALVIN_to_Python(s: str) -> list[str]:
-    def ALVIN_to_list(s: str) -> list[str]: return s.replace("(", " ( ").replace(")", " ) ").replace("'", " ' ").split()
-
-    def lst_to_Python(expr: str) -> list[str]:
-        syntax_check(expr)
-        if expr == []: return []
-        elif expr[0] == "(": 
-            closing = match(expr, "(", ")")
-            return [lst_to_Python(expr[1:closing])] + lst_to_Python(expr[closing+1:])
-        elif expr[0] == "'": 
-            closing = match(expr, "'")
-            contents = lst_to_Python(expr[1:closing])
-            if len(contents) == 1 and isinstance(contents[0], list): 
-                contents = contents[0]
-                if contents == []: return [datatypes.EmptyList()] + lst_to_Python(expr[closing+1:])
-                else: return [datatypes.LinkedList(contents)] + lst_to_Python(expr[closing+1:])
-            else: return [datatypes.String(contents)] + lst_to_Python(expr[closing+1:])
-        else: return [retype(expr[0])] + lst_to_Python(expr[1:])
-
-    return lst_to_Python(ALVIN_to_list(s))[0]
-
-
-def Python_to_ALVIN(s: list[str] | str | int | float) -> str | None:
-    if s == None                 : return None
-    elif isinstance(s, bool)     : return "#t" if s else "#f"
-    return str(s) if isinstance(s, (int, float, str, datatypes.Function, datatypes.String, datatypes.LinkedList)) else f"({' '.join(Python_to_ALVIN(elem) for elem in s if elem != None)})" 
-=======
 def Alvin_to_list(s: str) -> list[str]: return s.replace("(", " ( ").replace(")", " ) ").replace("'", " ' ").split()
 
 
@@ -107,40 +68,11 @@ def preprocess(expr: list) -> list[str]:
 def Alvin_to_Python(s: str) -> list[str]: syntax_check(s); return preprocess(lst_to_Python(Alvin_to_list(s)))[0]
 
 
-=======
-def Alvin_to_list(s: str) -> list[str]: return s.replace("(", " ( ").replace(")", " ) ").replace("'", " ' ").split()
-
-
-def lst_to_Python(expr: str) -> list[str]:
-    if expr == []: return []
-    elif expr[0] == "(": 
-        closing = p_match(expr)
-        return [lst_to_Python(expr[1:closing]), *lst_to_Python(expr[closing+1:])]
-    else: return [retype(expr[0]), *lst_to_Python(expr[1:])]
-
-
-def preprocess(expr: list) -> list[str]:
-    if isinstance(expr, list):
-        if expr == []: return []
-        elif isinstance(expr[0], list): return [preprocess(expr[0]), *preprocess(expr[1:])]
-        elif expr[0] == "'": return [["quote", preprocess(expr[1])], *preprocess(expr[2:])]
-        else: return [retype(expr[0]), *preprocess(expr[1:])]
-    else: return expr
-
-
-def Alvin_to_Python(s: str) -> list[str]: syntax_check(s); return preprocess(lst_to_Python(Alvin_to_list(s)))[0]
-
-
->>>>>>> Stashed changes
 def Python_to_Alvin(s: list[str] | str | int | float) -> str | None:
     if s == None: return None
     elif isinstance(s, bool): return "#t" if s else "#f"
     return f"'{Python_to_Alvin(s[1])}" if interpreter.isquote(s) else f"({' '.join(Python_to_Alvin(elem) for elem in s if elem != None)})" if isinstance(s, list) else str(s)
 
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
 
 
@@ -155,24 +87,6 @@ def repl(stream=sys.stdin) -> bool:
         """Interprets a line of code"""
         line = line.strip()
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-        def get_output(line):
-            if line == "help"                        : help()
-            elif line in ("exit", "quit")            : close()
-            elif line == "clear"                     : welcome()
-            elif line.startswith("'")                : print(line)
-            elif line == "" or line.startswith("--") : print(end='')
-            elif line == "keywords"                  : show_keywords()
-            elif line == "debug.env"                 : print(environment.ENV)
-            elif line == "debug.funarg"              : print(environment.FUNARG)
-            elif line.startswith("python")           : print(eval(line.removeprefix("python")))
-            elif line in interpreter.KEYWORDS        : print(f"{line} is an operator, built-in function or reserved word.")
-            else: return Python_to_ALVIN(interpreter.evaluate(ALVIN_to_Python(line)))
-        
-=======
-=======
->>>>>>> Stashed changes
         def get_output(line: str):
             if line in ("exit", "quit")      : close()
             elif line.startswith("@start")   : extend()
@@ -189,10 +103,6 @@ def repl(stream=sys.stdin) -> bool:
                     case "debug.funarg" : print(environment.FUNARG)
                     case _              : return Python_to_Alvin(interpreter.evaluate(Alvin_to_Python(line)))
             
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
         output = get_output(line)
         if output != None: print(output)
 
@@ -287,44 +197,21 @@ def close() -> None:
 def show_keywords() -> None:
     display = """"""
 
-    predicate = list(interpreter.PREDICATE.keys())
     all_keys  = list(interpreter.KEYWORDS.keys())
-    binary    = list(interpreter.BINARY.keys())
-    unary     = list(interpreter.UNARY.keys())
+    operator   = list(interpreter.OPERATOR.keys())
     special   = interpreter.SPECIAL
     extended = list(extensions.FUNCTIONS.keys())
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    categories = [binary, unary, predicate, special]
-=======
     categories = [operator, special, extended]
->>>>>>> Stashed changes
-=======
-    categories = [operator, special, extended]
->>>>>>> Stashed changes
 
     offset = max(len(key) for key in all_keys) + 2
 
     for section in range(len(categories)):
         if section > 0: display += "\n\n"
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-        if   section == 0: display += "BINARY"
-        elif section == 1: display += "UNARY"
-        elif section == 2: display += "PREDICATE"
-        elif section == 3: display += "SPECIAL"
-=======
         if   section == 0: display += "OPERATORS"
         elif section == 1: display += "SPECIAL"
         elif section == 2: display += "EXTENSIONS"
->>>>>>> Stashed changes
-=======
-        if   section == 0: display += "OPERATORS"
-        elif section == 1: display += "SPECIAL"
-        elif section == 2: display += "EXTENSIONS"
->>>>>>> Stashed changes
 
         display += "\n"
 
