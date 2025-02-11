@@ -86,7 +86,10 @@ class Environment:
         self.env = other.env + self.env
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
     def garbage_collect(self, var: str, scope=0) -> None:
         current = self.env[scope].get(var, None); isinstance(current, datatypes.Function) and FUNARG.pop(current.id) 
 

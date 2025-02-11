@@ -33,8 +33,13 @@ class Function:
 
             return value
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     
         args = [] if args == None else interpreter.evlist(args) 
+=======
+        
+        args = [] if args == None else interpreter.evlist(args)
+>>>>>>> Stashed changes
 =======
         
         args = [] if args == None else interpreter.evlist(args)

@@ -8,11 +8,16 @@ import main
 import re
 import extensions
 import importlib
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 
 ##### Subsidiary functions #####
 
 
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 def isstring(x)   : return isinstance(x, datatypes.String)
 def isfunction(x) : return isinstance(x, datatypes.Function)
@@ -33,6 +38,8 @@ def car(x)       : return x.car()
 def cdr(x)       : return x.cdr()
 def merge(x, y)  : return x.merge(y)
 =======
+=======
+>>>>>>> Stashed changes
 def isquote(x)    : return isinstance(x, list) and len(x) == 2 and x[0] == "quote"
 def isvariable(x) : return isatom(x) and not(iskeyword(x) or isnumber(x) or isbool(x))
 def iskeyword(x)  : return isinstance(x, str) and (x in KEYWORDS or iscxr(x))
@@ -48,6 +55,9 @@ def isnull(x)     : return x == []
 def cond(expr)   : return evaluate(expr[0][1]) if (expr[0][0] == "else" or evaluate(expr[0][0])) else cond(expr[1:])
 def append(x, y) : return x + y
 def cons(x, y)   : return [x] + y
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 def eq(x, y)       : return x == y
@@ -73,10 +83,15 @@ def NOR(a, b)  : return not (bool(a) or bool(b))
 def NAND(a, b) : return not (bool(a) and bool(b))
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 def evlist(x)   : return [evaluate(elem) for elem in x]
 def show(expr)  : print(main.Python_to_ALVIN(expr))
 def lst(x)      : return datatypes.LinkedList(x)
 def string(x)   : return datatypes.String(x)
+=======
+def evlist(x)   : return list(evaluate(elem) for elem in x)
+def show(expr)  : print(main.Python_to_Alvin(expr))
+>>>>>>> Stashed changes
 =======
 def evlist(x)   : return list(evaluate(elem) for elem in x)
 def show(expr)  : print(main.Python_to_Alvin(expr))
@@ -86,8 +101,11 @@ def elem(x, y)  : return x in y
 
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 def usrin(expr): return datatypes.String(input(f"{' '.join(expr)} "))
 =======
+=======
+>>>>>>> Stashed changes
 def head(x): 
     if islist(x): return x[0] 
     raise ValueError(f"unsupported argument for 'car': {main.Python_to_Alvin(x)}")
@@ -109,6 +127,7 @@ def usrin(expr): return input(f"{' '.join(expr)} ")
 def predicate(x, f): return f(evaluate(x)) if isvariable(x) else f(x)
 
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 def iseq(x, y):
     if isvariable(x): x = evaluate(x)
@@ -134,6 +153,12 @@ def ref(literal, index: str):
 def setref(lst, i, item):
     if isinstance(lst, datatypes.LinkedList): lst[i] = item
     else: raise TypeError(f"unsupported type for 'setref': {type(lst)}")
+=======
+def ref(lst, i): return lst[i]
+    
+
+def setref(lst, i, item): lst[int(i)] = item
+>>>>>>> Stashed changes
 =======
 def ref(lst, i): return lst[i]
     
@@ -186,6 +211,7 @@ def Alvin_eval(expr):
 
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 UNARY = {
     "not"   : NOT,      "++"     : increment,
     "car"   : car,      "cdr"    : cdr,
@@ -214,6 +240,8 @@ PREDICATE = {
     "string?"  : isstring,  "list?" : islist,
     "number?"  : isnumber,  "bool?" : isbool
 =======
+=======
+>>>>>>> Stashed changes
 OPERATOR = {
     "not"     : NOT,        "++"    : increment,
     "len"     : len,        "sort"  : sorted,
@@ -233,6 +261,9 @@ OPERATOR = {
     "string?" : isstring,   "list?" : islist,
     "number?" : isnumber,   "bool?" : isbool,
     "setref"  : setref
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }
 
@@ -241,8 +272,13 @@ SPECIAL = ["cond", "update", "set",
            "def", "lambda", "quote", 
            "del", "until", "do", "list", "string",
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
            "eval", "ref", "usrin", "eq",
            "repeat", "let", "setref"]
+=======
+           "eval", "ref", "usrin",
+           "repeat", "let"]
+>>>>>>> Stashed changes
 
 
 KEYWORDS = {}
@@ -257,11 +293,15 @@ KEYWORDS.update(PREDICATE)
 KEYWORDS = {}
 KEYWORDS.update(OPERATOR)
 KEYWORDS.update(extensions.FUNCTIONS)
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 KEYWORDS.update([(key, True) for key in SPECIAL])
 
 
 def evaluate(expr):
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
     """Evaluates complete ALVIN expressions."""
     
@@ -302,6 +342,10 @@ def evaluate(expr):
 =======
     """Evaluates complete Alvin expressions."""
 
+=======
+    """Evaluates complete Alvin expressions."""
+
+>>>>>>> Stashed changes
     if environment.RELOAD: 
         environment.RELOAD = False
         importlib.reload(extensions)
@@ -344,5 +388,9 @@ def evaluate(expr):
 
         elif islist(head): post = evlist(expr); return expr if post == expr else evaluate(post)
 
+<<<<<<< Updated upstream
+    raise SyntaxError(f"unidentified expression type in {expr}: {type(expr).__name__}")
+>>>>>>> Stashed changes
+=======
     raise SyntaxError(f"unidentified expression type in {expr}: {type(expr).__name__}")
 >>>>>>> Stashed changes
