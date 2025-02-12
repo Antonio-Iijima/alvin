@@ -4,7 +4,7 @@
 
 ### What is $\text{Alvin}$?
 
-$\text{Alvin}$ is recursive, self-extensible metaprogramming language. The initial idea for this project can be credited to the implementation of $\text{Lisp}$ outlined in the essay *The Roots of Lisp*. It was developed in large part over the course of __CSCI 370: Programming Languages__ under Dr. Saverio Perugini.
+$\text{Alvin}$ is a self-extensible metaprogramming language. The initial idea for this project can be credited to the implementation of $\text{Lisp}$ outlined in the essay *The Roots of Lisp*. It was developed in large part over the course of __CSCI 370: Programming Languages__ under Dr. Saverio Perugini.
 
 ### Basic Syntax
 
