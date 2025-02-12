@@ -158,8 +158,8 @@ def text_box(text: str, centered=False) -> None:
 
 
 def help() -> None: 
-    text_box("""The Alvin language was developed as an independent project over the
-course of CSCI 370: Programming Languages at Ave Maria University.
+    text_box("""The ALVIN programming language was developed as an independent research project,
+which began in CSCI 370: Programming Languages at Ave Maria University.
         
 Documentation can be found on GitHub:
 https://github.com/Antonio-Iijima/Alvin
