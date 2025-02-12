@@ -1,8 +1,10 @@
+<img src="https://private-user-images.githubusercontent.com/162367416/412246642-2e4c4a9b-d6a9-401a-9da4-93dec635a35a.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MzkzMjk4MzEsIm5iZiI6MTczOTMyOTUzMSwicGF0aCI6Ii8xNjIzNjc0MTYvNDEyMjQ2NjQyLTJlNGM0YTliLWQ2YTktNDAxYS05ZGE0LTkzZGVjNjM1YTM1YS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUwMjEyJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MDIxMlQwMzA1MzFaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1iOTc2NzE0ODBiMWQ5NWVhNzg4NWE1NDRhOWZjMmFjNmM0YzY2MGZiYWQwMDdhNDMzMzU4MDQ2YzNjZWNmY2Q3JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.zedB6ZlPeEQmk7_d3ytevvHH1T8HBS2oyfA68fs86A4" width=30% height=30%>
+
 # $\text{Alvin}$: The Language
 
 ### What is $\text{Alvin}$?
 
-$\text{Alvin}$ is recursive, self-extensible metaprogramming language. The initial idea for this project can be credited to the implementation of $\text{Lisp}$ outlined in the essay *The Roots of Lisp*. It was developed in large part over the course of __CSCI 370: Programming Languages__ under Dr. Saverio Perugini.
+$\text{Alvin}$ is a self-extensible metaprogramming language. The initial idea for this project can be credited to the implementation of $\text{Lisp}$ outlined in the essay *The Roots of Lisp*. It was developed in large part over the course of __CSCI 370: Programming Languages__ under Dr. Saverio Perugini.
 
 ### Basic Syntax
 
