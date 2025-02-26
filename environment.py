@@ -71,7 +71,6 @@ class Environment:
         elif self.env[scope][var] == "###": NameError(f"unbound variable {var} in expression.")
         else: return self.env[scope][var]
 
-
     def runlocal(self, logic: callable, args: list) -> any:
         """Run any function in a local scope which is destroyed when the function returns."""
         self.begin_scope()

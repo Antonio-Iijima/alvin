@@ -68,8 +68,8 @@ def tail(x):
 
 def evcxr(x, a):
     if x == "": return a
-    elif x[0] == "a": return evcxr(x[1:], head(a))
-    elif x[0] == "d": return evcxr(x[1:], tail(a))
+    elif x[-1] == "a": return evcxr(x[:-1], head(a))
+    elif x[-1] == "d": return evcxr(x[:-1], tail(a))
 
 
 def usrin(expr): return input(f"{' '.join(expr)} ")
@@ -120,6 +120,14 @@ def Alvin_eval(expr):
     return evaluate(expr)
 
 
+def get_file(filepath):
+    return open(filepath).readlines()
+
+
+def reload_extensions():
+    environment.RELOAD = False
+    importlib.reload(extensions)
+    KEYWORDS.update(extensions.FUNCTIONS)
 
 ##### Evaluation #####
 
@@ -151,7 +159,7 @@ SPECIAL = ["cond", "update", "set",
            "def", "lambda", "quote", 
            "del", "until", "do", "list", "string",
            "eval", "ref", "usrin",
-           "repeat", "let"]
+           "repeat", "let", "get"]
 
 
 KEYWORDS = {}
@@ -163,10 +171,7 @@ KEYWORDS.update([(key, True) for key in SPECIAL])
 def evaluate(expr):
     """Evaluates complete Alvin expressions."""
 
-    if environment.RELOAD: 
-        environment.RELOAD = False
-        importlib.reload(extensions)
-        KEYWORDS.update(extensions.FUNCTIONS)
+    if environment.RELOAD: reload_extensions()
 
     if isatom(expr):
         if isvariable(expr): return environment.ENV.lookup(expr)
@@ -180,7 +185,8 @@ def evaluate(expr):
         group = {"repeat" : repeat,       "def"    : environment.ENV.define,
                  "let"    : let,          "set"    : environment.ENV.set,
                  "do"     : do,           "update" : environment.ENV.update,
-                 "eval"   : Alvin_eval,   "del"    : environment.ENV.delete
+                 "eval"   : Alvin_eval,   "del"    : environment.ENV.delete,
+                 "get"    : get_file
                 }
     
         if isatom(head):

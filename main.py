@@ -3,7 +3,6 @@
 
 import sys
 import os
-import datatypes
 import environment
 import interpreter
 import extensions
@@ -27,14 +26,14 @@ def syntax_check(expr: list[str]) -> None:
         if interpreter.iskeyword(expr[i]) and interpreter.iskeyword(expr[i+1]): raise SyntaxError(f"invalid expression structure {here}")
 
 
-def p_match(expr: list) -> int:
+def closing_par(expr: list) -> int:
     stack = []
 
-    for i in range(len(expr)):
-        if   expr[i] == "(" : stack.append("(")
-        elif expr[i] == ")" : stack.pop()
+    for index, char in enumerate(expr):
+        if   char == "(" : stack.append("(")
+        elif char == ")" : stack.pop()
 
-        if not stack: return i
+        if not stack: return index
     
 
 def retype(x: str) -> int|float|bool|str|list: 
@@ -51,7 +50,7 @@ def Alvin_to_list(s: str) -> list[str]: return s.replace("(", " ( ").replace(")"
 def lst_to_Python(expr: str) -> list[str]:
     if expr == []: return []
     elif expr[0] == "(": 
-        closing = p_match(expr)
+        closing = closing_par(expr)
         return [lst_to_Python(expr[1:closing]), *lst_to_Python(expr[closing+1:])]
     else: return [retype(expr[0]), *lst_to_Python(expr[1:])]
 
@@ -108,7 +107,7 @@ def repl(stream=sys.stdin) -> bool:
 
     if iFlag:
         welcome()
-        print(">>", flush=True, end=" ")
+        print(PROMPT, flush=True, end='')
     else: print("--- Alvin ---")
 
     expression = ""
@@ -119,7 +118,7 @@ def repl(stream=sys.stdin) -> bool:
             else:
                 try: interpret(expression)
                 except Exception as e: print(f"{type(e).__name__}: {e}")
-            if iFlag: print(">>", flush=True, end=" ")
+            if iFlag: print(PROMPT, flush=True, end='')
             expression = ""
         else: continue
 
@@ -148,26 +147,25 @@ def text_box(text: str, centered=False) -> None:
     bottom = f"{chr(9562)}" + bar*(w+2) + f"{chr(9565)}"
     
     print(f"\n{top}")
-    for l in range(len(text)): 
-        text[l] = text[l]
-        space = w - len(text[l])
-        if centered: text[l] = f"{post} {' '*(space//2)}{text[l]}{' '*((space//2)+(space%2))} {post}"
-        else: text[l] = f"{post} {text[l]}{' '*space} {post}"
-        print(text[l])
+    for line in text:
+        space = w - len(line)
+        if centered: line = f"{post} {' '*(space//2)}{line}{' '*((space//2)+(space%2))} {post}"
+        else: line = f"{post} {line}{' '*space} {post}"
+        print(line)
     print(f"{bottom}\n")
 
 
 def help() -> None: 
-    text_box("""The ALVIN programming language was developed as an independent research project,
+    text_box(f"""The ALVIN programming language was developed as an independent research project,
 which began in CSCI 370: Programming Languages at Ave Maria University.
         
 Documentation can be found on GitHub:
 https://github.com/Antonio-Iijima/Alvin
 
->> clear     : clear the terminal 
->> exit/quit : exit the interpreter
->> python <> : evaluate <> using Python
->> keywords  : display all language keywords""")
+{PROMPT} clear     : clear the terminal 
+{PROMPT} exit/quit : exit the interpreter
+{PROMPT} python <> : evaluate <> using Python
+{PROMPT} keywords  : display all language keywords""")
 
 
 def welcome() -> None:
@@ -175,8 +173,10 @@ def welcome() -> None:
     text_box("""Welcome to Alvin,
 a Lisp Variant Implementation""", centered=True)
 
-    if iFlag: print("Alvin v2, running in interactive mode", end='\n'*(not dFlag))
-    if dFlag: print(" with debugging")
+    newline = not(dFlag or pFlag)
+    if iFlag: print("Alvin v2, running in interactive mode", end='\n'*newline)
+    if dFlag: print(" with debugging", end='\n'*newline)
+    if pFlag: print(", permanent extensions enabled")
     print("Enter 'help' to show further information")
 
 
@@ -188,8 +188,9 @@ def close() -> None:
 
     contents = open("extensions.py").readlines()
 
-    with open("extensions.py", "w") as file:
-        file.writelines(contents[-original_len:])
+    if not pFlag:
+        with open("extensions.py", "w") as file:
+            file.writelines(contents[-original_len:])
 
     exit()
 
@@ -206,20 +207,20 @@ def show_keywords() -> None:
 
     offset = max(len(key) for key in all_keys) + 2
 
-    for section in range(len(categories)):
-        if section > 0: display += "\n\n"
+    for sec_num, section in enumerate(categories):
+        if sec_num > 0: display += "\n\n"
 
-        if   section == 0: display += "OPERATORS"
-        elif section == 1: display += "SPECIAL"
-        elif section == 2: display += "EXTENSIONS"
+        if   sec_num == 0: display += "OPERATORS"
+        elif sec_num == 1: display += "SPECIAL"
+        elif sec_num == 2: display += "EXTENSIONS"
 
         display += "\n"
 
-        for column in range(len(categories[section])):
-            if column % 3 == 0: display += "\n"
-            display += f"{categories[section][column]}{' ' * (offset-len(categories[section][column]))}"
+        for col_num, column in enumerate(section):
+            if col_num % 3 == 0: display += "\n"
+            display += f"{column}{' ' * (offset-len(column))}"
 
-        line_len = len(categories[section]) % 3
+        line_len = len(section) % 3
         if line_len > 0:
             display += ' ' * ((3 - line_len) * offset)
         
@@ -230,13 +231,20 @@ def show_keywords() -> None:
 ##### Main #####
 
 
-    
+
 if __name__ == "__main__":
     sys.setrecursionlimit(10**5)
+
     iFlag = True if '-i' in sys.argv else False
     dFlag = True if '-d' in sys.argv else False
+    pFlag = True if '-p' in sys.argv else False
     if iFlag: sys.argv.remove("-i")
     if dFlag: sys.argv.remove("-d")
+    if pFlag: sys.argv.remove("-p")
+
+    color = '\033[36m' if dFlag else '\033[33m' if pFlag else '\033[31m'
+    prompt = 'α}>'
+    PROMPT = f"{color}{prompt}\033[97m "
 
     original_len = len(open("extensions.py").readlines())
 
@@ -250,6 +258,6 @@ if __name__ == "__main__":
 
 
 """
-Fun fact: the interpreter prompt for Alvin (>>) is 
-halfway between Python (>>>) and Scheme (>).
+Fun fact: the interpreter prompt for Alvin ({PROMPT}) is 
+halfway between Python ({PROMPT}>) and Scheme (>).
 """
