@@ -140,7 +140,6 @@ def extend() -> None:
 
 
 def text_box(text: str, centered=False) -> None:
-
     text = text.split("\n")
     w = max(len(line) for line in text)
     
