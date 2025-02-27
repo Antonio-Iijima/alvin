@@ -36,7 +36,7 @@ class Function:
         args = [] if args == None else interpreter.evlist(args)
 
         if len(self.parameters) != len(args): 
-            raise RuntimeError(f"{self.name} takes {len(self.parameters)} arguments but {len(args)} were given")
+            raise TypeError(f"{self.name} takes {len(self.parameters)} argument{"s"*bool(len(self.parameters)-1)} but {len(args)} were given")
         
         value = environment.FUNARG[self.id].runlocal(logic, [args])
 

@@ -22,8 +22,8 @@ def syntax_check(expr: list[str]) -> None:
     if not is_complete(expr):
         if expr.count("(") > expr.count(")"): raise SyntaxError(f"unmatched opening parenthesis {here}")
         else: raise SyntaxError(f"unmatched closing parenthesis {here}")
-    for i in range(len(expr)-1):
-        if interpreter.iskeyword(expr[i]) and interpreter.iskeyword(expr[i+1]): raise SyntaxError(f"invalid expression structure {here}")
+    for i, c in enumerate(expr):
+        if interpreter.iskeyword(c) and interpreter.iskeyword(i+1): raise SyntaxError(f"invalid expression structure {here}")
 
 
 def closing_par(expr: list) -> int:
@@ -164,10 +164,10 @@ which began in CSCI 370: Programming Languages at Ave Maria University.
 Documentation can be found on GitHub:
 https://github.com/Antonio-Iijima/Alvin
 
-{PROMPT} clear     : clear the terminal 
-{PROMPT} exit/quit : exit the interpreter
-{PROMPT} python <> : evaluate <> using Python
-{PROMPT} keywords  : display all language keywords""")
+{PROMPT_SYMBOL} clear     : clear the terminal 
+{PROMPT_SYMBOL} exit/quit : exit the interpreter
+{PROMPT_SYMBOL} python <> : evaluate <> using Python
+{PROMPT_SYMBOL} keywords  : display all language keywords""")
 
 
 def welcome() -> None:
@@ -244,9 +244,9 @@ if __name__ == "__main__":
     if dFlag: sys.argv.remove("-d")
     if pFlag: sys.argv.remove("-p")
 
-    color = '\033[36m' if dFlag else '\033[33m' if pFlag else '\033[31m'
-    prompt = '{α}>'
-    PROMPT = f"{color}{prompt}\033[97m "
+    COLOR = '\033[36m' if dFlag else '\033[33m' if pFlag else '\033[31m'
+    PROMPT_SYMBOL = '{α}>'
+    PROMPT = f"{COLOR}{PROMPT_SYMBOL}\033[97m "
 
     original_len = len(open("extensions.py").readlines())
 
