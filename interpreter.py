@@ -7,7 +7,6 @@ import environment
 import main
 import re
 import extensions
-import importlib
 
 
 ##### Subsidiary functions #####
@@ -78,10 +77,10 @@ def usrin(expr): return input(f"{' '.join(expr)} ")
 def predicate(x, f): return f(evaluate(x)) if isvariable(x) else f(x)
 
 
-def ref(lst, i): return lst[i]
+def ref(l, i): return l[i]
     
 
-def setref(lst, i, item): lst[int(i)] = item
+def setref(l, i, item): l[int(i)] = item
 
 
 def repeat(number, body):
@@ -120,14 +119,17 @@ def Alvin_eval(expr):
     return evaluate(expr)
 
 
-def get_file(filepath):
+def getfile(filepath):
+    """File system access."""
     return open(filepath).readlines()
 
 
-def reload_extensions():
-    environment.RELOAD = False
-    importlib.reload(extensions)
-    KEYWORDS.update(extensions.FUNCTIONS)
+def set_global(var, val=None):
+    """Define global variables."""
+    if val: environment.GLOBALS[var] = evaluate(val)
+    else: return environment.GLOBALS.get(var, ValueError)
+
+
 
 ##### Evaluation #####
 
@@ -155,11 +157,14 @@ OPERATOR = {
     }
 
 
-SPECIAL = ["cond", "update", "set", 
-           "def", "lambda", "quote", 
-           "del", "until", "do", "list", "string",
-           "eval", "ref", "usrin",
-           "repeat", "let", "get"]
+SPECIAL = [
+    "cond", "update", "set", 
+    "def", "lambda", "quote", 
+    "del", "until", "do", "list", "string",
+    "eval", "ref", "usrin",
+    "repeat", "let", "getfile",
+    "burrow","surface", "global"
+    ]
 
 
 KEYWORDS = {}
@@ -171,8 +176,6 @@ KEYWORDS.update([(key, True) for key in SPECIAL])
 def evaluate(expr):
     """Evaluates complete Alvin expressions."""
 
-    if environment.RELOAD: reload_extensions()
-
     if isatom(expr):
         if isvariable(expr): return environment.ENV.lookup(expr)
         else: return expr
@@ -180,35 +183,37 @@ def evaluate(expr):
     elif islist(expr):
         if isnull(expr): return []
 
-        head = expr[0] 
-        tail = expr[1:]
-        group = {"repeat" : repeat,       "def"    : environment.ENV.define,
-                 "let"    : let,          "set"    : environment.ENV.set,
-                 "do"     : do,           "update" : environment.ENV.update,
-                 "eval"   : Alvin_eval,   "del"    : environment.ENV.delete,
-                 "get"    : get_file
-                }
+        HEAD = expr[0] 
+        TAIL = expr[1:]
+        IRREGULAR = {
+            "repeat"  : repeat,       "def"     : environment.ENV.define,
+            "let"     : let,          "set"     : environment.ENV.set,
+            "do"      : do,           "update"  : environment.ENV.update,
+            "eval"    : Alvin_eval,   "del"     : environment.ENV.delete,
+            "getfile" : getfile,      "burrow"  : environment.ENV.begin_scope,
+            "global"  : set_global,   "surface" : environment.ENV.end_scope
+            }
     
-        if isatom(head):
-            if isfunction(head): return head.eval(tail)
-            elif isvariable(head): return evaluate([evaluate(head), *tail])
-            elif iskeyword(head):
-                if head in OPERATOR   : return OPERATOR[head](*evlist(tail))
-                elif head in extensions.FUNCTIONS: return extensions.FUNCTIONS[head](*tail)
-                elif head in group    : return group[head](*tail)
-                elif iscxr(head)      : return evcxr(head[1:-1], evaluate(expr[1]))
+        if isatom(HEAD):
+            if isfunction(HEAD): return HEAD.eval(TAIL)
+            elif isvariable(HEAD): return evaluate([evaluate(HEAD), *TAIL])
+            elif iskeyword(HEAD):
+                if   HEAD in IRREGULAR            : return IRREGULAR[HEAD](*TAIL)
+                elif HEAD in OPERATOR             : return OPERATOR[HEAD](*evlist(TAIL))
+                elif HEAD in extensions.FUNCTIONS : return extensions.FUNCTIONS[HEAD](*TAIL)
+                elif iscxr(HEAD)                  : return evcxr(HEAD[1:-1], evaluate(expr[1]))
 
                 else:
-                    match head:
+                    match HEAD:
                         case "lambda"  : return datatypes.Function("lambda", expr[1], expr[2])
                         case "until"   : return until(expr[1][0], expr[1][1], expr[2])
-                        case "string"  : return str(evaluate(tail))
-                        case "list"    : return list(evaluate(tail))
-                        case "usrin"   : return usrin(tail)
-                        case "cond"    : return cond(tail)
+                        case "string"  : return str(evaluate(TAIL))
+                        case "list"    : return list(evaluate(TAIL))
+                        case "usrin"   : return usrin(TAIL)
+                        case "cond"    : return cond(TAIL)
                         case "quote"   : return expr[1]
             else: return expr
 
-        elif islist(head): post = evlist(expr); return expr if post == expr else evaluate(post)
+        elif islist(HEAD): post = evlist(expr); return expr if post == expr else evaluate(post)
 
     raise SyntaxError(f"unidentified expression type in {expr}: {type(expr).__name__}")

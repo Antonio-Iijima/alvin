@@ -94,13 +94,14 @@ def repl(stream=sys.stdin) -> bool:
             elif interpreter.iskeyword(line) : print(f"{line} is an operator, built-in function or reserved word.")
             else:
                 match line:
-                    case "help"         : help()
-                    case "clear"        : welcome()
-                    case ""             : print(end='')
-                    case "keywords"     : show_keywords()
-                    case "debug.env"    : print(environment.ENV)
-                    case "debug.funarg" : print(environment.FUNARG)
-                    case _              : return Python_to_Alvin(interpreter.evaluate(Alvin_to_Python(line)))
+                    case "help"          : help()
+                    case "clear"         : welcome()
+                    case ""              : print(end='')
+                    case "keywords"      : show_keywords()
+                    case "debug.env"     : print(environment.ENV)
+                    case "debug.funarg"  : print(environment.FUNARG)
+                    case "debug.globals" : print(environment.GLOBALS)
+                    case _               : return Python_to_Alvin(interpreter.evaluate(Alvin_to_Python(line)))
             
         output = get_output(line)
         if output != None: print(output)
@@ -123,7 +124,7 @@ def repl(stream=sys.stdin) -> bool:
         else: continue
 
 
-def extend():
+def extend() -> None:
     extension = []
     for line in sys.stdin:
         if line.startswith("@end"): break
@@ -134,7 +135,8 @@ def extend():
     with open("extensions.py", "w") as file:
         file.writelines([*extension, "\n", *contents])
 
-    importlib.reload(extensions); environment.RELOAD = True
+    importlib.reload(extensions)
+    interpreter.KEYWORDS.update(extensions.FUNCTIONS)
 
 
 def text_box(text: str, centered=False) -> None:
@@ -243,7 +245,7 @@ if __name__ == "__main__":
     if pFlag: sys.argv.remove("-p")
 
     color = '\033[36m' if dFlag else '\033[33m' if pFlag else '\033[31m'
-    prompt = 'α}>'
+    prompt = '{α}>'
     PROMPT = f"{color}{prompt}\033[97m "
 
     original_len = len(open("extensions.py").readlines())

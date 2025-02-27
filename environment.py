@@ -30,7 +30,7 @@ class Environment:
 
     def end_scope(self, number=1) -> None:
         """End current scope."""
-        self.env = self.env[number:]
+        self.env = self.env[number:] if number < len(self.env) else [{}]
         
     def find_scope(self, var: str, scope=0) -> int:
         """Find nearest scope in which var has been declared."""
@@ -102,7 +102,7 @@ class Environment:
 
 
 
-ENV = Environment(name="env")
 FUNARG = {}
-RELOAD = False
+GLOBALS = {}
+ENV = Environment(name="env")
 LINES = len(open("extensions.py").readlines())
