@@ -212,6 +212,7 @@ def evaluate(expr):
                         case "usrin"   : return usrin(TAIL)
                         case "cond"    : return cond(TAIL)
                         case "quote"   : return expr[1]
+                        
             else: return expr
 
         elif islist(HEAD): post = evlist(expr); return expr if post == expr else evaluate(post)
