@@ -243,7 +243,12 @@ if __name__ == "__main__":
     if dFlag: sys.argv.remove("-d")
     if pFlag: sys.argv.remove("-p")
 
-    COLOR = '\033[36m' if dFlag else '\033[33m' if pFlag else '\033[31m'
+    BLUE = '\033[36m'
+    GOLD = '\033[33m'
+    RED  = '\033[31m'
+
+    COLOR = BLUE if dFlag else GOLD if pFlag else RED
+    
     PROMPT_SYMBOL = '{α}>'
     PROMPT = f"{COLOR}{PROMPT_SYMBOL}\033[97m "
 
