@@ -136,7 +136,7 @@ def extend() -> None:
         file.writelines([*extension, "\n", *contents])
 
     importlib.reload(extensions)
-    interpreter.KEYWORDS.update(extensions.FUNCTIONS)
+    interpreter.KEYWORDS.update(extensions.EXTENSIONS)
 
 
 def text_box(text: str, centered=False) -> None:
@@ -184,13 +184,25 @@ def clear() -> None: os.system('cls' if os.name == 'nt' else 'clear')
 
 
 def close() -> None:
-    text_box("""Arrivederci!""")
-
     contents = open("extensions.py").readlines()
 
-    if not pFlag:
+    if pFlag: 
+        print(COLOR)
+
+        new_extensions = [key for key in extensions.EXTENSIONS if not key in environment.ORIGINAL_EXTENSIONS]
+
+        if len(new_extensions) > 0:
+            print("The following new extensions have been saved:")
+            for ext in new_extensions: print(ext)
+        else: print("No extensions added.")
+
+        print(END_COLOR, end='')
+
+    else:
         with open("extensions.py", "w") as file:
             file.writelines(contents[-ORIGINAL_LEN:])
+
+    text_box("""Arrivederci!""")
 
     exit()
 
@@ -201,7 +213,7 @@ def show_keywords() -> None:
     all_keys  = list(interpreter.KEYWORDS.keys())
     operator   = list(interpreter.OPERATOR.keys())
     special   = interpreter.SPECIAL
-    extended = list(extensions.FUNCTIONS.keys())
+    extended = list(extensions.EXTENSIONS.keys())
 
     categories = [operator, special, extended]
 
@@ -247,10 +259,11 @@ if __name__ == "__main__":
     GOLD = '\033[33m'
     RED  = '\033[31m'
 
-    COLOR = BLUE if dFlag else GOLD if pFlag else RED
+    END_COLOR = '\033[97m'
+    COLOR = GOLD if pFlag else BLUE if dFlag else RED
     
-    PROMPT_SYMBOL = '{α}>'
-    PROMPT = f"{COLOR}{PROMPT_SYMBOL}\033[97m "
+    PROMPT_SYMBOL = '{α}> '
+    PROMPT = f"{COLOR}{PROMPT_SYMBOL}{END_COLOR}"
 
     ORIGINAL_LEN = len(open("extensions.py").readlines())
 

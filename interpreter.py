@@ -169,7 +169,7 @@ SPECIAL = [
 
 KEYWORDS = {}
 KEYWORDS.update(OPERATOR)
-KEYWORDS.update(extensions.FUNCTIONS)
+KEYWORDS.update(extensions.EXTENSIONS)
 KEYWORDS.update([(key, True) for key in SPECIAL])
 
 
@@ -200,7 +200,7 @@ def evaluate(expr):
             elif iskeyword(HEAD):
                 if   HEAD in IRREGULAR            : return IRREGULAR[HEAD](*TAIL)
                 elif HEAD in OPERATOR             : return OPERATOR[HEAD](*evlist(TAIL))
-                elif HEAD in extensions.FUNCTIONS : return extensions.FUNCTIONS[HEAD](*TAIL)
+                elif HEAD in extensions.EXTENSIONS : return extensions.EXTENSIONS[HEAD](*TAIL)
                 elif iscxr(HEAD)                  : return evcxr(HEAD[1:-1], evaluate(expr[1]))
 
                 else:

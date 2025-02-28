@@ -5,6 +5,7 @@
 import datatypes
 import interpreter
 import copy
+import extensions
 
 
 
@@ -106,3 +107,4 @@ FUNARG = {}
 GLOBALS = {}
 ENV = Environment(name="env")
 LINES = len(open("extensions.py").readlines())
+ORIGINAL_EXTENSIONS = copy.deepcopy(extensions.EXTENSIONS)
