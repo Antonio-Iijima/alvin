@@ -50,13 +50,13 @@ class Environment:
     def update(self, var: str, val: any) -> None | str:
         """Reassign previously declared var to new val."""
         scope = self.find_scope(var)
-        if scope == -1: raise ValueError(f"cannot update variable {var} before assignment.")
+        if scope == -1: raise ValueError(f"cannot update variable '{var}' before assignment.")
         else: self.env[scope][var] = interpreter.evaluate(val)
 
     def delete(self, var: str, scope=0) -> None | str: 
         """Delete closest declaration of var."""
         scope = self.find_scope(var)
-        if scope == -1: raise ValueError(f"cannot delete variable {var} before assignment.")
+        if scope == -1: raise ValueError(f"cannot delete variable '{var}' before assignment.")
         self.garbage_collect(var)
         self.env[scope].pop(var)
 

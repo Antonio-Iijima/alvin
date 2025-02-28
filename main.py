@@ -174,10 +174,9 @@ def welcome() -> None:
     text_box("""Welcome to Alvin,
 a Lisp Variant Implementation""", centered=True)
 
-    newline = not(dFlag or pFlag)
-    if iFlag: print("Alvin v2, running in interactive mode", end='\n'*newline)
-    if dFlag: print(" with debugging", end='\n'*newline)
-    if pFlag: print(", permanent extensions enabled")
+    if iFlag: print("Alvin v2, running in interactive mode", end='\n'*(not dFlag))
+    if dFlag: print(" with debugging")
+    if pFlag: print("Permanent extensions enabled")
     print("Enter 'help' to show further information")
 
 
@@ -191,7 +190,7 @@ def close() -> None:
 
     if not pFlag:
         with open("extensions.py", "w") as file:
-            file.writelines(contents[-original_len:])
+            file.writelines(contents[-ORIGINAL_LEN:])
 
     exit()
 
@@ -239,6 +238,7 @@ if __name__ == "__main__":
     iFlag = True if '-i' in sys.argv else False
     dFlag = True if '-d' in sys.argv else False
     pFlag = True if '-p' in sys.argv else False
+
     if iFlag: sys.argv.remove("-i")
     if dFlag: sys.argv.remove("-d")
     if pFlag: sys.argv.remove("-p")
@@ -252,7 +252,7 @@ if __name__ == "__main__":
     PROMPT_SYMBOL = '{α}>'
     PROMPT = f"{COLOR}{PROMPT_SYMBOL}\033[97m "
 
-    original_len = len(open("extensions.py").readlines())
+    ORIGINAL_LEN = len(open("extensions.py").readlines())
 
     if len(sys.argv) > 1:
         for item in sys.argv[1:]:
