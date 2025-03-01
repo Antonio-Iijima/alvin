@@ -74,7 +74,6 @@ def Python_to_Alvin(s: list[str] | str | int | float) -> str | None:
 
 
 
-
 ##### REPL & Command-Line #####
 
 
@@ -96,13 +95,13 @@ def repl(stream=sys.stdin) -> bool:
                 match line:
                     case "help"          : help()
                     case "clear"         : welcome()
-                    case "dev.help"    : show_dev()
+                    case "dev.help"      : show_dev()
                     case ""              : print(end='')
-                    case "dev.funarg"  : show_funarg()
-                    case "dev.globals" : show_globals()
-                    case "dev.imports" : show_imports()
+                    case "dev.funarg"    : show_funarg()
+                    case "dev.globals"   : show_globals()
+                    case "dev.imports"   : show_imports()
                     case "keywords"      : show_keywords()
-                    case "dev.env"     : print(environment.ENV)
+                    case "dev.env"       : print(environment.ENV)
                     case _               : return Python_to_Alvin(interpreter.evaluate(Alvin_to_Python(line)))
     
         output = get_output(line)
