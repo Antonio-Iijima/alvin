@@ -3,9 +3,10 @@
 
 
 import random
+
+import main
 import environment
 import interpreter
-import main
 
 
 
@@ -21,6 +22,7 @@ class Function:
         self.id = self.generate_id()
         environment.FUNARG[self.id] = environment.Environment(name="funarg")
         
+
     def eval(self, args=None) -> any:
         def logic(args):
             environment.FUNARG[self.id].match_arguments(self.parameters, args)
@@ -48,11 +50,14 @@ class Function:
 
         return value
 
+
     def generate_id(self, length=15): return f"id:{''.join(random.choices([str(i) for i in range(10)], k=length))}.{self.name}"
+
 
     def __str__(self) -> str:
         if self.name == 'lambda':
             return f"<lambda {main.Python_to_Alvin(self.parameters)} {main.Python_to_Alvin(self.body)}>"
         return f"<{self.name}>"
-    
+
+
     def __repr__(self) -> str: return str(self)

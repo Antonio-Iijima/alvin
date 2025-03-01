@@ -2,12 +2,14 @@
 
 
 
-import datatypes
-import environment
-import main
 import re
-import extensions
 import importlib
+
+import main
+import datatypes
+import extensions
+import environment
+
 
 
 ##### Subsidiary functions #####

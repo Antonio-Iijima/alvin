@@ -1,12 +1,14 @@
 """Syntax conversion and REPL."""
 
 
-import sys
+
 import os
+import sys
+import importlib
+
+import extensions
 import environment
 import interpreter
-import extensions
-import importlib
 
 
 
