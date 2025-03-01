@@ -96,13 +96,15 @@ def repl(stream=sys.stdin) -> bool:
                 match line:
                     case "help"          : help()
                     case "clear"         : welcome()
+                    case "dev.help"    : show_dev()
                     case ""              : print(end='')
+                    case "dev.funarg"  : show_funarg()
+                    case "dev.globals" : show_globals()
+                    case "dev.imports" : show_imports()
                     case "keywords"      : show_keywords()
-                    case "debug.env"     : print(environment.ENV)
-                    case "debug.funarg"  : print(environment.FUNARG)
-                    case "debug.globals" : print(environment.GLOBALS)
+                    case "dev.env"     : print(environment.ENV)
                     case _               : return Python_to_Alvin(interpreter.evaluate(Alvin_to_Python(line)))
-            
+    
         output = get_output(line)
         if output != None: print(output)
 
@@ -166,15 +168,16 @@ https://github.com/Antonio-Iijima/Alvin
 {PROMPT_SYMBOL} clear     : clear the terminal 
 {PROMPT_SYMBOL} exit/quit : exit the interpreter
 {PROMPT_SYMBOL} python <> : evaluate <> using Python
-{PROMPT_SYMBOL} keywords  : display all language keywords""")
+{PROMPT_SYMBOL} keywords  : display all language keywords
+{PROMPT_SYMBOL} dev.help  : useful developement/debugging tools""")
 
 
 def welcome() -> None:
     clear()
     text_box("""Welcome to Alvin,
-a Lisp Variant Implementation""", centered=True)
+a Lisp variant implementation""", centered=True)
 
-    if iFlag: print("Alvin v2, running in interactive mode", end='\n'*(not dFlag))
+    if iFlag: print("Alvin v3, running in interactive mode", end='\n'*(not dFlag))
     if dFlag: print(" with debugging")
     if pFlag: print("Permanent extensions enabled")
     print("Enter 'help' to show further information")
@@ -207,13 +210,44 @@ def close() -> None:
     exit()
 
 
+def show_funarg():
+    for function, env in environment.FUNARG.items():
+        print(f"\n{function}:")
+        print(env)
+              
+
+def show_globals():
+    if environment.GLOBALS:
+        print("Global variables:")
+        for var, val in environment.GLOBALS.items():
+            print(f"{var} : {val}")
+    else: print("No global variables declared.")
+
+
+def show_imports():
+    if environment.IMPORTS:
+        print("Imported modules:")
+        for mnemonic, module in environment.IMPORTS.items():
+            print(mnemonic) if mnemonic == module.__name__ else print(f"{module.__name__} alias {mnemonic}")
+    else: print("No imported modules found.")
+
+
+def show_dev():
+    text_box(f"""useful tools
+             
+{PROMPT_SYMBOL} dev.funarg  : FUNARGs
+{PROMPT_SYMBOL} dev.env     : environment
+{PROMPT_SYMBOL} dev.globals : global variables
+{PROMPT_SYMBOL} dev.imports : imported modules""")
+
+
 def show_keywords() -> None:
     display = """"""
 
-    all_keys  = list(interpreter.KEYWORDS.keys())
-    operator   = list(interpreter.OPERATOR.keys())
-    special   = interpreter.SPECIAL
-    extended = list(extensions.EXTENSIONS.keys())
+    all_keys  = sorted(list(interpreter.KEYWORDS.keys()))
+    operator   = sorted(list(interpreter.OPERATOR.keys()))
+    special   = sorted(interpreter.SPECIAL)
+    extended = sorted(list(extensions.EXTENSIONS.keys()))
 
     categories = [operator, special, extended]
 

@@ -24,12 +24,14 @@ class Function:
     def eval(self, args=None) -> any:
         def logic(args):
             environment.FUNARG[self.id].match_arguments(self.parameters, args)
+            environment.FUNARG[self.id].define('self', self.parameters, self.body)
             environment.ENV.extend(environment.FUNARG[self.id])
 
             try:
                 value = interpreter.evaluate(self.body)
             finally:
                 environment.ENV.end_scope(len(environment.FUNARG[self.id]))
+                environment.FUNARG[self.id].delete('self')
 
             return value
         
@@ -43,7 +45,7 @@ class Function:
         if isinstance(value, Function):
             environment.FUNARG[value.id] = environment.FUNARG[self.id].clone()
             environment.FUNARG[value.id].match_arguments(self.parameters, args)
-            
+
         return value
 
     def generate_id(self, length=15): return f"id:{''.join(random.choices([str(i) for i in range(10)], k=length))}.{self.name}"

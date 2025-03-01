@@ -68,7 +68,9 @@ class Environment:
     def lookup(self, var: str, scope=0) -> any:
         """Finds nearest declaration of var."""
         scope = self.find_scope(var)
-        if scope == -1: raise ValueError(f"variable {var} is not defined.")
+        if scope == -1: 
+            if var in IMPORTS: print(f"'{var}' is an imported module.")
+            else: raise ValueError(f"variable {var} is not defined.")
         elif self.env[scope][var] == "###": NameError(f"unbound variable {var} in expression.")
         else: return self.env[scope][var]
 
@@ -91,8 +93,15 @@ class Environment:
     def __len__(self) -> int: 
         return len(self.env)
 
-    def __str__(self) -> str: 
-        return "\n".join([f"".join([f"\nScope {i}\n"] + [f"{key} : {val}\n" for key, val in self.env[i].items()]) for i in range(len(self.env))])
+    def __str__(self) -> str:
+        display = ""
+        for scope, contents in enumerate(self.env):
+            display += f"\nScope {scope}\n"
+            for var, val in contents.items():
+                display += f"\n{var} : {val}"
+        display += "\n"
+        
+        return display
 
     def __repr__(self) -> str: 
         return str(self)
@@ -105,6 +114,7 @@ class Environment:
 
 FUNARG = {}
 GLOBALS = {}
+IMPORTS = {}
 ENV = Environment(name="env")
 LINES = len(open("extensions.py").readlines())
 ORIGINAL_EXTENSIONS = copy.deepcopy(extensions.EXTENSIONS)

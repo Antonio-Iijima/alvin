@@ -7,6 +7,7 @@ import environment
 import main
 import re
 import extensions
+import importlib
 
 
 ##### Subsidiary functions #####
@@ -16,6 +17,7 @@ import extensions
 def isquote(x)    : return isinstance(x, list) and len(x) == 2 and x[0] == "quote"
 def isvariable(x) : return isatom(x) and not(iskeyword(x) or isnumber(x) or isbool(x))
 def iskeyword(x)  : return isinstance(x, str) and (x in KEYWORDS or iscxr(x))
+def isimport(x)   : return re.match(r"^[a-z, A-Z]*[.][a-z, A-Z]", str(x))
 def isnumber(x)   : return re.match(r"^[0-9]*[.]?[0-9]+$", str(x))
 def isfunction(x) : return isinstance(x, datatypes.Function)
 def iscxr(x)      : return re.match(r"^c[ad]+r$", str(x))
@@ -124,6 +126,18 @@ def getfile(filepath):
     return open(filepath).readlines()
 
 
+def import_lib(location, named=None, mnemonic=None):
+    mnemonic = mnemonic or location
+    location = importlib.import_module(location)
+    environment.IMPORTS[mnemonic] = location
+
+
+def run_method(imported, args):
+    module, method = imported.split(".")
+    imported = getattr(environment.IMPORTS[module], method)
+    return imported(*args) if callable(imported) else imported
+
+
 def set_global(var, val=None):
     """Define global variables."""
     if val: environment.GLOBALS[var] = evaluate(val)
@@ -163,7 +177,7 @@ SPECIAL = [
     "del", "until", "do", "list", "string",
     "eval", "ref", "usrin",
     "repeat", "let", "getfile",
-    "burrow","surface", "global"
+    "burrow","surface", "global", "import"
     ]
 
 
@@ -191,17 +205,19 @@ def evaluate(expr):
             "do"      : do,           "update"  : environment.ENV.update,
             "eval"    : Alvin_eval,   "del"     : environment.ENV.delete,
             "getfile" : getfile,      "burrow"  : environment.ENV.begin_scope,
-            "global"  : set_global,   "surface" : environment.ENV.end_scope
+            "global"  : set_global,   "surface" : environment.ENV.end_scope,
+            "import"  : import_lib
             }
-    
+        
         if isatom(HEAD):
-            if isfunction(HEAD): return HEAD.eval(TAIL)
+            if isimport(HEAD): print(f"{HEAD} is imported."); return run_method(HEAD, TAIL)
+            elif isfunction(HEAD): return HEAD.eval(TAIL)
             elif isvariable(HEAD): return evaluate([evaluate(HEAD), *TAIL])
             elif iskeyword(HEAD):
-                if   HEAD in IRREGULAR            : return IRREGULAR[HEAD](*TAIL)
-                elif HEAD in OPERATOR             : return OPERATOR[HEAD](*evlist(TAIL))
+                if   HEAD in IRREGULAR             : return IRREGULAR[HEAD](*TAIL)
+                elif HEAD in OPERATOR              : return OPERATOR[HEAD](*evlist(TAIL))
                 elif HEAD in extensions.EXTENSIONS : return extensions.EXTENSIONS[HEAD](*TAIL)
-                elif iscxr(HEAD)                  : return evcxr(HEAD[1:-1], evaluate(expr[1]))
+                elif iscxr(HEAD)                   : return evcxr(HEAD[1:-1], evaluate(expr[1]))
 
                 else:
                     match HEAD:
