@@ -26,6 +26,8 @@ class Function:
         
 
     def eval(self, args=None) -> any:
+        """Function call evaluation."""
+
         def logic(args: list) -> any:
             """Function evaluation logic."""
 
