@@ -1,4 +1,4 @@
-"""Syntax conversion and REPL."""
+"""Main program to run the Alvin programming language."""
 
 
 
@@ -8,25 +8,33 @@ import repl
 
 
 
-##### Main #####
+##### Setup #####
 
 
 
+# Set flags
 iFlag = '-i' in sys.argv
 dFlag = '-d' in sys.argv
 pFlag = '-p' in sys.argv
 
+# Prompt customization
 BLUE = '\033[36m'
 GOLD = '\033[33m'
 RED  = '\033[31m'
-
 END_COLOR = '\033[97m'
-COLOR = GOLD if pFlag else BLUE if dFlag else RED
 
+COLOR = GOLD if pFlag else BLUE if dFlag else RED
 PROMPT_SYMBOL = '{α}> '
+
 PROMPT = f"{COLOR}{PROMPT_SYMBOL}{END_COLOR}"
 
-ORIGINAL_LEN = len(open("extensions.py").readlines())
+# Save the original length of the extensions file if
+# permanent extensions enabled
+if not pFlag: ORIGINAL_LEN = len(open("extensions.py").readlines())
+
+
+
+##### Main Program #####
 
 
 
