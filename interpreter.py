@@ -5,11 +5,10 @@
 import re
 import importlib
 
-import main
+import parser
 import datatypes
 import extensions
 import environment
-
 
 
 ##### Subsidiary functions #####
@@ -56,18 +55,18 @@ def NOR(a, b)  : return not (bool(a) or bool(b))
 def NAND(a, b) : return not (bool(a) and bool(b))
 
 def evlist(x)   : return list(evaluate(elem) for elem in x)
-def show(expr)  : print(main.Python_to_Alvin(expr))
+def show(expr)  : print(parser.parse(expr))
 def boolean(x)  : return x == "#t"
 def elem(x, y)  : return x in y
 
 
 def head(x): 
     if islist(x): return x[0] 
-    raise ValueError(f"unsupported argument for 'car': {main.Python_to_Alvin(x)}")
+    raise ValueError(f"unsupported argument for 'car': {parser.Python_to_Alvin(x)}")
 
 def tail(x):
     if islist(x): return x[1:] 
-    raise ValueError(f"unsupported argument for 'cdr': {main.Python_to_Alvin(x)}")
+    raise ValueError(f"unsupported argument for 'cdr': {parser.Python_to_Alvin(x)}")
 
 def evcxr(x, a):
     if x == "": return a

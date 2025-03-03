@@ -4,7 +4,7 @@
 
 import random
 
-import main
+import parser
 import environment
 import interpreter
 
@@ -26,14 +26,14 @@ class Function:
     def eval(self, args=None) -> any:
         def logic(args):
             environment.FUNARG[self.id].match_arguments(self.parameters, args)
-            environment.FUNARG[self.id].define('self', self.parameters, self.body)
+            if self.name in ('lambda', 'self'): environment.FUNARG[self.id].define('self', self.parameters, self.body)
             environment.ENV.extend(environment.FUNARG[self.id])
 
             try:
                 value = interpreter.evaluate(self.body)
             finally:
                 environment.ENV.end_scope(len(environment.FUNARG[self.id]))
-                environment.FUNARG[self.id].delete('self')
+                if self.name in ('lambda', 'self'): environment.FUNARG[self.id].delete('self')
 
             return value
         
@@ -48,6 +48,8 @@ class Function:
             environment.FUNARG[value.id] = environment.FUNARG[self.id].clone()
             environment.FUNARG[value.id].match_arguments(self.parameters, args)
 
+        if self.name == 'lambda': environment.FUNARG.pop(self.id)
+
         return value
 
 
@@ -56,7 +58,7 @@ class Function:
 
     def __str__(self) -> str:
         if self.name == 'lambda':
-            return f"<lambda {main.Python_to_Alvin(self.parameters)} {main.Python_to_Alvin(self.body)}>"
+            return f"<lambda {parser.Python_to_Alvin(self.parameters)} {parser.Python_to_Alvin(self.body)}>"
         return f"<{self.name}>"
 
 
