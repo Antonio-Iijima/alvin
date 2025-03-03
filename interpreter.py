@@ -19,7 +19,7 @@ def isquote(x)    : return isinstance(x, list) and len(x) == 2 and x[0] == "quot
 def isvariable(x) : return isatom(x) and not(iskeyword(x) or isnumber(x) or isbool(x))
 def iskeyword(x)  : return isinstance(x, str) and (x in KEYWORDS or iscxr(x))
 def isimport(x)   : return re.match(r"^[a-z, A-Z]*[.][a-z, A-Z]", str(x))
-def isnumber(x)   : return re.match(r"^[0-9]*[.]?[0-9]+$", str(x))
+def isnumber(x)   : return re.match(r"^[-]?[0-9]*[.]?[0-9]+$", str(x))
 def isfunction(x) : return isinstance(x, datatypes.Function)
 def iscxr(x)      : return re.match(r"^c[ad]+r$", str(x))
 def isatom(x)     : return not isinstance(x, list)
