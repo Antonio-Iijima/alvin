@@ -6,7 +6,7 @@ import interpreter
 
 
 
-##### (Alvin syntax) <-> [Python, list] converters #####
+##### Syntax checking and type conversions #####
 
 
 
@@ -88,9 +88,9 @@ def preprocess(expr: list) -> list:
     else: return expr
 
 
-def parse(s: str) -> list: 
-    """Perform syntax checking and convert Alvin expresssion string to manipulable Python lists."""
-    syntax_check(s); return preprocess(lst_to_Python(Alvin_to_list(s)))[0]
+
+##### (Alvin syntax) <-> [Python, list] converters #####
+
 
 
 def Python_to_Alvin(s: any) -> str | None:
@@ -103,3 +103,8 @@ def Python_to_Alvin(s: any) -> str | None:
 
     # Otherwise replace lists with parentheses and (quote x) with '
     return f"'{Python_to_Alvin(s[1])}" if interpreter.isquote(s) else f"({' '.join(Python_to_Alvin(elem) for elem in s if elem != None)})" if isinstance(s, list) else str(s)
+
+
+def parse(s: str) -> list: 
+    """Perform syntax checking and convert Alvin expresssion string to manipulable Python lists."""
+    syntax_check(s); return preprocess(lst_to_Python(Alvin_to_list(s)))[0]
