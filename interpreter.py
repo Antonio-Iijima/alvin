@@ -55,7 +55,7 @@ def NOR(a, b)  : return not (bool(a) or bool(b))
 def NAND(a, b) : return not (bool(a) and bool(b))
 
 def evlist(x)   : return list(evaluate(elem) for elem in x)
-def show(expr)  : print(parser.parse(expr))
+def show(expr)  : print(parser.Python_to_Alvin(expr))
 def boolean(x)  : return x == "#t"
 def elem(x, y)  : return x in y
 

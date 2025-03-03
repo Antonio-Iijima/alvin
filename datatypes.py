@@ -48,8 +48,6 @@ class Function:
             environment.FUNARG[value.id] = environment.FUNARG[self.id].clone()
             environment.FUNARG[value.id].match_arguments(self.parameters, args)
 
-        if self.name == 'lambda': environment.FUNARG.pop(self.id)
-
         return value
 
 
