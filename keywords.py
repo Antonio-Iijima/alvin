@@ -134,7 +134,7 @@ def evcxr(x: str, output: any) -> any:
     elif x[-1] == "d": return evcxr(x[:-1], tail(output))
 
 
-def predicate(x: any, p: function) -> any:
+def predicate(x: any, p: callable) -> any:
     """Wrapper for predicate functions. 
     \nLooks up variables in the environment, but otherwise applies the predicate to its argument directly."""
     return p(environment.ENV.lookup(x)) if isvariable(x) else p(x)
