@@ -94,7 +94,7 @@ def preprocess(expr: list) -> list:
 
 
 def Python_to_Alvin(s: any) -> str | None:
-    """Convert Python list to parenthesized Alvin string."""
+    """Convert Python list to fully-parenthesized Alvin string."""
 
     if s == None: return None
 
