@@ -2,7 +2,7 @@
 
 
 
-import interpreter
+import eval
 
 
 
@@ -27,7 +27,7 @@ def syntax_check(expr: list) -> None:
 
     # Confirm that no two operators appear successively without parenthetical nesting
     for i, c in enumerate(expr):
-        if interpreter.iskeyword(c) and interpreter.iskeyword(i+1): raise SyntaxError(f"invalid expression structure {here}")
+        if eval.iskeyword(c) and eval.iskeyword(i+1): raise SyntaxError(f"invalid expression structure {here}")
 
 
 def closing_par(expr: list) -> int:
@@ -46,7 +46,7 @@ def retype(x: str) -> int | float | bool:
     """Replace int, float, and bool strings with their correct data types."""
 
     if isinstance(x, str):
-        if interpreter.isnumber(x): return float(x) if "." in x else int(x)
+        if eval.isnumber(x): return float(x) if "." in x else int(x)
         elif x in ("#t", "#f"): return x == "#t"
     return x
 
@@ -102,7 +102,7 @@ def Python_to_Alvin(s: any) -> str | None:
     elif isinstance(s, bool): return "#t" if s else "#f"
 
     # Otherwise replace lists with parentheses and (quote x) with '
-    return f"'{Python_to_Alvin(s[1])}" if interpreter.isquote(s) else f"({' '.join(Python_to_Alvin(elem) for elem in s if elem != None)})" if isinstance(s, list) else str(s)
+    return f"'{Python_to_Alvin(s[1])}" if eval.isquote(s) else f"({' '.join(Python_to_Alvin(elem) for elem in s if elem != None)})" if isinstance(s, list) else str(s)
 
 
 def parse(s: str) -> list: 

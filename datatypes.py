@@ -6,7 +6,7 @@ import random
 
 import parser
 import environment
-import interpreter
+import eval
 
 
 
@@ -46,7 +46,7 @@ class Function:
 
             # Evaluate the function
             try:
-                value = interpreter.evaluate(self.body)
+                value = eval.evaluate(self.body)
 
                 # If returning a function, give it access to current FUNARG environment
                 if isinstance(value, Function): environment.FUNARG[value.id] = environment.FUNARG[self.id].clone()
@@ -59,7 +59,7 @@ class Function:
             return value
         
         # Applicative order evaluation for arguments
-        args = [] if args == None else interpreter.evlist(args)
+        args = [] if args == None else eval.evlist(args)
 
         # Confirm function arity
         if len(self.parameters) != len(args): 

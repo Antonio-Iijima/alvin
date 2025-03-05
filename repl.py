@@ -6,7 +6,7 @@ import main
 import parser
 import extensions
 import environment
-import interpreter
+import eval
 
 
 
@@ -26,7 +26,7 @@ def REPL(stream=sys.stdin) -> bool:
             elif line.startswith("@start")   : extend()
             elif line.startswith("--")       : print(end='')
             elif line.startswith("python")   : print(eval(line.removeprefix("python")))
-            elif interpreter.iskeyword(line) : print(f"{line} is an operator, built-in function or reserved word.")
+            elif eval.iskeyword(line) : print(f"{line} is an operator, built-in function or reserved word.")
             else:
                 match line:
                     case "help"          : help()
@@ -38,7 +38,7 @@ def REPL(stream=sys.stdin) -> bool:
                     case "dev.imports"   : show_imports()
                     case "keywords"      : show_keywords()
                     case "dev.env"       : print(environment.ENV)
-                    case _               : return parser.Python_to_Alvin(interpreter.evaluate(parser.parse(line)))
+                    case _               : return parser.Python_to_Alvin(eval.evaluate(parser.parse(line)))
     
         output = get_output(line)
         if output != None: print(output)
@@ -78,7 +78,7 @@ def extend() -> None:
         file.writelines([*extension, "\n", *contents])
 
     importlib.reload(extensions)
-    interpreter.KEYWORDS.update(extensions.EXTENSIONS)
+    eval.KEYWORDS.update(extensions.EXTENSIONS)
 
 
 def text_box(text: str, centered=False) -> None:
@@ -185,13 +185,13 @@ def show_dev():
 def show_keywords() -> None:
     display = """"""
 
-    operator   = sorted(interpreter.OPERATOR)
-    special   = sorted(interpreter.SPECIAL)
+    operator   = sorted(eval.OPERATOR)
+    special   = sorted(eval.SPECIAL)
     extended = sorted(extensions.EXTENSIONS)
 
     categories = [operator, special, extended]
 
-    offset = max(len(key) for key in interpreter.KEYWORDS) + 2
+    offset = max(len(key) for key in eval.KEYWORDS) + 2
 
     for sec_num, section in enumerate(categories):
         if sec_num > 0: display += "\n\n"
