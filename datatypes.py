@@ -76,7 +76,7 @@ class Function:
 
     def __str__(self) -> str:
         if self.name == 'lambda':
-            return f"<lambda {parser.Python_to_Alvin(self.parameters)} {parser.Python_to_Alvin(self.body)}>"
+            return f"<lambda {parser.convert(self.parameters)} {parser.convert(self.body)}>"
         return f"<{self.name}>"
 
 

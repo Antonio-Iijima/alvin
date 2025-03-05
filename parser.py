@@ -28,7 +28,7 @@ def syntax_check(expr: list) -> None:
         if expr.count("(") > expr.count(")"): raise SyntaxError(f"unmatched opening parenthesis {here}")
         else: raise SyntaxError(f"unmatched closing parenthesis {here}")
 
-    # Confirm that no two operators appear successively without parenthetical nesting
+    # Confirm that no two operators appear successively without correct parenthetical nesting
     for i, c in enumerate(expr):
         if eval.iskeyword(c) and eval.iskeyword(i+1): raise SyntaxError(f"invalid expression structure {here}")
 
@@ -99,7 +99,7 @@ def preprocess(expr: list) -> list:
 
 
 
-def Python_to_Alvin(s: any) -> str | None:
+def convert(s: any) -> str | None:
     """Convert Python list to fully-parenthesized Alvin string."""
 
     if s == None: return None
@@ -108,7 +108,7 @@ def Python_to_Alvin(s: any) -> str | None:
     elif isinstance(s, bool): return "#t" if s else "#f"
 
     # Otherwise replace lists with parentheses and (quote x) with '
-    return f"'{Python_to_Alvin(s[1])}" if eval.isquote(s) else f"({' '.join(Python_to_Alvin(elem) for elem in s if elem != None)})" if isinstance(s, list) else str(s)
+    return f"'{convert(s[1])}" if eval.isquote(s) else f"({' '.join(convert(elem) for elem in s if elem != None)})" if isinstance(s, list) else str(s)
 
 
 def parse(s: str) -> list: 

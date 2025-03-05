@@ -79,7 +79,7 @@ def cons(x: any, y: list) -> list:
 
 def show(expr: str) -> None:
     """Prints to standard output."""
-    print(parser.Python_to_Alvin(expr))
+    print(parser.convert(expr))
 
 
 def usrin(expr: str) -> str:
@@ -112,7 +112,7 @@ def head(x: list) -> any:
     try: 
         if isinstance(x, list): return x[0]
     except: 
-        raise TypeError(f"unsupported argument for 'car': {parser.Python_to_Alvin(x)}")
+        raise TypeError(f"unsupported argument for 'car': {parser.convert(x)}")
 
 
 def tail(x: list) -> list:
@@ -120,7 +120,7 @@ def tail(x: list) -> list:
     try: 
         if isinstance(x, list): return x[1:] 
     except:
-        raise TypeError(f"unsupported argument for 'cdr': {parser.Python_to_Alvin(x)}")
+        raise TypeError(f"unsupported argument for 'cdr': {parser.convert(x)}")
     
 
 def evcxr(x: str, output: any) -> any:
