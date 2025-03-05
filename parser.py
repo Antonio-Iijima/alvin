@@ -13,7 +13,7 @@ import eval
 ## Basic syntax checking (parentheses, operators, etc.) and typing
 
 
-def is_complete(expr: list) -> bool: 
+def iscomplete(expr: list) -> bool: 
     """Check for balanced parentheses in Python list."""
     return expr.count("(") == expr.count(")")
 
@@ -24,7 +24,7 @@ def syntax_check(expr: list) -> None:
     here = f"in {' '.join(expr)}"
     
     # Confirm balanced parentheses
-    if not is_complete(expr):
+    if not iscomplete(expr):
         if expr.count("(") > expr.count(")"): raise SyntaxError(f"unmatched opening parenthesis {here}")
         else: raise SyntaxError(f"unmatched closing parenthesis {here}")
 
