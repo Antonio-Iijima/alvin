@@ -123,7 +123,7 @@ class Environment:
 
 
     def runlocal(self, logic: callable, args: list) -> any:
-        """Run any procedure in a local scope which is destroyed when the procedure returns."""
+        """Run any function in a local scope which is destroyed when the function returns."""
 
         # Begin a new local scope
         self.begin_scope()
