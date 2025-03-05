@@ -4,9 +4,9 @@
 
 import random
 
+import eval
 import parser
 import environment
-import eval
 
 
 
