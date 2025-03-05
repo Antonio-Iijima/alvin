@@ -38,19 +38,27 @@ def closing_par(expr: list) -> int:
 
     stack = []
 
+    # Iterate through the expression
     for index, char in enumerate(expr):
+        
+        # Track opening parentheses using the stack
         if   char == "(" : stack.append("(")
         elif char == ")" : stack.pop()
 
+        # Return the index once the stack is empty (i.e. found the balancing parenthesis)
         if not stack: return index
     
 
 def retype(x: str) -> int | float | bool: 
     """Replace int, float, and bool strings with their correct data types."""
 
-    if isinstance(x, str):
-        if eval.isnumber(x): return float(x) if "." in x else int(x)
-        elif x in ("#t", "#f"): return x == "#t"
+    # Replace numbers with either int or float types
+    if eval.isnumber(x): return float(x) if "." in x else int(x)
+    
+    # Replace boolean #t and #f with the proper bool
+    elif x in ("#t", "#f"): return x == "#t"
+    
+    # Otherwise just return the original input
     return x
 
 
@@ -67,18 +75,23 @@ def lst_to_Python(expr: list) -> list:
 
     if expr == []: return []
 
-    # If the head is an opening parenthesis, convert to a list
+    # If the head is an opening parenthesis,
     elif expr[0] == "(": 
+
+        # Find the corresponding closing parenthesis
         closing_idx = closing_par(expr)
+
+        # Replace the section from opening to closing with a list, process the contents, process the rest, and return
         return [lst_to_Python(expr[1:closing_idx]), *lst_to_Python(expr[closing_idx+1:])]
     
-    # Otherwise leave as is
-    else: return [expr[0], *lst_to_Python(expr[1:])]
+    # Otherwise leave as is and process the rest
+    return [expr[0], *lst_to_Python(expr[1:])]
 
 
 def preprocess(expr: list) -> list:
     """Replace all special data types."""
 
+    # Filter only expressions
     if isinstance(expr, list):
         if expr == []: return []
         
@@ -89,9 +102,10 @@ def preprocess(expr: list) -> list:
         elif expr[0] == "'": return [["quote", preprocess(expr[1])], *preprocess(expr[2:])]
 
         # Otherwise replace with correct data type
-        else: return [retype(expr[0]), *preprocess(expr[1:])]
-        
-    else: return expr
+        return [retype(expr[0]), *preprocess(expr[1:])]
+
+    # Otherwise return original input atom
+    return expr
 
 
 
