@@ -1,4 +1,4 @@
-"""Main program to run the Alvin programming language."""
+"""Main program to run the Alvin interpreter."""
 
 
 
