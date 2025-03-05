@@ -13,9 +13,9 @@ import repl
 
 
 # Set flags
-iFlag = '-i' in sys.argv
-dFlag = '-d' in sys.argv
-pFlag = '-p' in sys.argv
+iFlag = '-i' in sys.argv # interactive interpreter
+dFlag = '-d' in sys.argv # debugging
+pFlag = '-p' in sys.argv # permanent extensions
 
 # Prompt customization
 BLUE = '\033[36m'
