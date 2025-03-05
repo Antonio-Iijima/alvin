@@ -10,6 +10,9 @@ import eval
 
 
 
+## Basic syntax checking (parentheses, operators, etc.) and typing
+
+
 def is_complete(expr: list) -> bool: 
     """Check for balanced parentheses in Python list."""
     return expr.count("(") == expr.count(")")
@@ -51,6 +54,9 @@ def retype(x: str) -> int | float | bool:
     return x
 
 
+## Low-level syntax conversion
+
+
 def Alvin_to_list(s: str) -> list: 
     """Divide Alvin expression into intermediary list of strings."""
     return s.replace("(", " ( ").replace(")", " ) ").replace("'", " ' ").split()
@@ -89,7 +95,7 @@ def preprocess(expr: list) -> list:
 
 
 
-##### (Alvin syntax) <-> [Python, list] converters #####
+##### Complete (Alvin syntax) <-> [Python, list] converters #####
 
 
 
