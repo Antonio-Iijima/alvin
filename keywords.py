@@ -5,9 +5,10 @@
 import re
 import importlib
 
+import eval
 import parser
 import datatypes
-import eval
+import extensions
 import environment
 
 
@@ -309,22 +310,22 @@ BOOLEAN = {
 
 # Special forms and other functions that have individual evaluation strategies
 # handled explicitly by evaluate()
-SPECIAL = [
-    "cond",
-   "lambda", "quote", 
-    "until", "do", 
+SPECIAL = {
+    "cond", "lambda", "quote", 
+    "until", "do",
     "list", "string", "eval", 
     "ref", "usrin", "repeat", 
     "let", "getfile", "burrow",
     "surface", "global", "import",
     "string?", "list?", "bool?"
-    ]
+    }
 
 
 # Grouping of all keywords in the language
-KEYWORDS = [
+KEYWORDS = {
     *REGULAR, 
     *IRREGULAR,
     *BOOLEAN, 
-    *SPECIAL
-    ]
+    *SPECIAL,
+    *extensions.EXTENSIONS
+    }
