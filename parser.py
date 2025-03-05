@@ -14,7 +14,7 @@ import eval
 
 
 def iscomplete(expr: list) -> bool: 
-    """Check for balanced parentheses in Python list."""
+    """Check for balanced parentheses in a split Alvin expression."""
     return expr.count("(") == expr.count(")")
 
 
