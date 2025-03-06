@@ -70,6 +70,11 @@ def evaluate(expr):
                 # Evaluate 'until' expressions
                 case "until": return until(expr[1][0], expr[1][1], expr[2])
 
+                # 'list', 'string', and 'bool' predicates
+                case "string?": return isinstance(TAIL, str)
+                case "list?": return isinstance(TAIL, list)
+                case "bool?": return isinstance(TAIL, bool)
+
                 # 'list' and 'string' type conversions
                 case "string": return str(evaluate(TAIL))
                 case "list": return list(evaluate(TAIL))
@@ -79,11 +84,6 @@ def evaluate(expr):
 
                 # Evaluate conditionals
                 case "cond": return cond(TAIL)
-
-                # 'list', 'string', and 'bool' predicates
-                case "string?": return isinstance(TAIL, str)
-                case "list?": return isinstance(TAIL, list)
-                case "bool?": return isinstance(TAIL, bool)
 
                 # Evaluate 'quote' expressions
                 case "quote": return expr[1]
