@@ -236,8 +236,8 @@ def globals(var: str, val: any = None) -> None:
     else: return environment.GLOBALS.get(var, ValueError)
 
 
-# Wrappers or slight extensions for basic Python functions
-# Simplicity obviates the need for detailed comments or type annotation
+## Wrappers or slight extensions for basic Python functions
+## Simplicity obviates the need for detailed comments or type annotation
 
 
 # Mathematical functions
@@ -308,8 +308,8 @@ BOOLEAN = {
 }
 
 
-# Special forms and other functions that have individual evaluation strategies
-# handled explicitly by evaluate()
+# Special forms and other functions having individual 
+# evaluation strategies handled explicitly by evaluate()
 SPECIAL = {
     "cond", "lambda", "quote", 
     "until", "do",
