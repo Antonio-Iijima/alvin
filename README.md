@@ -358,6 +358,7 @@ They are all unary and return `#t` if their argument is of the specified type.
 - `python` evaluates the proceeding expression using the Python interpreter and syntax.
 - `help` displays a textbox with some helpful information
 
+##### Lines of code (comments and spaces included): 1,225
 ## Known Bugs
 
 Feel free to push $\text{Alvin}$ to the extremes, and send me any bugs you find!
