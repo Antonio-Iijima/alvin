@@ -53,7 +53,7 @@ def evaluate(expr):
             elif HEAD in IRREGULAR: return IRREGULAR[HEAD](*TAIL)
 
             # Boolean functions
-            elif HEAD in BOOLEAN: return BOOLEAN[HEAD](bool(arg) for arg in TAIL)
+            elif HEAD in BOOLEAN: return BOOLEAN[HEAD](*[bool(arg) for arg in evlist(TAIL)])
 
             # Extensions
             elif HEAD in extensions.EXTENSIONS: return extensions.EXTENSIONS[HEAD](*TAIL)
