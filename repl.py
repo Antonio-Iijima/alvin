@@ -7,9 +7,9 @@ import sys
 import importlib
 
 import main
-import eval
 import parser
 import keywords
+import evaluate
 import extensions
 import environment
 
@@ -67,7 +67,7 @@ def get_output(line: str) -> any:
     elif line.startswith("python"): print(eval(line.removeprefix("python")))
     
     # Identify solitary keywords
-    elif eval.iskeyword(line): print(f"{line} is an operator, built-in function or reserved word.")
+    elif evaluate.iskeyword(line): print(f"{line} is an operator, built-in function or reserved word.")
     
     # Otherwise match specific inputs
     else:
@@ -93,7 +93,7 @@ def get_output(line: str) -> any:
             case "": print(end='')
 
             # Parse the line and convert it to Python syntax, evaluate, and return as an Alvin string 
-            case _: return parser.convert(eval.evaluate(parser.parse(line)))
+            case _: return parser.convert(evaluate.evaluate(parser.parse(line)))
 
 
 def interpret(line: str) -> None:
@@ -314,7 +314,7 @@ def show_keywords() -> None:
         }
 
     # Calculate the required character limit of each word
-    offset = max(len(key) for key in eval.KEYWORDS) + 2
+    offset = max(len(key) for key in evaluate.KEYWORDS) + 2
 
     # Iterate through each category
     for section_idx, section_title in enumerate(categories):

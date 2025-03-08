@@ -4,7 +4,7 @@
 
 import copy
 
-import eval
+import evaluate
 import datatypes
 import extensions
 
@@ -61,7 +61,7 @@ class Environment:
         self.garbage_collect(var)
 
         # Evaluate value and assign
-        self.env[scope][var] = eval.evaluate(val)
+        self.env[scope][var] = evaluate.evaluate(val)
 
 
     def define(self, name: str, parameters: list, body: list) -> None:

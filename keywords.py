@@ -5,8 +5,8 @@
 import re
 import importlib
 
-import eval
 import parser
+import evaluate
 import datatypes
 import extensions
 import environment
@@ -105,7 +105,7 @@ def setref(l: list, i: int, item: any) -> None:
 
 def evlist(x: list) -> list:
     """Evaluates each element in the input list and returns them as a list."""
-    return [*map(eval.evaluate, x)]
+    return [*map(evaluate.evaluate, x)]
 
 
 def head(x: list) -> any:
@@ -148,24 +148,24 @@ def cond(expr: list) -> any:
     """Evaluate conditional expression."""
     
     # Evaluate the body of the conditional if the condition is true or 'else', otherwise move to next conditional
-    return eval.evaluate(expr[0][1]) if (expr[0][0] == "else" or eval.evaluate(expr[0][0])) else cond(expr[1:])
+    return evaluate.evaluate(expr[0][1]) if (expr[0][0] == "else" or evaluate.evaluate(expr[0][0])) else cond(expr[1:])
 
 
 def repeat(number: int, body: list) -> None:
     """Evaluate `body` `number` times."""
     
-    n = eval.evaluate(number)
+    n = evaluate.evaluate(number)
     for _ in range(n):
-        eval.evaluate(body)
+        evaluate.evaluate(body)
 
 
 def until(cond: list | bool, inc: list, body: list) -> None:
     """Repeatedly evaluate `body` until `cond` is `#f`. Runs in a local scope."""
 
     def logic(cond: list | bool, inc: int, body: list) -> None:
-        while not(eval.evaluate(cond)):
-            eval.evaluate(body)
-            eval.evaluate(inc)
+        while not(evaluate.evaluate(cond)):
+            evaluate.evaluate(body)
+            evaluate.evaluate(inc)
 
     return environment.ENV.runlocal(logic, [cond, inc, body])
 
@@ -175,7 +175,7 @@ def let(bindings: list, body: list) -> any:
 
     def logic(bindings: list, body: list) -> any:
         for pair in bindings: environment.ENV.set(pair[0], pair[1])
-        return eval.evaluate(body)
+        return evaluate.evaluate(body)
     
     return environment.ENV.runlocal(logic, [bindings, body])
 
@@ -184,15 +184,15 @@ def do(exprlist: list, body: list) -> any:
     """Evaluates a series of expressions before returning the value of `body`. Runs in a local scope."""
     
     def logic(exprlist: list, body: list) -> any:
-        for expr in exprlist: eval.evaluate(expr)
-        return eval.evaluate(body)
+        for expr in exprlist: evaluate.evaluate(expr)
+        return evaluate.evaluate(body)
     
     return environment.ENV.runlocal(logic, [exprlist, body])
 
 
 def Alvin_eval(expr: any) -> any:
     """Interpreter access from the command line."""
-    return eval.evaluate(expr)
+    return evaluate.evaluate(expr)
 
 
 def getfile(filepath: str) -> list:
@@ -230,7 +230,7 @@ def globals(var: str, val: any = None) -> None:
     """Define or access global variables."""
 
     # If val is provided, evaluate and assign it to var in the GLOBALS dictionary
-    if val: environment.GLOBALS[var] = eval.evaluate(val)
+    if val: environment.GLOBALS[var] = evaluate.evaluate(val)
 
     # Otherwise look up and return the value of var if it exists
     else: return environment.GLOBALS.get(var, ValueError)
