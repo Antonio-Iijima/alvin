@@ -219,7 +219,7 @@ def extend() -> None:
 def help() -> None:
     """Display help information."""
 
-    display = f"""The ALVIN programming language was developed as an independent research project,
+    display = f"""The Alvin programming language was developed as an independent research project,
 which began in CSCI 370: Programming Languages at Ave Maria University.
         
 Documentation can be found on GitHub:
