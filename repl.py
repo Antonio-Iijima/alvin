@@ -104,7 +104,7 @@ def interpret(line: str) -> None:
 
     # If the output is None, then the line probably has its own internal 
     # output solution, so don't print it. Otherwise print the output.
-    if output != None: print(output)
+    if output is not None: print(output)
     
 
 
@@ -171,7 +171,7 @@ def exit_extensions() -> None:
     if main.pFlag:
         print(main.COLOR)
 
-        new_extensions = [key for key in extensions.EXTENSIONS if not key in environment.ORIGINAL_EXTENSIONS]
+        new_extensions = [key for key in extensions.EXTENSIONS if key not in environment.ORIGINAL_EXTENSIONS]
 
         if len(new_extensions) > 0:
             print("The following new extensions have been saved:")
@@ -255,30 +255,36 @@ def close() -> None:
 def show_funargs() -> None:
     """Display the current FUNARG environment."""
     
+    print()
     if environment.FUNARG:
         for function, env in environment.FUNARG.items():
             print(f"{function}:\n{env}")  
     else: print("No function environments found.")
+    print()
               
 
 def show_globals() -> None:
     """Display all global variables."""
 
+    print()
     if environment.GLOBALS:
         print("Global variables:")
         for var, val in environment.GLOBALS.items():
-            print(f"{var} : {val}")
+            print(f" {var} : {val}")
     else: print("No global variables found.")
+    print()
 
 
 def show_imports() -> None:
     """Display all currently imported modules and libraries."""
 
+    print()
     if environment.IMPORTS:
         print("Imported modules:")
         for alias, module in environment.IMPORTS.items():
-            print(alias) if alias == module.__name__ else print(f"{module.__name__} alias {alias}")
+            print(f" {alias}") if alias == module.__name__ else print(f" {module.__name__} alias {alias}")
     else: print("No imported modules found.")
+    print()
 
 
 def show_dev() -> None:

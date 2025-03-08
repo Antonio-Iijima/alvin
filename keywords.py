@@ -295,7 +295,7 @@ IRREGULAR = {
     "do"      : do,           "update"  : environment.ENV.update,
     "eval"    : Alvin_eval,   "del"     : environment.ENV.delete,
     "getfile" : getfile,      "burrow"  : environment.ENV.begin_scope,
-    "global"  : globals,   "surface" : environment.ENV.end_scope,
+    "global"  : globals,      "surface" : environment.ENV.end_scope,
     "import"  : import_lib
     }
 
