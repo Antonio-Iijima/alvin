@@ -19,10 +19,10 @@ import environment
 
 
 
-def REPL(stream: str = sys.stdin) -> None:
-    """Main REPL function"""
+def REPL(stream: str = sys.stdin, loading: bool = False) -> None:
+    """Process a stream or load a file."""
 
-    if main.iFlag:
+    if main.iFlag and not loading:
         welcome()
         print(main.PROMPT, flush=True, end='')
     else: print("--- Alvin ---")
@@ -44,7 +44,7 @@ def REPL(stream: str = sys.stdin) -> None:
                 except Exception as e: print(f"{type(e).__name__}: {e}")
 
             #  Print the prompt again to prepare for the next line
-            if main.iFlag: print(main.PROMPT, flush=True, end='')
+            if main.iFlag and not loading: print(main.PROMPT, flush=True, end='')
 
             expression = ""
 

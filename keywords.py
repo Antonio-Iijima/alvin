@@ -5,6 +5,7 @@
 import re
 import importlib
 
+import repl
 import parser
 import evaluate
 import datatypes
@@ -213,6 +214,16 @@ def import_lib(name: str, as_: str = None, alias: str = None) -> None:
     environment.IMPORTS[alias] = name
 
 
+def load(location: str) -> None:
+    """Load and run a .alv file from provided relative location."""
+
+    # Require .alv files for reliability
+    if not location.endswith(".alv"): raise IOError(f"ensure file extension is *.alv.")
+    
+    # Process file using REPL
+    with open(location, "r") as file: repl.REPL(file.read().split("\n"), True)
+
+
 def run_method(imported: str, args: list) -> any:
     """Call a method from an imported module or library."""
 
@@ -296,7 +307,7 @@ IRREGULAR = {
     "eval"    : Alvin_eval,   "del"     : environment.ENV.delete,
     "getfile" : getfile,      "burrow"  : environment.ENV.begin_scope,
     "global"  : globals,      "surface" : environment.ENV.end_scope,
-    "import"  : import_lib
+    "import"  : import_lib,   "load"    : load
     }
 
 
