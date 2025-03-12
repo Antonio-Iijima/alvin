@@ -4,6 +4,8 @@
 
 import os
 import sys
+import math
+import random
 import importlib
 
 import main
@@ -41,7 +43,47 @@ def REPL(stream: str = sys.stdin, loading: bool = False) -> None:
             # Otherwise catch and print errors without breaking the read-eval-print loop
             else:
                 try: interpret(expression)
-                except Exception as e: print(f"{type(e).__name__}: {e}")
+                except Exception as e:                     
+                    print(f"{type(e).__name__}: {e}")
+                    
+                    # Random keyword deletion mode, because why not?
+                    if main.zFlag:
+                        
+                        # Collect all available keyword groups (extensions excluded)
+                        collection = [keywords.REGULAR,
+                                        keywords.IRREGULAR,
+                                        keywords.BOOLEAN,
+                                        keywords.SPECIAL]
+                        
+                        # Remove all empty groups
+                        for idx, group in enumerate(collection):
+                            if not group: collection.pop(idx) 
+
+                        print(main.PURPLE, end='')
+
+                        # Pick a random keyword from a random group, and (probably) delete it
+                        if keywords.KEYWORDS:
+                            group = random.choice(collection)
+
+                            if group:
+                                item = random.choice(list(group))   
+
+                                if item in keywords.KEYWORDS:                     
+                                    
+                                    # Handle the fact that SPECIAL is a set, not a dict
+                                    group.remove(item) if isinstance(group, set) else group.pop(item)
+                                    keywords.KEYWORDS.discard(item)
+
+                                    print(f"You just lost the '{item}' function. Number of keywords remaining: {len(keywords.KEYWORDS)}")
+
+                                # It's not a bug, it's a feature (keyword is randomly not deleted)
+                                else: print(f"Nothing deleted... this time. Number of keywords remaining: {len(keywords.KEYWORDS)}")
+
+                        else: print(f"You have nothing left to lose. The language is now utterly and completely broken. Congratulations.")
+                        
+                        main.ERROR_COUNTER += 1
+                        
+                        print(main.END_COLOR, end='')
 
             #  Print the prompt again to prepare for the next line
             if main.iFlag and not loading: print(main.PROMPT, flush=True, end='')
@@ -67,7 +109,7 @@ def get_output(line: str) -> any:
     elif line.startswith("python"): print(eval(line.removeprefix("python")))
     
     # Identify solitary keywords
-    elif evaluate.iskeyword(line): print(f"{line} is an operator, built-in function or reserved word.")
+    elif keywords.iskeyword(line): print(f"{line} is an operator, built-in function or reserved word.")
     
     # Otherwise match specific inputs
     else:
@@ -113,36 +155,38 @@ def interpret(line: str) -> None:
 
 
 def text_box(text: str, centered: bool = False) -> None:
-    """Display the provided string of `text` in a printed box, either left-justified (default) or centered."""
+    """Display the provided string of `text` in a colorful printed box, either left-justified (default) or centered."""
 
     text = text.split("\n")
     
     # Maximum line length provides the necessary text justification 
-    w = len(max(text, key=len))
+    width = len(max(text, key=len))
     
     # Name components of the box for readability
     bar, post = chr(9552), chr(9553)
-    top = f"{chr(9556)}" + bar*(w+2) + f"{chr(9559)}"
-    bottom = f"{chr(9562)}" + bar*(w+2) + f"{chr(9565)}"
+    top = f"{chr(9556)}" + bar*(width+2) + f"{chr(9559)}"
+    bottom = f"{chr(9562)}" + bar*(width+2) + f"{chr(9565)}"
     
     # Print the top layer
-    print(f"\n{top}")
+    print(f"\n{main.COLOR}{top}{main.END_COLOR}")
 
     for line in text:
 
         # Calculate required line offset
-        space = w - len(line)
+        offset = width - len(line)
 
         # Center if specified
-        if centered: line = f"{post} {' '*(space//2)}{line}{' '*((space//2)+(space%2))} {post}"
+        if centered: 
+            offset /= 2
+            line = f"{main.COLOR}{post}{main.END_COLOR} {' ' * math.floor(offset)}{line}{' ' * math.ceil(offset)} {main.COLOR}{post}{main.END_COLOR}"
         
         # Otherwise left-justify
-        else: line = f"{post} {line}{' '*space} {post}"
+        else: line = f"{post} {line}{' '*offset} {post}"
         
         print(line)
     
     # Print bottom layer
-    print(f"{bottom}\n")
+    print(f"{main.COLOR}{bottom}{main.END_COLOR}\n")
 
 
 def welcome() -> None:
@@ -150,15 +194,19 @@ def welcome() -> None:
 
     clear()
 
-    display = """Welcome to Alvin,
-a Lisp variant implementation"""
+    display = """Welcome to the Alvin  
+    Programming Language"""
 
     text_box(display, centered=True)
 
     if main.iFlag: print("Alvin v3, running in interactive mode", end='\n'*(not main.dFlag))
     if main.dFlag: print(" with debugging")
     if main.pFlag: print("Permanent extensions enabled")
+
     print("Enter 'help' to show further information")
+
+    if main.zFlag: print(f"{main.RED}WARNING: Random keyword deletion enabled.{main.PURPLE} Proceed at your own risk.{main.END_COLOR}")
+
 
 
 def exit_extensions() -> None:
@@ -169,9 +217,9 @@ def exit_extensions() -> None:
 
     # Print informational text if saving new extensions
     if main.pFlag:
-        print(main.COLOR)
+        print(main.GOLD)
 
-        new_extensions = [key for key in extensions.EXTENSIONS if key not in environment.ORIGINAL_EXTENSIONS]
+        new_extensions = [key for key in extensions.EXTENSIONS if key not in environment.OG_EXTENSIONS_COPY]
 
         if len(new_extensions) > 0:
             print("The following new extensions have been saved:")
@@ -183,7 +231,7 @@ def exit_extensions() -> None:
     # Otherwise remove them
     else:
         with open("extensions.py", "w") as file:
-            file.writelines(contents[-main.ORIGINAL_LEN:])
+            file.writelines(contents[-main.OG_EXTENSIONS_LEN:])
 
 
 ## Built-in commands
@@ -243,6 +291,10 @@ def close() -> None:
     """Exit the interactive interpreter."""
 
     exit_extensions()
+
+    if main.zFlag: 
+        total = 56 - len(keywords.KEYWORDS)
+        print(f"\n{main.PURPLE}You made {main.ERROR_COUNTER} errors with a net loss of {total} functions.{main.END_COLOR}")
 
     text_box("""Arrivederci!""", centered=True)
 
@@ -314,7 +366,7 @@ def show_keywords() -> None:
         }
 
     # Calculate the required character limit of each word
-    offset = max(len(key) for key in evaluate.KEYWORDS) + 2
+    offset = max(len(key) for key in keywords.KEYWORDS) + 2
 
     # Iterate through each category
     for section_idx, section_title in enumerate(categories):
