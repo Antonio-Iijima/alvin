@@ -188,7 +188,4 @@ IMPORTS = {}
 ENV = Environment(name="env")
 
 # Save all the original extensions declared when the interpreter starts
-ORIGINAL_EXTENSIONS = copy.deepcopy(extensions.EXTENSIONS)
-
-# Save the original size of the extensions.py file
-LINES = len(open("extensions.py").readlines())
+OG_EXTENSIONS_COPY = copy.deepcopy(extensions.EXTENSIONS)
