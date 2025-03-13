@@ -29,7 +29,7 @@ END_COLOR = '\033[97m'
 
 # Prompt color changes to reflect enabled flags
 COLOR = PURPLE if zFlag else GOLD if pFlag else BLUE if dFlag else RED
-PROMPT_SYMBOL = '{α}> '
+PROMPT_SYMBOL = '(α) '
 
 PROMPT = f"{COLOR}{PROMPT_SYMBOL}{END_COLOR}"
 
