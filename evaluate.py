@@ -88,8 +88,8 @@ def evaluate(expr):
                 # Evaluate 'quote' expressions
                 case "quote": return expr[1]
         
-        # Otherwise head is something strange
-        return expr
+        # Otherwise head is a literal
+        return evlist(expr)
 
     # Otherwise head is a list
     return evaluate([evaluate(expr[0]), *expr[1:]])
