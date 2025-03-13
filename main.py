@@ -52,6 +52,6 @@ if __name__ == "__main__":
         for item in sys.argv[1:]:
             if item not in FLAGS:
                 with open(item, "r") as file:
-                    repl.REPL(file.read().split("\n"))
+                    repl.REPL(file.read().split("\n"), True)
 
     if iFlag: repl.REPL()

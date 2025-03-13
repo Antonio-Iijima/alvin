@@ -117,7 +117,7 @@ def get_output(line: str) -> any:
             
             # Basic commands
             case "help": help()
-            case "clear": welcome()
+            case "clear": clear()
             case "keywords": show_keywords()
             case "exit" | "quit": close()
 
@@ -191,8 +191,6 @@ def text_box(text: str, centered: bool = False) -> None:
 
 def welcome() -> None:
     """Display a welcome text box."""
-
-    clear()
 
     display = """Welcome to the Alvin  
     Programming Language"""
@@ -284,7 +282,7 @@ https://github.com/Antonio-Iijima/Alvin
 
 def clear() -> None:
     """Clear the terminal."""
-    os.system('cls' if os.name == 'nt' else 'clear')
+    os.system('cls' if os.name == 'nt' else 'clear'); welcome()
 
 
 def close() -> None:
