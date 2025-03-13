@@ -113,7 +113,7 @@ class Environment:
         if scope == -1: 
 
             # Check if it is the name of an imported module
-            if var in IMPORTS: print(f"'{var}' is an imported module.")
+            if var in IMPORTS: print(f"'{var}' {f"(or '{IMPORTS[var].__name__}') " if IMPORTS[var].__name__ != var else ""}is an imported module.")
 
             # Otherwise raise error
             else: raise ValueError(f"variable {var} is not defined.")
