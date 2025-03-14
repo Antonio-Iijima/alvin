@@ -13,12 +13,12 @@ import repl
 
 
 # Set boolean flags
-FLAGS = {'-i','-d','-p','-z'}
-
 iFlag = '-i' in sys.argv # interactive interpreter
 dFlag = '-d' in sys.argv # debugging
 pFlag = '-p' in sys.argv # permanent extensions
 zFlag = '-z' in sys.argv # randomly delete a keyword from the language whenever the interpreter registers an error
+
+FLAGS = {'-i','-d','-p','-z'}
 
 # Prompt customization
 BLUE = '\033[36m'
