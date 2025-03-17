@@ -119,8 +119,8 @@ def head(x: list) -> any:
 
 def tail(x: list) -> list:
     """Returns the tail of a list or raises a TypeError."""
-    try: 
-        if isinstance(x, list): return x[1:] 
+    try:
+        if isinstance(x, list): return x[1:]
     except:
         raise TypeError(f"unsupported argument for 'cdr': {parser.convert(x)}")
     
@@ -129,11 +129,11 @@ def evcxr(x: str, output: any) -> any:
     """Tail-recursive evaluation of `cxr` expressions (arbitrary combinations of `car` and `cdr`)."""
 
     # Return the final output if all head and tail calls have been processed
-    if x == "": return output
-
+    if not x: return output
+    
     # Otherwise call head or tail depending on the current letter of the abbreviation
-    elif x[-1] == "a": return evcxr(x[:-1], head(output))
-    elif x[-1] == "d": return evcxr(x[:-1], tail(output))
+    elif x.endswith("a"): return evcxr(x.removesuffix("a"), head(output))
+    elif x.endswith("d"): return evcxr(x.removesuffix("d"), tail(output))
 
 
 def predicate(x: any, p: callable) -> any:
