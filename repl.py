@@ -162,8 +162,8 @@ def text_box(text: str, centered: bool = False) -> None:
     # Maximum line length provides the necessary text justification 
     width = len(max(text, key=len))
     
-    # Name components of the box for readability
-    bar, post = chr(9552), chr(9553)
+    # Name components of the box for readability; add color to post
+    bar, post = chr(9552), f"{main.COLOR}{chr(9553)}{main.END_COLOR}"
     top = f"{chr(9556)}" + bar*(width+2) + f"{chr(9559)}"
     bottom = f"{chr(9562)}" + bar*(width+2) + f"{chr(9565)}"
     
@@ -178,7 +178,7 @@ def text_box(text: str, centered: bool = False) -> None:
         # Center if specified
         if centered: 
             offset /= 2
-            line = f"{main.COLOR}{post}{main.END_COLOR} {' ' * math.floor(offset)}{line}{' ' * math.ceil(offset)} {main.COLOR}{post}{main.END_COLOR}"
+            line = f"{post} {' ' * math.floor(offset)}{line}{' ' * math.ceil(offset)} {post}"
         
         # Otherwise left-justify
         else: line = f"{post} {line}{' '*offset} {post}"
