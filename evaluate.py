@@ -16,7 +16,7 @@ from keywords import *
 
 def evaluate(expr):
     """Evaluates complete Alvin expressions."""
-
+    print(parser.convert(expr))
     # Processing a single atom
 
     # Look up variables in environment, otherwise return as literal
