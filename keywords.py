@@ -127,10 +127,11 @@ def tail(x: list) -> list:
 
 def evcxr(x: str, output: any) -> any:
     """Tail-recursive evaluation of `cxr` expressions (arbitrary combinations of `car` and `cdr`)."""
-
+    
+    print(x, " : ", parser.convert(output))
     # Return the final output if all head and tail calls have been processed
     if not x: return output
-    
+
     # Otherwise call head or tail depending on the current letter of the abbreviation
     elif x.endswith("a"): return evcxr(x.removesuffix("a"), head(output))
     elif x.endswith("d"): return evcxr(x.removesuffix("d"), tail(output))
