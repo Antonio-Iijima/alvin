@@ -31,8 +31,7 @@ def evaluate(expr):
     elif isatom(expr[0]):
 
         # Head and tail identifiers for readability
-        HEAD = expr[0] 
-        TAIL = expr[1:]
+        HEAD, TAIL = expr[0],  expr[1:]
 
         # Evaluate methods from imported modules
         if isimport(HEAD): return run_method(HEAD, TAIL)
