@@ -1,4 +1,0 @@
-@start
-def test(): print("Hello world")
-@end
-(show (test))
