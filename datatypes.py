@@ -63,7 +63,7 @@ class Function:
 
         # Confirm function arity
         if len(self.parameters) != len(args): 
-            raise TypeError(f"{self.name} takes {len(self.parameters)} argument{"s"*bool(len(self.parameters)-1)} but {len(args)} were given")
+            raise TypeError(f"{self.name} takes {len(self.parameters)} argument{"s"*bool(len(self.parameters)-1)} but {len(args)} were given") # pragma: no cover
         
         # Perform the actual function logic in local scope
         return environment.FUNARG[self.id].runlocal(logic, [args])

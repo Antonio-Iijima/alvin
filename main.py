@@ -16,7 +16,7 @@ import repl
 iFlag = '-i' in sys.argv # interactive interpreter
 dFlag = '-d' in sys.argv # debugging
 pFlag = '-p' in sys.argv # permanent extensions
-zFlag = '-z' in sys.argv # randomly delete a keyword from the language whenever the interpreter registers an error
+zFlag = '-z' in sys.argv # just no
 
 FLAGS = {'-i','-d','-p','-z'}
 
@@ -51,8 +51,8 @@ PROMPT_SYMBOL = '(α) '
 PROMPT = color(PROMPT_SYMBOL)
 
 
-# Save the original size of the extensions.py file
-OG_EXTENSIONS_LEN = len(open("extensions.py").readlines())
+# Initialize the length of newly added extensions
+NEW_EXTENSIONS_LEN = 0
 
 # Track the number of programming errors by the user
 ERROR_COUNTER = 0
@@ -72,7 +72,7 @@ def main(args: list=sys.argv) -> None:
         for item in args[1:]:
             if item not in FLAGS:
                 with open(item, "r") as file:
-                    repl.REPL(file.read().split("\n"), True)
+                    repl.REPL(file.read().splitlines(), True)
 
     if iFlag: repl.REPL()
 

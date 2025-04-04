@@ -24,3 +24,6 @@ test(args = ['main.py'])
 for flag in main.FLAGS:
     print(f"Running with {flag} flag")
     test(args = ['main.py', flag])
+
+print("Last things")
+test(args = ['main.py', "-p", "final_test.alv"])

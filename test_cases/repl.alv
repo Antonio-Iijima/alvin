@@ -20,3 +20,10 @@ python 1 + 2
 dev.funarg
 dev.globals
 dev.imports
+clear
+
+@start
+def f(x): return x + 1
+@end
+
+(f 1)

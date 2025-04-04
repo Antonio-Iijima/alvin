@@ -13,32 +13,29 @@ import evaluate
 ## Basic syntax checking (parentheses, operators, etc.) and typing
 
 
-def isbalanced(expr: list | str) -> bool: 
+def isbalanced(expr: list) -> bool: 
     """Check for balanced parentheses in an Alvin expression."""
     
     stack = 0
-    
-    # Automatically and permanently invalid
-    if expr.count(")") > expr.count("("): raise SyntaxError(f"unmatched closing parenthesis in {expr}")
 
     for char in expr:
         if char == "(": stack += 1
-        elif char == ")": stack -= 1
+        elif char == ")": 
+            if not stack: raise SyntaxError(f"unmatched closing parenthesis in {" ".join(expr)}")
+            else: stack -= 1
     
-    return not stack
+    if stack: raise SyntaxError(f"unmatched opening parenthesis in {" ".join(expr)}")
 
 
 def syntax_check(expr: list) -> list:
-    """Basic syntax check: balanced parentheses, proper expression nesting, etc."""
+    """Checks balanced parentheses, proper expression nesting, etc. Raises errors if any conditions not met, otherwise returns `expr`."""
 
-    here = f"in {' '.join(expr)}"
-    
     # Confirm balanced parentheses
     isbalanced(expr)        
 
     # Confirm that no two operators appear successively without correct parenthetical nesting
     for i, c in enumerate(expr):
-        if evaluate.iskeyword(c) and evaluate.iskeyword(i+1): raise SyntaxError(f"invalid expression structure {here}")
+        if evaluate.iskeyword(c) and evaluate.iskeyword(i+1): raise SyntaxError(f"invalid expression structure {" ".join(expr)}")
 
     return expr
 

@@ -91,7 +91,7 @@ def show(expr: str) -> None:
 
 def usrin(expr: list) -> str:
     """Reads from standard input."""
-    return input(f"{expr} ")
+    return input(f"{expr} ") # pragma: no cover
 
 
 def elem(x: any, y: list | str) -> bool:

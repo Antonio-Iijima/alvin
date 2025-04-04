@@ -23,95 +23,69 @@ import environment
 
 def REPL(stream: str = sys.stdin, loading: bool = False) -> None:
     """Process a stream or load a file."""
-
-    if main.iFlag and not loading:
-        welcome()
-        print(main.PROMPT, flush=True, end='')
+    
+    if main.iFlag:
+        if not loading:
+            welcome()
+            print(main.PROMPT, flush=True, end='')
     else: print("--- Alvin ---")
 
+    # Initialize expresssion
     expression = ""
 
     for line in stream:
-        expression += line
+        expression += f"{line}\n" if loading else line
+                           
+        # Handle extensions
+        if expression.startswith("@start"):
+            if expression.endswith("@end\n"):
+                extend(expression)
+
+                if main.iFlag and not loading: print(main.PROMPT, flush=True, end='')
+                expression = ""
+
+            # Extensions have their own prompt (the Python prompt)
+            else: 
+                main.NEW_EXTENSIONS_LEN += 1
+                if not loading: print("> ", flush=True, end='')
 
         # If the expression is syntactically complete
-        try:
-            if parser.isbalanced(expression):
+        elif expression.count("(") == expression.count(")"):
 
                 # Interpret without error handling
-                if main.dFlag: interpret(expression)
+                if main.dFlag: run(expression, loading)
 
                 # Otherwise catch and print errors without breaking the REPL
                 else:
-                    try: interpret(expression)
+                    try: run(expression, loading)
                     except Exception as e:                     
                         print(f"{type(e).__name__}: {e}")
                         
                         # Random keyword deletion mode, because why not?
-                        if main.zFlag:
-                            
-                            # Collect all available keyword groups (extensions excluded)
-                            collection = [
-                                keywords.REGULAR,
-                                keywords.IRREGULAR,
-                                keywords.BOOLEAN,
-                                keywords.SPECIAL
-                            ]
-                            
-                            # Remove all empty groups
-                            for idx, group in enumerate(collection):
-                                if not group: collection.pop(idx) 
-
-                            print(main.PURPLE, end='')
-
-                            # Pick a random keyword from a random group, and (probably) delete it
-                            if keywords.KEYWORDS:
-                                group = random.choice(collection)
-
-                                if group:
-                                    item = random.choice(list(group))   
-
-                                    if item in keywords.KEYWORDS:                     
-                                        
-                                        # Handle the fact that SPECIAL is a set, not a dict
-                                        group.remove(item) if isinstance(group, set) else group.pop(item)
-                                        keywords.KEYWORDS.discard(item)
-
-                                        print(f"You just lost the '{item}' function. Number of keywords remaining: {len(keywords.KEYWORDS)}")
-
-                                    # It's not a bug, it's a feature (keyword is randomly not deleted)
-                                    else: print(f"Nothing deleted... this time. Number of keywords remaining: {len(keywords.KEYWORDS)}")
-
-                            else: print(f"You have nothing left to lose. The language is now utterly and completely broken. Congratulations.")
-                            
-                            main.ERROR_COUNTER += 1
-                            
-                            print(main.END_COLOR, end='')
-
+                        if main.zFlag: del_random_keyword()
+                
                 #  Print the prompt again to prepare for the next line
                 if main.iFlag and not loading: print(main.PROMPT, flush=True, end='')
-
+                
                 expression = ""
-
-        # Catch completely invalid statements
-        except Exception as e: 
-            print(f"{type(e).__name__}: {e}")
-            expression = ""
 
         # Otherwise do nothing and hope the next line completes the expression    
         else: continue
+
+    else:
+        if not main.iFlag: exit_extensions()
 
 
 ## REPL helper functions
 
 
-def get_output(line: str) -> any:
-    """Process a line of code and return any output."""
+def interpret(line: str) -> any:
+    """Fully interpret a complete expression."""
     
     # Handle interactive tools
     
     # Ignore comments
-    if line.startswith("--"): print(end='')
+    if line.startswith("--"): return None
     
     # Interpret using the Python interpreter
     elif line.startswith("python"): print(eval(line.removeprefix("python")))
@@ -129,9 +103,6 @@ def get_output(line: str) -> any:
             case "keywords": show_keywords()
             case "exit" | "quit": close()
 
-            # Language extensions
-            case "@start": extend()
-
             # Dev commands
             case "dev.info": show_dev()
             case "dev.funarg": show_funargs()
@@ -140,22 +111,64 @@ def get_output(line: str) -> any:
             case "dev.env": print(environment.ENV)
 
             # No input
-            case "": print(end='')
+            case "": return None
 
             # Parse the line and convert it to Python syntax, evaluate, and return as an Alvin string 
             case _: return parser.convert(evaluate.evaluate(parser.parse(line)))
 
 
-def interpret(line: str) -> None:
-    """Fully interpret a line of code and print to standard output."""
+def run(line: str, loading: bool = False) -> None:
+    """Execute a complete expression and print output, if any."""
 
     line = line.strip()
-    output = get_output(line)
+    output = interpret(line)
 
     # If the output is None, then the line probably has its own internal 
     # output solution, so don't print it. Otherwise print the output.
-    if output is not None: print(output)
+    if not loading and output is not None: print(output)
     
+
+def del_random_keyword() -> None: # pragma: no cover
+    """Delete a random keyword from the language for the duration of the interpreter instance if the user makes a mistake."""
+
+    # Collect all available keyword groups (extensions excluded)
+    collection = [
+        keywords.REGULAR,
+        keywords.IRREGULAR,
+        keywords.BOOLEAN,
+        keywords.SPECIAL
+    ]
+    
+    # Remove all empty groups
+    for idx, group in enumerate(collection):
+        if not group: collection.pop(idx) 
+
+    print(main.PURPLE, end='')
+
+    # Pick a random keyword from a random group, and (probably) delete it
+    if keywords.KEYWORDS:
+        group = random.choice(collection)
+
+        if group:
+            item = random.choice(list(group))   
+
+            if item in keywords.KEYWORDS:                     
+                
+                # Handle the fact that SPECIAL is a set, not a dict
+                group.remove(item) if isinstance(group, set) else group.pop(item)
+                keywords.KEYWORDS.discard(item)
+
+                print(f"You just lost the '{item}' function. Number of keywords remaining: {len(keywords.KEYWORDS)}")
+
+            # It's not a bug, it's a feature (keyword is randomly not deleted)
+            else: print(f"Nothing deleted... this time. Number of keywords remaining: {len(keywords.KEYWORDS)}")
+
+    else: print(f"You have nothing left to lose. The language is now utterly and completely broken. Congratulations.")
+    
+    main.ERROR_COUNTER += 1
+    
+    print(main.END_COLOR, end='')
+
 
 
 ##### Helper Functions #####
@@ -176,6 +189,7 @@ def text_box(text: str, centered: bool = False) -> None:
     bottom = f"{chr(9562)}" + bar*(width+2) + f"{chr(9565)}"
     
     # Print the top layer
+    print()
     print(main.color(top))
 
     for line in text:
@@ -195,6 +209,7 @@ def text_box(text: str, centered: bool = False) -> None:
     
     # Print bottom layer
     print(main.color(bottom))
+    print()
 
 
 def welcome() -> None:
@@ -212,7 +227,6 @@ def welcome() -> None:
     print("Enter 'help' to show further information")
 
     if main.zFlag: print(f"{main.RED}WARNING: Random keyword deletion enabled.{main.PURPLE} Proceed at your own risk.{main.END_COLOR}")
-
 
 
 def exit_extensions() -> None:
@@ -237,31 +251,25 @@ def exit_extensions() -> None:
     # Otherwise remove them
     else:
         with open("extensions.py", "w") as file:
-            file.writelines(contents[-main.OG_EXTENSIONS_LEN:])
+            file.writelines(contents[main.NEW_EXTENSIONS_LEN:])
 
-
+    main.NEW_EXTENSIONS_LEN = 0
+    
+        
 ## Built-in commands
 
 
-def extend() -> None:
+def extend(pycode: str) -> None:
     """Add extensions in Python to Alvin."""
 
-    extension = []
+    extension = pycode.removeprefix("@start\n").removesuffix("@end\n")
     
-    for line in sys.stdin:
-
-        # Stop reading with the @end command
-        if line.startswith("@end"): break
-
-        # Otherwise add the latest line to the extension
-        else: extension += [line]
-
     # Get the current contents of the extensions.py file
     contents = open("extensions.py").readlines()
     
     # Write the new extensions to beginning of the file
     with open("extensions.py", "w") as file:
-        file.writelines([*extension, "\n", *contents])
+        file.writelines([extension, "\n", *contents])
 
     # Reload extensions to enable access to newly added
     importlib.reload(extensions)
