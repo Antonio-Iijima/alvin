@@ -28,7 +28,7 @@ def isquote(x: str) -> bool:
 
 def isvariable(x: str) -> bool:
     """Unary `variable` predicate."""
-    return isatom(x) and not(iskeyword(x) or isnumber(x) or isinstance(x, bool))
+    return isatom(x) and not(iskeyword(x) or isnumber(x) or isbool(x))
 
     
 def iskeyword(x: str) -> bool: 
@@ -66,6 +66,11 @@ def isnull(x: list) -> bool:
     return x == []
 
 
+def isbool(x: str) -> bool:
+    """Unary `bool` predicate."""
+    return isinstance(x, bool) or x in ("#t", "#f")
+
+
 ## Other basic functions
 
 
@@ -84,9 +89,9 @@ def show(expr: str) -> None:
     print(parser.convert(expr))
 
 
-def usrin(expr: str) -> str:
+def usrin(expr: list) -> str:
     """Reads from standard input."""
-    return input(f"{' '.join(expr)} ")
+    return input(f"{expr} ")
 
 
 def elem(x: any, y: list | str) -> bool:
@@ -112,7 +117,7 @@ def evlist(x: list) -> list:
 def head(x: list) -> any:
     """Returns the head of a list or raises a TypeError."""
     try: 
-        if isinstance(x, list): return x[0]
+        return x[0]
     except: 
         raise TypeError(f"unsupported argument for 'car': {parser.convert(x)}")
 
@@ -120,7 +125,7 @@ def head(x: list) -> any:
 def tail(x: list) -> list:
     """Returns the tail of a list or raises a TypeError."""
     try:
-        if isinstance(x, list): return x[1:]
+        return x[1:]
     except:
         raise TypeError(f"unsupported argument for 'cdr': {parser.convert(x)}")
     
@@ -128,7 +133,6 @@ def tail(x: list) -> list:
 def evcxr(x: str, output: any) -> any:
     """Tail-recursive evaluation of `cxr` expressions (arbitrary combinations of `car` and `cdr`)."""
     
-    print(x, " : ", parser.convert(output))
     # Return the final output if all head and tail calls have been processed
     if not x: return output
 
@@ -137,10 +141,14 @@ def evcxr(x: str, output: any) -> any:
     elif x.endswith("d"): return evcxr(x.removesuffix("d"), tail(output))
 
 
-def predicate(x: any, p: callable) -> any:
-    """Wrapper for predicate functions. 
-    \nLooks up variables in the environment, but otherwise applies the predicate to its argument directly."""
-    return p(environment.ENV.lookup(x)) if isvariable(x) else p(x)
+def rebool(x: str | bool) -> bool:
+    """Convert the literal `#t` and `#f` into the `bool` datatype."""
+    return x == "#t" if isinstance(x, str) else x
+
+
+def lst(*x: str | int | bool) -> list:
+    """List type conversion."""
+    return list(x)
 
 
 ## More complex functions and special forms
@@ -193,8 +201,8 @@ def do(exprlist: list, body: list) -> any:
 
 
 def Alvin_eval(expr: any) -> any:
-    """Interpreter access from the command line."""
-    return evaluate.evaluate(expr)
+    """Interpreter access from the command line for quoted expressions."""
+    return evaluate.evaluate(expr[1])
 
 
 def getfile(filepath: str) -> list:
@@ -296,7 +304,9 @@ REGULAR = {
     "=="      : eq,         "ref"   : ref,
     "null?"   : isnull,     "atom?" : isatom,
     "number?" : isnumber,   "cons"  : cons,
-    "setref"  : setref,     "++"    : increment
+    "setref"  : setref,     "++"    : increment,
+    "bool?"   : isbool,     "list"  : lst,
+    "usrin"   : usrin
     }
 
 

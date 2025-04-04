@@ -13,41 +13,53 @@ import evaluate
 ## Basic syntax checking (parentheses, operators, etc.) and typing
 
 
-def iscomplete(expr: list) -> bool: 
-    """Check for balanced parentheses in a split Alvin expression."""
-    return expr.count("(") == expr.count(")")
+def isbalanced(expr: list | str) -> bool: 
+    """Check for balanced parentheses in an Alvin expression."""
+    
+    stack = 0
+    
+    # Automatically and permanently invalid
+    if expr.count(")") > expr.count("("): raise SyntaxError(f"unmatched closing parenthesis in {expr}")
+
+    for char in expr:
+        if char == "(": stack += 1
+        elif char == ")": stack -= 1
+    
+    return not stack
 
 
-def syntax_check(expr: list) -> None:
+def syntax_check(expr: list) -> list:
     """Basic syntax check: balanced parentheses, proper expression nesting, etc."""
 
     here = f"in {' '.join(expr)}"
     
     # Confirm balanced parentheses
-    if not iscomplete(expr):
-        if expr.count("(") > expr.count(")"): raise SyntaxError(f"unmatched opening parenthesis {here}")
-        else: raise SyntaxError(f"unmatched closing parenthesis {here}")
+    isbalanced(expr)        
 
     # Confirm that no two operators appear successively without correct parenthetical nesting
     for i, c in enumerate(expr):
         if evaluate.iskeyword(c) and evaluate.iskeyword(i+1): raise SyntaxError(f"invalid expression structure {here}")
 
+    return expr
 
-def closing_par(expr: list) -> int:
-    """Get the index of the closing parenthesis."""
 
-    stack = []
+def get_opp_par(expr: list, par: str="(") -> int | bool:
+    """Get the index of the corresponding parenthesis, otherwise return False."""
+
+    stack = 0
+
+    opp = ")" if par == "(" else "("
 
     # Iterate through the expression
     for index, char in enumerate(expr):
         
         # Track opening parentheses using the stack
-        if   char == "(" : stack.append("(")
-        elif char == ")" : stack.pop()
+        if   char == par: stack += 1
+        elif char == opp: stack -= 1
 
         # Return the index once the stack is empty (i.e. found the balancing parenthesis)
         if not stack: return index
-    
+
 
 def retype(x: str) -> int | float | bool: 
     """Replace int, float, and bool strings with their correct data types."""
@@ -79,7 +91,7 @@ def lst_to_Python(expr: list) -> list:
     elif expr[0] == "(": 
 
         # Find the corresponding closing parenthesis
-        closing_idx = closing_par(expr)
+        closing_idx = get_opp_par(expr)
 
         # Replace the section from opening to closing with a list, process the contents, process the rest, and return
         return [lst_to_Python(expr[1:closing_idx]), *lst_to_Python(expr[closing_idx+1:])]
@@ -127,4 +139,4 @@ def convert(s: any) -> str | None:
 
 def parse(s: str) -> list: 
     """Perform syntax checking and convert Alvin expresssion string to manipulable Python lists."""
-    syntax_check(s); return preprocess(lst_to_Python(Alvin_to_list(s)))[0]
+    return preprocess(lst_to_Python(syntax_check(Alvin_to_list(s))))[0]

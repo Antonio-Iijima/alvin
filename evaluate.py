@@ -16,11 +16,11 @@ from keywords import *
 
 def evaluate(expr):
     """Evaluates complete Alvin expressions."""
-    print(parser.convert(expr))
+#    print(parser.convert(expr))
     # Processing a single atom
 
     # Look up variables in environment, otherwise return as literal
-    if isatom(expr): return environment.ENV.lookup(expr) if isvariable(expr) else expr
+    if isatom(expr): return environment.ENV.lookup(expr) if isvariable(expr) else rebool(expr) if isbool(expr) else expr
 
     # Otherwise processing a list
 
@@ -72,20 +72,12 @@ def evaluate(expr):
                 # 'list', 'string', and 'bool' predicates
                 case "string?": return isinstance(TAIL, str)
                 case "list?": return isinstance(TAIL, list)
-                case "bool?": return isinstance(TAIL, bool)
-
-                # 'list' and 'string' type conversions
-                case "string": return str(evaluate(TAIL))
-                case "list": return list(evaluate(TAIL))
-
-                # 'usrin' to process user input
-                case "usrin": return usrin(TAIL)
 
                 # Evaluate conditionals
                 case "cond": return cond(TAIL)
 
                 # Evaluate 'quote' expressions
-                case "quote": return expr[1]
+                case _: return expr[1]
         
         # Otherwise head is a literal
         return evlist(expr)

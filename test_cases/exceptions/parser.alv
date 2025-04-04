@@ -1,0 +1,5 @@
+-- isincomplete
+)(+ 1 2))
+
+-- syntax_check
+(+ 1 (or or))

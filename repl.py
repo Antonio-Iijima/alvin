@@ -35,63 +35,71 @@ def REPL(stream: str = sys.stdin, loading: bool = False) -> None:
         expression += line
 
         # If the expression is syntactically complete
-        if parser.iscomplete(expression):
+        try:
+            if parser.isbalanced(expression):
 
-            # Interpret without error handling
-            if main.dFlag: interpret(expression)
+                # Interpret without error handling
+                if main.dFlag: interpret(expression)
 
-            # Otherwise catch and print errors without breaking the read-eval-print loop
-            else:
-                try: interpret(expression)
-                except Exception as e:                     
-                    print(f"{type(e).__name__}: {e}")
-                    
-                    # Random keyword deletion mode, because why not?
-                    if main.zFlag:
+                # Otherwise catch and print errors without breaking the REPL
+                else:
+                    try: interpret(expression)
+                    except Exception as e:                     
+                        print(f"{type(e).__name__}: {e}")
                         
-                        # Collect all available keyword groups (extensions excluded)
-                        collection = [keywords.REGULAR,
-                                        keywords.IRREGULAR,
-                                        keywords.BOOLEAN,
-                                        keywords.SPECIAL]
-                        
-                        # Remove all empty groups
-                        for idx, group in enumerate(collection):
-                            if not group: collection.pop(idx) 
+                        # Random keyword deletion mode, because why not?
+                        if main.zFlag:
+                            
+                            # Collect all available keyword groups (extensions excluded)
+                            collection = [
+                                keywords.REGULAR,
+                                keywords.IRREGULAR,
+                                keywords.BOOLEAN,
+                                keywords.SPECIAL
+                            ]
+                            
+                            # Remove all empty groups
+                            for idx, group in enumerate(collection):
+                                if not group: collection.pop(idx) 
 
-                        print(main.PURPLE, end='')
+                            print(main.PURPLE, end='')
 
-                        # Pick a random keyword from a random group, and (probably) delete it
-                        if keywords.KEYWORDS:
-                            group = random.choice(collection)
+                            # Pick a random keyword from a random group, and (probably) delete it
+                            if keywords.KEYWORDS:
+                                group = random.choice(collection)
 
-                            if group:
-                                item = random.choice(list(group))   
+                                if group:
+                                    item = random.choice(list(group))   
 
-                                if item in keywords.KEYWORDS:                     
-                                    
-                                    # Handle the fact that SPECIAL is a set, not a dict
-                                    group.remove(item) if isinstance(group, set) else group.pop(item)
-                                    keywords.KEYWORDS.discard(item)
+                                    if item in keywords.KEYWORDS:                     
+                                        
+                                        # Handle the fact that SPECIAL is a set, not a dict
+                                        group.remove(item) if isinstance(group, set) else group.pop(item)
+                                        keywords.KEYWORDS.discard(item)
 
-                                    print(f"You just lost the '{item}' function. Number of keywords remaining: {len(keywords.KEYWORDS)}")
+                                        print(f"You just lost the '{item}' function. Number of keywords remaining: {len(keywords.KEYWORDS)}")
 
-                                # It's not a bug, it's a feature (keyword is randomly not deleted)
-                                else: print(f"Nothing deleted... this time. Number of keywords remaining: {len(keywords.KEYWORDS)}")
+                                    # It's not a bug, it's a feature (keyword is randomly not deleted)
+                                    else: print(f"Nothing deleted... this time. Number of keywords remaining: {len(keywords.KEYWORDS)}")
 
-                        else: print(f"You have nothing left to lose. The language is now utterly and completely broken. Congratulations.")
-                        
-                        main.ERROR_COUNTER += 1
-                        
-                        print(main.END_COLOR, end='')
+                            else: print(f"You have nothing left to lose. The language is now utterly and completely broken. Congratulations.")
+                            
+                            main.ERROR_COUNTER += 1
+                            
+                            print(main.END_COLOR, end='')
 
-            #  Print the prompt again to prepare for the next line
-            if main.iFlag and not loading: print(main.PROMPT, flush=True, end='')
+                #  Print the prompt again to prepare for the next line
+                if main.iFlag and not loading: print(main.PROMPT, flush=True, end='')
 
+                expression = ""
+
+        # Catch completely invalid statements
+        except Exception as e: 
+            print(f"{type(e).__name__}: {e}")
             expression = ""
 
         # Otherwise do nothing and hope the next line completes the expression    
-        continue
+        else: continue
 
 
 ## REPL helper functions
@@ -163,12 +171,12 @@ def text_box(text: str, centered: bool = False) -> None:
     width = len(max(text, key=len))
     
     # Name components of the box for readability; add color to post
-    bar, post = chr(9552), f"{main.COLOR}{chr(9553)}{main.END_COLOR}"
+    bar, post = chr(9552), main.color(chr(9553))
     top = f"{chr(9556)}" + bar*(width+2) + f"{chr(9559)}"
     bottom = f"{chr(9562)}" + bar*(width+2) + f"{chr(9565)}"
     
     # Print the top layer
-    print(f"\n{main.COLOR}{top}{main.END_COLOR}")
+    print(main.color(top))
 
     for line in text:
 
@@ -186,7 +194,7 @@ def text_box(text: str, centered: bool = False) -> None:
         print(line)
     
     # Print bottom layer
-    print(f"{main.COLOR}{bottom}{main.END_COLOR}\n")
+    print(main.color(bottom))
 
 
 def welcome() -> None:

@@ -1,0 +1,12 @@
+-- test creation of a function
+(def f (x) (+ x 1))
+(f 1)
+
+-- test lambda function
+(set f (lambda (x) (+ x 1)))
+(f 1)
+
+((lambda (x) (++ x)) 3)
+
+-- test printing 
+(show (lambda (x) (+ x 1)))

@@ -78,6 +78,3 @@ class Function:
         if self.name == 'lambda':
             return f"<lambda {parser.convert(self.parameters)} {parser.convert(self.body)}>"
         return f"<{self.name}>"
-
-
-    def __repr__(self) -> str: return str(self)

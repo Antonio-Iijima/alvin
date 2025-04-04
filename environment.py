@@ -22,11 +22,6 @@ class Environment:
         self.name = name or ""
 
 
-    def is_empty(self) -> bool:
-        """Check if environment is a single empty scope."""
-        return self.env == [{}]
-
-
     def clone(self) -> "Environment":
         """Returns a deep copy of the environment."""
         return Environment(env=copy.deepcopy(self.env))
@@ -165,9 +160,6 @@ class Environment:
             display += "\n"
         
         return display
-
-
-    def __repr__(self) -> str: return str(self)
 
 
 
