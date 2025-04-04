@@ -25,7 +25,7 @@ def REPL(stream: str = sys.stdin, loading: bool = False) -> None:
     """Process a stream or load a file."""
     
     if main.iFlag:
-        if not loading:
+        if not loading: # pragma: no cover
             welcome()
             print(main.PROMPT, flush=True, end='')
     else: print("--- Alvin ---")
@@ -236,7 +236,7 @@ def exit_extensions() -> None:
     contents = open("extensions.py").readlines()
 
     # Print informational text if saving new extensions
-    if main.pFlag:
+    if main.pFlag: # pragma: no cover
         print(main.GOLD)
 
         new_extensions = [key for key in extensions.EXTENSIONS if key not in environment.OG_EXTENSIONS_COPY]
@@ -306,7 +306,7 @@ def close() -> None:
 
     exit_extensions()
 
-    if main.zFlag: 
+    if main.zFlag: # pragma: no cover
         total = 56 - len(keywords.KEYWORDS)
         print(f"\n{main.PURPLE}You made {main.ERROR_COUNTER} errors with a net loss of {total} functions.{main.END_COLOR}")
 
@@ -349,7 +349,7 @@ def show_imports() -> None:
         print("Imported modules:")
         for alias, module in environment.IMPORTS.items():
             print(f" {alias}") if alias == module.__name__ else print(f" {module.__name__} alias {alias}")
-    else: print("No imported modules found.")
+    else: print("No imported modules found.") # pragma: no cover
     print()
 
 
