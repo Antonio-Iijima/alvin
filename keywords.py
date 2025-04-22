@@ -5,7 +5,7 @@
 import extensions
 
 from clips import *
-from native import *
+from builtin_functions import *
 
 
 
