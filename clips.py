@@ -14,7 +14,7 @@ class CLIPS:
         self.rules = []
 
 
-    def DEFRULE(self):
+    def DEFRULE(self, name: str, ):
         """Create a new logical relation."""
 
 
@@ -26,7 +26,7 @@ class CLIPS:
         """Retract an asserted fact."""
 
 
-    def RESOLUTION(self):
+    def INFERENCE(self):
         """Run resolution on the entire database to a depth of `n`. If not provided runs until no more relations found."""
 
 
