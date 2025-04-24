@@ -14,7 +14,7 @@ class CLIPS:
         self.rules = []
 
 
-    def RULE(self):
+    def DEFRULE(self):
         """Create a new logical relation."""
 
 
@@ -46,3 +46,19 @@ class CLIPS:
         """Reset the current CLIPS instance."""
         self.facts = []
         self.rules = []
+
+
+    def WATCH(self):
+        """Print new facts to standard output."""
+
+    
+    def UNWATCH(self):
+        """Undo the `WATCH` function."""
+
+
+def announce():
+    """Create a new CLIPS instance."""
+
+
+def renounce():
+    """Destroy a created CLIPS instance."""
