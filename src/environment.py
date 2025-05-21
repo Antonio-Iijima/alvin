@@ -4,9 +4,9 @@
 
 import copy
 
-import evaluate
-import datatypes
-import extensions
+import config as cf
+import evaluate as ev
+import datatypes as dt
 
 
 
@@ -56,12 +56,12 @@ class Environment:
         self.garbage_collect(var)
 
         # Evaluate value and assign
-        self.env[scope][var] = evaluate.evaluate(val)
+        self.env[scope][var] = ev.evaluate(val)
 
 
     def define(self, name: str, parameters: list, body: list) -> None:
         """Define a named function."""
-        self.env[0][name] = datatypes.Function(name, parameters, body)
+        self.env[0][name] = dt.Function(name, parameters, body)
 
 
     def update(self, var: str, val: any) -> None | str:
@@ -108,7 +108,7 @@ class Environment:
         if scope == -1: 
 
             # Check if it is the name of an imported module
-            if var in IMPORTS: print(f"'{var}'{f" (or '{IMPORTS[var].__name__}') " if IMPORTS[var].__name__ != var else ""}is an imported module.")
+            if var in cf.config.IMPORTS: print(f"'{var}'{f" (or '{cf.config.IMPORTS[var].__name__}') " if cf.config.IMPORTS[var].__name__ != var else ""}is an imported module.")
 
             # Otherwise raise error
             else: raise ValueError(f"variable {var} is not defined.")
@@ -143,7 +143,7 @@ class Environment:
         """Basic garbage collection only for the `FUNARG` environments attached to functions."""
 
         # Get the current variable; if it is a function, remove its FUNARG environment
-        current = self.env[scope].get(var, None); isinstance(current, datatypes.Function) and FUNARG.pop(current.id) 
+        current = self.env[scope].get(var, None); isinstance(current, dt.Function) and cf.config.FUNARG.pop(current.id) 
 
 
     def __len__(self) -> int: return len(self.env)
@@ -160,24 +160,3 @@ class Environment:
             display += "\n"
         
         return display
-
-
-
-##### Global Access #####
-
-
-
-# Function FUNARG environments, accessed by function IDs
-FUNARG = {}
-
-# Declared global variables
-GLOBALS = {}
-
-# Imported modules
-IMPORTS = {}
-
-# The Environment
-ENV = Environment(name="env")
-
-# Save all the original extensions declared when the interpreter starts
-OG_EXTENSIONS_COPY = copy.deepcopy(extensions.EXTENSIONS)

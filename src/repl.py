@@ -8,13 +8,11 @@ import math
 import random
 import importlib
 
-import main
-import parser
-import keywords
-import evaluate
-import extensions
-import environment
-
+import parser as prs
+import config as cf
+import keywords as kw
+import evaluate as ev
+import extensions as ext
 
 
 ##### REPL / Command-Line #####
@@ -24,10 +22,10 @@ import environment
 def REPL(stream: str = sys.stdin, loading: bool = False) -> None:
     """Process a stream or load a file."""
     
-    if main.iFlag:
+    if cf.config.iFlag:
         if not loading: # pragma: no cover
             welcome()
-            print(main.PROMPT, flush=True, end='')
+            print(cf.config.PROMPT, flush=True, end='')
     else: print("--- Alvin ---")
 
     # Initialize expresssion
@@ -41,19 +39,19 @@ def REPL(stream: str = sys.stdin, loading: bool = False) -> None:
             if expression.endswith("@end\n"):
                 extend(expression)
 
-                if main.iFlag and not loading: print(main.PROMPT, flush=True, end='')
+                if cf.config.iFlag and not loading: print(cf.config.PROMPT, flush=True, end='')
                 expression = ""
 
             # Extensions have their own prompt (the Python prompt)
             else: 
-                main.NEW_EXTENSIONS_LEN += 1
+                cf.config.NEW_EXTENSIONS_LEN += 1
                 if not loading: print("> ", flush=True, end='')
 
         # If the expression is syntactically complete
         elif expression.count("(") == expression.count(")"):
 
                 # Interpret without error handling
-                if main.dFlag: run(expression, loading)
+                if cf.config.dFlag: run(expression, loading)
 
                 # Otherwise catch and print errors without breaking the REPL
                 else:
@@ -62,10 +60,10 @@ def REPL(stream: str = sys.stdin, loading: bool = False) -> None:
                         print(f"{type(e).__name__}: {e}")
                         
                         # Random keyword deletion mode, because why not?
-                        if main.zFlag: del_random_keyword()
+                        if cf.config.zFlag: del_random_keyword()
                 
                 #  Print the prompt again to prepare for the next line
-                if main.iFlag and not loading: print(main.PROMPT, flush=True, end='')
+                if cf.config.iFlag and not loading: print(cf.config.PROMPT, flush=True, end='')
                 
                 expression = ""
 
@@ -73,7 +71,7 @@ def REPL(stream: str = sys.stdin, loading: bool = False) -> None:
         else: continue
 
     else:
-        if not main.iFlag: exit_extensions()
+        if not cf.config.iFlag: exit_extensions()
 
 
 ## REPL helper functions
@@ -91,7 +89,7 @@ def interpret(line: str) -> any:
     elif line.startswith("python"): print(eval(line.removeprefix("python")))
     
     # Identify solitary keywords
-    elif keywords.iskeyword(line): print(f"{line} is an operator, built-in function or reserved word.")
+    elif kw.iskeyword(line): print(f"{line} is an operator, built-in function or reserved word.")
     
     # Otherwise match specific inputs
     else:
@@ -108,13 +106,13 @@ def interpret(line: str) -> any:
             case "dev.funarg": show_funargs()
             case "dev.globals": show_globals()
             case "dev.imports": show_imports()
-            case "dev.env": print(environment.ENV)
+            case "dev.env": print(cf.config.ENV)
 
             # No input
             case "": return None
 
             # Parse the line and convert it to Python syntax, evaluate, and return as an Alvin string 
-            case _: return parser.convert(evaluate.evaluate(parser.parse(line)))
+            case _: return prs.convert(ev.evaluate(prs.parse(line)))
 
 
 def run(line: str, loading: bool = False) -> None:
@@ -133,41 +131,41 @@ def del_random_keyword() -> None: # pragma: no cover
 
     # Collect all available keyword groups (extensions excluded)
     collection = [
-        keywords.REGULAR,
-        keywords.IRREGULAR,
-        keywords.BOOLEAN,
-        keywords.SPECIAL
+        cf.config.REGULAR,
+        cf.config.IRREGULAR,
+        cf.config.BOOLEAN,
+        cf.config.SPECIAL
     ]
     
     # Remove all empty groups
     for idx, group in enumerate(collection):
         if not group: collection.pop(idx) 
 
-    print(main.PURPLE, end='')
+    print(cf.config.PURPLE, end='')
 
     # Pick a random keyword from a random group, and (probably) delete it
-    if keywords.KEYWORDS:
+    if cf.config.KEYWORDS:
         group = random.choice(collection)
 
         if group:
             item = random.choice(list(group))   
 
-            if item in keywords.KEYWORDS:                     
+            if item in cf.config.KEYWORDS:                     
                 
                 # Handle the fact that SPECIAL is a set, not a dict
                 group.remove(item) if isinstance(group, set) else group.pop(item)
-                keywords.KEYWORDS.discard(item)
+                cf.config.KEYWORDS.discard(item)
 
-                print(f"You just lost the '{item}' function. Number of keywords remaining: {len(keywords.KEYWORDS)}")
+                print(f"You just lost the '{item}' function. Number of keywords remaining: {len(cf.config.KEYWORDS)}")
 
             # It's not a bug, it's a feature (keyword is randomly not deleted)
-            else: print(f"Nothing deleted... this time. Number of keywords remaining: {len(keywords.KEYWORDS)}")
+            else: print(f"Nothing deleted... this time. Number of keywords remaining: {len(cf.config.KEYWORDS)}")
 
     else: print(f"You have nothing left to lose. The language is now utterly and completely broken. Congratulations.")
     
-    main.ERROR_COUNTER += 1
+    cf.config.ERROR_COUNTER += 1
     
-    print(main.END_COLOR, end='')
+    print(cf.config.END_COLOR, end='')
 
 
 
@@ -184,13 +182,13 @@ def text_box(text: str, centered: bool = False) -> None:
     width = len(max(text, key=len))
     
     # Name components of the box for readability; add color to post
-    bar, post = chr(9552), main.color(chr(9553))
+    bar, post = chr(9552), cf.config.set_color(chr(9553))
     top = f"{chr(9556)}" + bar*(width+2) + f"{chr(9559)}"
     bottom = f"{chr(9562)}" + bar*(width+2) + f"{chr(9565)}"
     
     # Print the top layer
     print()
-    print(main.color(top))
+    print(cf.config.set_color(top))
 
     for line in text:
 
@@ -208,7 +206,7 @@ def text_box(text: str, centered: bool = False) -> None:
         print(line)
     
     # Print bottom layer
-    print(main.color(bottom))
+    print(cf.config.set_color(bottom))
     print()
 
 
@@ -220,13 +218,13 @@ def welcome() -> None:
 
     text_box(display, centered=True)
 
-    if main.iFlag: print("Alvin v3, running in interactive mode", end='\n'*(not main.dFlag))
-    if main.dFlag: print(" with debugging")
-    if main.pFlag: print("Permanent extensions enabled")
+    if cf.config.iFlag: print("Alvin v3, running in interactive mode", end='\n'*(not cf.config.dFlag))
+    if cf.config.dFlag: print(" with debugging")
+    if cf.config.pFlag: print("Permanent extensions enabled")
 
     print("Enter 'help' to show further information")
 
-    if main.zFlag: print(f"{main.RED}WARNING: Random keyword deletion enabled.{main.PURPLE} Proceed at your own risk.{main.END_COLOR}")
+    if cf.config.zFlag: print(f"{cf.config.RED}WARNING: Random keyword deletion enabled.{cf.config.PURPLE} Proceed at your own risk.{cf.config.END_COLOR}")
 
 
 def exit_extensions() -> None:
@@ -236,24 +234,24 @@ def exit_extensions() -> None:
     contents = open("extensions.py").readlines()
 
     # Print informational text if saving new extensions
-    if main.pFlag: # pragma: no cover
-        print(main.GOLD)
+    if cf.config.pFlag: # pragma: no cover
+        print(cf.config.GOLD)
 
-        new_extensions = [key for key in extensions.EXTENSIONS if key not in environment.OG_EXTENSIONS_COPY]
+        new_extensions = [key for key in cf.config.EXTENSIONS if key not in cf.config.OG_EXTENSIONS_COPY]
 
         if len(new_extensions) > 0:
             print("The following new extensions have been saved:")
             for ext in new_extensions: print(ext)
         else: print("No extensions added.")
 
-        print(main.END_COLOR, end='')
+        print(cf.config.END_COLOR, end='')
 
     # Otherwise remove them
     else:
         with open("extensions.py", "w") as file:
-            file.writelines(contents[main.NEW_EXTENSIONS_LEN:])
+            file.writelines(contents[cf.config.NEW_EXTENSIONS_LEN:])
 
-    main.NEW_EXTENSIONS_LEN = 0
+    cf.config.NEW_EXTENSIONS_LEN = 0
     
         
 ## Built-in commands
@@ -272,10 +270,10 @@ def extend(pycode: str) -> None:
         file.writelines([extension, "\n", *contents])
 
     # Reload extensions to enable access to newly added
-    importlib.reload(extensions)
+    importlib.reload(ext)
 
     # Add new extensions to the list of keywords
-    for extension in extensions.EXTENSIONS: keywords.KEYWORDS.add(extension)
+    for extension in cf.config.EXTENSIONS: cf.config.KEYWORDS.add(extension)
 
 
 def help() -> None:
@@ -287,11 +285,11 @@ which began during CSCI 370: Programming Languages at Ave Maria University.
 Documentation can be found on GitHub:
 https://github.com/Antonio-Iijima/Alvin
 
-{main.PROMPT_SYMBOL} clear     : clear the terminal 
-{main.PROMPT_SYMBOL} exit/quit : exit the interpreter
-{main.PROMPT_SYMBOL} python <> : evaluate <> using Python
-{main.PROMPT_SYMBOL} keywords  : display all language keywords
-{main.PROMPT_SYMBOL} dev.info  : useful developement/debugging tools"""
+{cf.config.PROMPT_SYMBOL} clear     : clear the terminal 
+{cf.config.PROMPT_SYMBOL} exit/quit : exit the interpreter
+{cf.config.PROMPT_SYMBOL} python <> : evaluate <> using Python
+{cf.config.PROMPT_SYMBOL} keywords  : display all language keywords
+{cf.config.PROMPT_SYMBOL} dev.info  : useful developement/debugging tools"""
     
     text_box(display)
 
@@ -306,9 +304,9 @@ def close() -> None:
 
     exit_extensions()
 
-    if main.zFlag: # pragma: no cover
-        total = 56 - len(keywords.KEYWORDS)
-        print(f"\n{main.PURPLE}You made {main.ERROR_COUNTER} errors with a net loss of {total} functions.{main.END_COLOR}")
+    if cf.config.zFlag: # pragma: no cover
+        total = 56 - len(cf.config.KEYWORDS)
+        print(f"\n{cf.config.PURPLE}You made {cf.config.ERROR_COUNTER} errors with a net loss of {total} functions.{cf.config.END_COLOR}")
 
     text_box("""Arrivederci!""", centered=True)
 
@@ -319,11 +317,11 @@ def close() -> None:
 
 
 def show_funargs() -> None:
-    """Display the current FUNARG environment."""
+    """Display the current FUNARG config.config."""
     
     print()
-    if environment.FUNARG:
-        for function, env in environment.FUNARG.items():
+    if cf.config.FUNARG:
+        for function, env in cf.config.FUNARG.items():
             print(f"{function}:\n{env}")  
     else: print("No function environments found.")
     print()
@@ -333,9 +331,9 @@ def show_globals() -> None:
     """Display all global variables."""
 
     print()
-    if environment.GLOBALS:
+    if cf.config.GLOBALS:
         print("Global variables:")
-        for var, val in environment.GLOBALS.items():
+        for var, val in cf.config.GLOBALS.items():
             print(f" {var} : {val}")
     else: print("No global variables found.")
     print()
@@ -345,9 +343,9 @@ def show_imports() -> None:
     """Display all currently imported modules and libraries."""
 
     print()
-    if environment.IMPORTS:
+    if cf.config.IMPORTS:
         print("Imported modules:")
-        for alias, module in environment.IMPORTS.items():
+        for alias, module in cf.config.IMPORTS.items():
             print(f" {alias}") if alias == module.__name__ else print(f" {module.__name__} alias {alias}")
     else: print("No imported modules found.") # pragma: no cover
     print()
@@ -358,10 +356,10 @@ def show_dev() -> None:
 
     display = f"""useful tools
              
-{main.PROMPT_SYMBOL} dev.funarg  : FUNARGs
-{main.PROMPT_SYMBOL} dev.env     : environment
-{main.PROMPT_SYMBOL} dev.globals : global variables
-{main.PROMPT_SYMBOL} dev.imports : imported modules"""
+{cf.config.PROMPT_SYMBOL} dev.funarg  : FUNARGs
+{cf.config.PROMPT_SYMBOL} dev.env     : config.config
+{cf.config.PROMPT_SYMBOL} dev.globals : global variables
+{cf.config.PROMPT_SYMBOL} dev.imports : imported modules"""
     
     text_box(display)
 
@@ -372,15 +370,15 @@ def show_keywords() -> None:
     display = """"""
 
     categories = {
-        "REGULAR"    : sorted(keywords.REGULAR),
-        "IRREGULAR"  : sorted(keywords.IRREGULAR),
-        "BOOLEAN"    : sorted(keywords.BOOLEAN),
-        "SPECIAL"    : sorted(keywords.SPECIAL),
-        "EXTENSIONS" : sorted(extensions.EXTENSIONS)
+        "REGULAR"    : sorted(cf.config.REGULAR),
+        "IRREGULAR"  : sorted(cf.config.IRREGULAR),
+        "BOOLEAN"    : sorted(cf.config.BOOLEAN),
+        "SPECIAL"    : sorted(cf.config.SPECIAL),
+        "EXTENSIONS" : sorted(cf.config.EXTENSIONS)
         }
 
     # Calculate the required character limit of each word
-    offset = max(len(key) for key in keywords.KEYWORDS) + 2
+    offset = max(len(key) for key in cf.config.KEYWORDS) + 2
 
     # Iterate through each category
     for section_idx, section_title in enumerate(categories):

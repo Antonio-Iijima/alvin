@@ -2,7 +2,7 @@
 
 
 
-import evaluate
+import keywords as kw
 
 
 
@@ -13,7 +13,7 @@ import evaluate
 ## Basic syntax checking (parentheses, operators, etc.) and typing
 
 
-def isbalanced(expr: list) -> bool: 
+def isperfectlybalanced(expr: list) -> bool: 
     """Check for balanced parentheses in an Alvin expression."""
     
     stack = 0
@@ -31,11 +31,11 @@ def syntax_check(expr: list) -> list:
     """Checks balanced parentheses, proper expression nesting, etc. Raises errors if any conditions not met, otherwise returns `expr`."""
 
     # Confirm balanced parentheses
-    isbalanced(expr)        
+    isperfectlybalanced(expr)        
 
     # Confirm that no two operators appear successively without correct parenthetical nesting
     for i, c in enumerate(expr):
-        if evaluate.iskeyword(c) and evaluate.iskeyword(i+1): raise SyntaxError(f"invalid expression structure {" ".join(expr)}")
+        if kw.iskeyword(c) and kw.iskeyword(i+1): raise SyntaxError(f"invalid expression structure {" ".join(expr)}")
 
     return expr
 
@@ -62,7 +62,7 @@ def retype(x: str) -> int | float | bool:
     """Replace int, float, and bool strings with their correct data types."""
 
     # Replace numbers with either int or float types
-    if evaluate.isnumber(x): return float(x) if "." in x else int(x)
+    if kw.isnumber(x): return float(x) if "." in x else int(x)
     
     # Replace boolean #t and #f with the proper bool
     elif x in ("#t", "#f"): return x == "#t"
@@ -131,7 +131,7 @@ def convert(s: any) -> str | None:
     elif isinstance(s, bool): return "#t" if s else "#f"
 
     # Otherwise replace lists with parentheses and (quote x) with '
-    return f"'{convert(s[1])}" if evaluate.isquote(s) else f"({' '.join(convert(elem) for elem in s if elem != None)})" if isinstance(s, list) else str(s)
+    return f"'{convert(s[1])}" if kw.isquote(s) else f"({' '.join(convert(elem) for elem in s if elem != None)})" if isinstance(s, list) else str(s)
 
 
 def parse(s: str) -> list: 

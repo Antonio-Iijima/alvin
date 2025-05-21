@@ -2,11 +2,13 @@
 
 
 
-import random
+import config as cf
+import parser as prs
+import evaluate as ev
+import keywords as kw
+import environment as env
 
-import parser
-import evaluate
-import environment
+import random
 
 
 
@@ -15,7 +17,7 @@ import environment
 
 
 class Function:
-    """Custom function class."""
+    """Custom Alvin function class."""
 
     def __init__(self, name: any = None, parameters: any = None, body: any = None) -> None:
         self.name = name or 'lambda'
@@ -26,7 +28,7 @@ class Function:
         self.id = self.generate_id()
 
         # Create FUNARG environment
-        environment.FUNARG[self.id] = environment.Environment(name="funarg")
+        cf.config.FUNARG[self.id] = env.Environment(name="funarg")
         
 
     def eval(self, args: any = None) -> any:
@@ -36,37 +38,37 @@ class Function:
             """Function evaluation logic."""
 
             # Match the arguments to the function to its parameters
-            environment.FUNARG[self.id].match_arguments(self.parameters, args)
+            cf.config.FUNARG[self.id].match_arguments(self.parameters, args)
 
             # Define 'self' as a special local reference to the current function
-            if self.name in ('lambda', 'self'): environment.FUNARG[self.id].define('self', self.parameters, self.body)
+            if self.name in ('lambda', 'self'): cf.config.FUNARG[self.id].define('self', self.parameters, self.body)
 
             # Extend the general environment with the current function's FUNARG environment
-            environment.ENV.extend(environment.FUNARG[self.id])
+            cf.config.ENV.extend(cf.config.FUNARG[self.id])
 
             # Evaluate the function
             try:
-                value = evaluate.evaluate(self.body)
+                value = ev.evaluate(self.body)
 
                 # If returning a function, give it access to current FUNARG environment
-                if isinstance(value, Function): environment.FUNARG[value.id] = environment.FUNARG[self.id].clone()
+                if isinstance(value, Function): cf.config.FUNARG[value.id] = cf.config.FUNARG[self.id].clone()
 
             # Safely end the extended scopes and remove 'self'
             finally:
-                environment.ENV.end_scope(len(environment.FUNARG[self.id]))
-                if self.name in ('lambda', 'self'): environment.FUNARG[self.id].delete('self')
+                cf.config.ENV.end_scope(len(cf.config.FUNARG[self.id]))
+                if self.name in ('lambda', 'self'): cf.config.FUNARG[self.id].delete('self')
 
             return value
         
         # Applicative order evaluation for arguments
-        args = [] if args == None else evaluate.evlist(args)
+        args = [] if args == None else kw.evlist(args)
 
         # Confirm function arity
         if len(self.parameters) != len(args): 
             raise TypeError(f"{self.name} takes {len(self.parameters)} argument{"s"*bool(len(self.parameters)-1)} but {len(args)} were given") # pragma: no cover
         
-        # Perform the actual function logic in local scope
-        return environment.FUNARG[self.id].runlocal(logic, [args])
+        # Execute the actual function logic in local scope
+        return cf.config.FUNARG[self.id].runlocal(logic, [args])
 
 
     def generate_id(self, k: int = 15) -> str: 
@@ -76,5 +78,5 @@ class Function:
 
     def __str__(self) -> str:
         if self.name == 'lambda':
-            return f"<lambda {parser.convert(self.parameters)} {parser.convert(self.body)}>"
+            return f"<lambda {prs.convert(self.parameters)} {prs.convert(self.body)}>"
         return f"<{self.name}>"

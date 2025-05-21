@@ -2,11 +2,9 @@
 
 
 
-import datatypes
-import extensions
-import environment
-
-from keywords import *
+import config as cf
+import keywords as kw
+import datatypes as dt
 
 
 
@@ -16,71 +14,74 @@ from keywords import *
 
 def evaluate(expr):
     """Evaluates complete Alvin expressions."""
-#    print(parser.convert(expr))
+
     # Processing a single atom
 
-    # Look up variables in environment, otherwise return as literal
-    if isatom(expr): return environment.ENV.lookup(expr) if isvariable(expr) else rebool(expr) if isbool(expr) else expr
+    # Look up variables in config, otherwise return as literal
+    if kw.isatom(expr): return cf.config.ENV.lookup(expr) if kw.isvariable(expr) else kw.rebool(expr) if kw.isbool(expr) else expr
 
     # Otherwise processing a list
 
     # Empty list
-    elif isnull(expr): return []
+    elif kw.isnull(expr): return []
 
     # Head is an atom
-    elif isatom(expr[0]):
+    elif kw.isatom(expr[0]):
 
         # Head and tail identifiers for readability
         HEAD, TAIL = expr[0],  expr[1:]
 
         # Evaluate methods from imported modules
-        if isimport(HEAD): return run_method(HEAD, TAIL)
+        if kw.isimport(HEAD): return kw.run_method(HEAD, TAIL)
 
         # Evaluate function calls
-        elif isfunction(HEAD): return HEAD.eval(TAIL)
+        elif kw.isfunction(HEAD): return HEAD.eval(TAIL)
 
         # If the head is a variable, replace it with its value and re-evaluate the expression
-        elif isvariable(HEAD): return evaluate([environment.ENV.lookup(HEAD), *TAIL])
+        elif kw.isvariable(HEAD): return evaluate([cf.config.ENV.lookup(HEAD), *TAIL])
 
         # If its a keyword, evaluate each group
-        elif iskeyword(HEAD):
+        elif kw.iskeyword(HEAD):
             
             # Regular or applicative-order n-ary functions
-            if HEAD in REGULAR: return REGULAR[HEAD](*evlist(TAIL))
+            if HEAD in kw.REGULAR: return kw.REGULAR[HEAD](*kw.evlist(TAIL))
 
             # Irregular or normal-order n-ary functions
-            elif HEAD in IRREGULAR: return IRREGULAR[HEAD](*TAIL)
+            elif HEAD in kw.IRREGULAR: return kw.IRREGULAR[HEAD](*TAIL)
+
+            # Environment manipulation functions
+            elif HEAD in cf.config.ENVIRONMENT: return cf.config.ENVIRONMENT[HEAD](*TAIL)
 
             # Boolean functions
-            elif HEAD in BOOLEAN: return BOOLEAN[HEAD](*[bool(arg) for arg in evlist(TAIL)])
+            elif HEAD in kw.BOOLEAN: return kw.BOOLEAN[HEAD](*[bool(arg) for arg in kw.evlist(TAIL)])
 
             # Extensions
-            elif HEAD in extensions.EXTENSIONS: return extensions.EXTENSIONS[HEAD](*TAIL)
+            elif HEAD in cf.config.EXTENSIONS: return cf.config.EXTENSIONS[HEAD](*TAIL)
 
             # Unpack and evaluate 'cxr' expressions
-            elif iscxr(HEAD): return evcxr(HEAD[1:-1], evaluate(expr[1]))
+            elif kw.iscxr(HEAD): return kw.evcxr(HEAD[1:-1], evaluate(expr[1]))
 
             # Special forms and functions with entirely unique evaluation requirements
             match HEAD:
 
                 # Lambda function declarations
-                case "lambda": return datatypes.Function("lambda", expr[1], expr[2])
+                case "lambda": return dt.Function("lambda", expr[1], expr[2])
 
                 # Evaluate 'until' expressions
-                case "until": return until(expr[1][0], expr[1][1], expr[2])
+                case "until": return kw.until(expr[1][0], expr[1][1], expr[2])
 
                 # 'list', 'string', and 'bool' predicates
                 case "string?": return isinstance(TAIL, str)
                 case "list?": return isinstance(TAIL, list)
 
                 # Evaluate conditionals
-                case "cond": return cond(TAIL)
+                case "cond": return kw.cond(TAIL)
 
                 # Evaluate 'quote' expressions
                 case _: return expr[1]
         
         # Otherwise head is a literal
-        return evlist(expr)
+        return kw.evlist(expr)
 
     # Otherwise head is a list
     return evaluate([evaluate(expr[0]), *expr[1:]])
