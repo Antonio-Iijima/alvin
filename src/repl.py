@@ -6,8 +6,8 @@ import sys
 import random
 import importlib
 
-import parser as prs
 import config as cf
+import parser as prs
 import evaluate as ev
 import keywords as kw
 import extensions as ext
