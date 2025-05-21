@@ -13,30 +13,35 @@ import config as cf
 
 
 
-# Set boolean flags
-iFlag = '-i' in sys.argv # interactive interpreter
-dFlag = '-d' in sys.argv # debugging
-pFlag = '-p' in sys.argv # permanent extensions
-zFlag = '-z' in sys.argv # why
-
-flags = [iFlag, dFlag, pFlag, zFlag]
-
-
-
 def main(args: list=sys.argv) -> None:
     """Main program."""
 
     sys.setrecursionlimit(10**5)
-    cf.config.initialize(flags)
 
-    # Load any files passed as command-line arguments before proceeding to interactive session
-    if len(args) > 1:
-        for item in args[1:]:
-            if item not in cf.config.FLAGS:
-                with open(item, "r") as file:
-                    rpl.REPL(file.read().splitlines(), True)
+    # Set boolean flags
+    flags = {}
 
-    if iFlag: rpl.REPL()
+    flags['-i'] = '-i' in sys.argv # interactive interpreter
+    flags['-d'] = '-d' in sys.argv # debugging
+    flags['-p'] = '-p' in sys.argv # permanent extensions
+    flags['-z'] = '-z' in sys.argv # why
+
+    # Setup config
+    cf.config.initialize(flags); 
+
+    # Remove flags from args
+    for flag in cf.config.FLAGS:
+        if flag in args:
+            args.remove(flag)
+
+    # Read in files if necessary
+    for item in args[1:]:
+        with open(item, "r") as file:
+            rpl.REPL(file.read().splitlines(), True)
+
+    # Off we go
+    if cf.config.iFlag: rpl.REPL()
+
 
 
 if __name__ == "__main__": main()

@@ -11,17 +11,16 @@ import environment as env
 
 
 class Config:
+    """Config class to manage global variables and settings."""
+
     def __init__(self) -> None:
         """Initialize config."""
 
         # Setup constants
 
         # Useless details
-        self.VERSION = "3.0.1"
+        self.VERSION = "3.1.0"
         self.NAME = "Alvin"
-
-        # Flags
-        self.FLAGS = {'-i','-d','-p','-z'}
 
         # Color customization
         self.BLUE = '\033[36m'
@@ -31,11 +30,13 @@ class Config:
         self.END_COLOR = '\033[97m'
 
 
-    def initialize(self, flags: list, prompt_symbol: str = "(α) ") -> None:
+    def initialize(self, flags: dict, prompt_symbol: str = "(α) ") -> None:
         """Setup config."""
 
+
         # Set flags
-        self.iFlag, self.dFlag, self.pFlag, self.zFlag = flags
+        self.FLAGS = flags
+        self.iFlag, self.dFlag, self.pFlag, self.zFlag = flags.values()
 
         # Prompt color changes to reflect enabled flags
         self.DEFAULT_COLOR = "purple" if self.zFlag else "gold" if self.pFlag else "blue" if self.dFlag else "red"
@@ -53,7 +54,7 @@ class Config:
             self.NEW_EXTENSIONS_LEN = 0
             
             # Save all the original extensions declared when the interpreter starts
-            self.OG_EXTENSIONS_COPY = copy.deepcopy(ext.EXTENSIONS)
+            self.ORIGINAL_EXTENSIONS = copy.deepcopy(ext.EXTENSIONS)
 
 
         # REQUIRED settings (or everything breaks)
@@ -95,6 +96,8 @@ class Config:
             *self.ENVIRONMENT
         }
         
+        self.INITIAL_KEYWORD_LEN = len(self.KEYWORDS)
+
 
     def set_color(self, text: str, color: str = "") -> str:
         """Return text formatted according to the provided color."""
