@@ -340,4 +340,4 @@ BOOLEAN = {
 
 # Set of all special forms and other functions having 
 # evaluation strategies handled explicitly by evaluate()
-SPECIAL = { "lambda", "until", "string?", "list?", "cond" }
+SPECIAL = { "lambda", "until", "string?", "list?", "cond", "quote" }

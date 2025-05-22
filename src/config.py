@@ -19,7 +19,7 @@ class Config:
         # Setup constants
 
         # Useless details
-        self.VERSION = "3.2.1"
+        self.VERSION = "3.2.2"
         self.NAME = "Alvin"
 
         # Color customization
