@@ -33,7 +33,6 @@ class Config:
     def initialize(self, flags: dict, prompt_symbol: str = "(α) ") -> None:
         """Setup config."""
 
-
         # Set flags
         self.FLAGS = flags
         self.iFlag, self.dFlag, self.pFlag, self.zFlag = flags.values()
@@ -44,20 +43,14 @@ class Config:
         self.PROMPT_SYMBOL = prompt_symbol
         self.PROMPT = self.set_color(self.PROMPT_SYMBOL)
 
-        # OPTIONAL settings (flag dependent)
+        # Track the number of programming errors by the user
+        self.ERROR_COUNTER = 0
 
-        if self.zFlag: self.ERROR_COUNTER = 0 # tracks the number of programming errors by the user
+        # Save the original size of the extensions file
+        self.ORIGINAL_EXT_SIZE = len(open("extensions.py").readlines())
         
-        if not self.pFlag:
-
-            # Save the original size of the extensions file
-            self.ORIGINAL_EXT_SIZE = len(open("extensions.py").readlines())
-            
-            # Save all the original extensions declared when the interpreter starts
-            self.ORIGINAL_EXTENSIONS = copy.deepcopy(ext.EXTENSIONS)
-
-
-        # REQUIRED settings (or everything breaks)
+        # Save all the original extensions declared when the interpreter starts
+        self.ORIGINAL_EXTENSIONS = copy.deepcopy(ext.EXTENSIONS)
 
         # Function FUNARG environments, accessed by function IDs
         self.FUNARG = {}
