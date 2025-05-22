@@ -4,9 +4,11 @@
 
 import os
 import math
+import random
+import importlib
 
-import repl as rpl
 import config as cf
+import extensions as ext
 
 
 
@@ -30,9 +32,9 @@ class Interpreter():
         }
 
 
-    def prompt(self):
+    def prompt(self, text=None) -> None:
         """Prints the interpreter prompt."""
-        print(cf.config.PROMPT, flush=True, end='')
+        text = cf.config.PROMPT if text is None else cf.config.set_color(text); print(text, flush=True, end='')
 
 
     def welcome(self) -> None:
@@ -63,7 +65,7 @@ https://github.com/Antonio-Iijima/Alvin
 
 {cf.config.PROMPT_SYMBOL} clear     : clear the terminal 
 {cf.config.PROMPT_SYMBOL} exit/quit : exit the interpreter
-{cf.config.PROMPT_SYMBOL} python <> : evaluate <> using Python
+{cf.config.PROMPT_SYMBOL} python *. : evaluate *. using Python
 {cf.config.PROMPT_SYMBOL} keywords  : display all language keywords
 {cf.config.PROMPT_SYMBOL} dev.info  : useful developement/debugging tools"""
         
@@ -78,11 +80,11 @@ https://github.com/Antonio-Iijima/Alvin
     def quit(self) -> None:
         """Exit the interactive interpreter."""
 
-        rpl.exit_extensions()
+        self.exit_extensions()
 
-        if cf.config.zFlag: # pragma: no cover
-            total = 56 - len(cf.config.KEYWORDS)
-            print(f"\n{cf.config.PURPLE}You made {cf.config.ERROR_COUNTER} errors with a net loss of {total} functions.{cf.config.END_COLOR}")
+        if cf.config.zFlag:
+            net = cf.config.ERROR_COUNTER - cf.config.ADDED_KEYWORD_NUM
+            print(f"\n{cf.config.PURPLE}You made {cf.config.ERROR_COUNTER} error{"s"*(cf.config.ERROR_COUNTER!=1)} with a net loss of {net} function{"s"*(abs(net)!=1)}.{cf.config.END_COLOR}")
 
         self.text_box("""Arrivederci!""", centered=True)
 
@@ -126,7 +128,6 @@ https://github.com/Antonio-Iijima/Alvin
 
     def show_env(self):
         "Display current environment."
-
         print(cf.config.ENV)
 
 
@@ -146,7 +147,9 @@ https://github.com/Antonio-Iijima/Alvin
     def show_keywords(self) -> None:
         """Display all language keywords."""
 
-        display = f"""KEYWORDS ({len(cf.config.KEYWORDS)}/{cf.config.INITIAL_KEYWORD_LEN})\n\n"""
+        if not cf.config.KEYWORDS: print(f"{cf.config.RED}No keywords found."); return
+
+        display = f"""KEYWORDS ({len(cf.config.KEYWORDS)}/{cf.config.INITIAL_KEYWORD_NUM})\n\n"""
 
         categories = {
             f"REGULAR ({len(cf.config.REGULAR)})"         : sorted(cf.config.REGULAR),
@@ -223,6 +226,87 @@ https://github.com/Antonio-Iijima/Alvin
         # Print bottom layer
         print(cf.config.set_color(bottom))
         print()
+
+
+    def extend(self, pycode: str) -> None:
+        """Add extensions in Python to Alvin."""
+
+        extension = pycode.removeprefix("@start").removesuffix("@end").strip()
+
+        # Get the current contents of the extensions.py file
+        contents = open("extensions.py").readlines()
+        
+        # Write the new extensions to beginning of the file
+        with open("extensions.py", "w") as file:
+            file.writelines([f"{extension}\n\n", *contents])
+        
+        # Reload extensions to make changes visible
+        importlib.reload(ext)
+
+        # Increment total keywords
+        cf.config.ADDED_KEYWORD_NUM += 1
+
+        # Update external references
+        cf.config.EXTENSIONS.update(ext.EXTENSIONS)
+        cf.config.KEYWORDS.update(ext.EXTENSIONS)
+
+
+    def exit_extensions(self) -> None:
+        """Safely save or remove any extensions added in an interactive interpreter session."""
+
+        # Save the contents of the extensions.py file
+        contents = open("extensions.py").readlines()
+
+        # Print informational text if saving new extensions
+        if cf.config.pFlag:
+            print(cf.config.GOLD)
+
+            new_extensions = [key for key in cf.config.EXTENSIONS if key not in cf.config.ORIGINAL_EXTENSIONS]
+
+            if len(new_extensions) > 0:
+                print("The following new extensions have been saved:")
+                for ext in new_extensions: print(ext)
+            else: print("No extensions added.")
+
+            print(cf.config.END_COLOR, end='')
+
+        # Otherwise remove them
+        else:
+            with open("extensions.py", "w") as file:
+                file.writelines(contents[-cf.config.ORIGINAL_EXT_SIZE:])
+    
+
+    def del_random_keyword(self) -> None:
+        """Delete a random keyword from the language for the duration of the interpreter instance if the user makes a mistake."""
+
+        keywords = [
+            cf.config.REGULAR, 
+            cf.config.IRREGULAR,
+            cf.config.BOOLEAN, 
+            cf.config.SPECIAL,
+            cf.config.EXTENSIONS,
+            cf.config.ENVIRONMENT
+        ]
+        
+        keywords = [category for category in keywords if len(category) > 0]
+
+        print(cf.config.PURPLE, end='')
+
+        if keywords:
+            category = None
+            while not category: category = random.choice(keywords)
+            item = random.choice(list(category))
+
+            category.pop(item) if isinstance(category, dict) else category.discard(item)
+            cf.config.KEYWORDS.remove(item)
+                             
+            print(f"You just lost the '{item}' function. Number of keywords remaining: {len(cf.config.KEYWORDS)}")
+
+        else: print(f"You have nothing left to lose. The language is now utterly and completely broken. Congratulations.")
+        
+        cf.config.ERROR_COUNTER += 1
+        
+        print(cf.config.END_COLOR, end='')
 
 
 

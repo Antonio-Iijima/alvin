@@ -19,7 +19,7 @@ class Config:
         # Setup constants
 
         # Useless details
-        self.VERSION = "3.1.0"
+        self.VERSION = "3.2.0"
         self.NAME = "Alvin"
 
         # Color customization
@@ -50,8 +50,8 @@ class Config:
         
         if not self.pFlag:
 
-            # Initialize the length of newly added extensions
-            self.NEW_EXTENSIONS_LEN = 0
+            # Save the original size of the extensions file
+            self.ORIGINAL_EXT_SIZE = len(open("extensions.py").readlines())
             
             # Save all the original extensions declared when the interpreter starts
             self.ORIGINAL_EXTENSIONS = copy.deepcopy(ext.EXTENSIONS)
@@ -96,17 +96,19 @@ class Config:
             *self.ENVIRONMENT
         }
         
-        self.INITIAL_KEYWORD_LEN = len(self.KEYWORDS)
+        # Track keywords
+        self.INITIAL_KEYWORD_NUM = len(self.KEYWORDS)
+        self.ADDED_KEYWORD_NUM = 0
 
 
     def set_color(self, text: str, color: str = "") -> str:
         """Return text formatted according to the provided color."""
 
         colors = {
-            "blue": '\033[36m',
-            "purple": '\033[35m',
-            "gold": '\033[33m',
-            "red" : '\033[31m'
+            "blue"   : '\033[36m',
+            "purple" : '\033[35m',
+            "gold"   : '\033[33m',
+            "red"    : '\033[31m'
         }
 
         return f"{colors[color or self.DEFAULT_COLOR]}{text}{self.END_COLOR}"

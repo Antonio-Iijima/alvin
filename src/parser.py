@@ -13,6 +13,11 @@ import keywords as kw
 ## Basic syntax checking (parentheses, operators, etc.) and typing
 
 
+def iscomplete(expr: str) -> bool:
+    """Checks for *hopefully* complete expressions in the REPL."""
+    return ("@start" in expr and "@end" in expr) or ("@start" not in expr and expr.count("(") == expr.count(")"))
+
+
 def isperfectlybalanced(expr: list) -> bool: 
     """Check for balanced parentheses in an Alvin expression."""
     
