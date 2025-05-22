@@ -70,9 +70,9 @@ def evaluate(expr):
                 # Evaluate 'until' expressions
                 case "until": return kw.until(expr[1][0], expr[1][1], expr[2])
 
-                # 'list', 'string', and 'bool' predicates
-                case "string?": return isinstance(*TAIL, str)
-                case "list?":  return isinstance(*TAIL, list)
+                # 'string' and 'list' predicates
+                case "string?": return kw.isstring(TAIL)
+                case "list?":  return kw.islist(TAIL)
 
                 # Evaluate conditionals
                 case "cond": return kw.cond(TAIL)

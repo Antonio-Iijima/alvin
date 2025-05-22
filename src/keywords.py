@@ -70,6 +70,17 @@ def isbool(x: str) -> bool:
     return isinstance(x, bool) or x in ("#t", "#f")
 
 
+def islist(x: list) -> bool:
+    """Unary `list` predicate."""
+    return isinstance(x[0], list) if len(x) == 1 else False
+
+
+def isstring(x: list) -> bool:
+    """Unary `string` predicate."""
+    return isinstance(x[0], str) if len(x) == 1 else False
+
+
+
 ## Other basic functions
 
 
