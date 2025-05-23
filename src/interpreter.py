@@ -33,7 +33,6 @@ class Interpreter():
 
         # Tracks expression comments
         self.COMMENT = 0
-        self.SAVED_EXPR = ""
 
 
     def prompt(self, text=None) -> None:
