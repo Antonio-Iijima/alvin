@@ -6,6 +6,7 @@ import sys
 
 import repl as rpl
 import config as cf
+import interpreter as intrp
 
 
 
@@ -16,9 +17,10 @@ import config as cf
 def main(args: list=sys.argv) -> None:
     """Main program."""
 
+    # Because writing a language in Python is really inefficient
     sys.setrecursionlimit(10**5)
 
-    # Set boolean flags
+    # Read in flags
     flags = {}
 
     flags['-i'] = '-i' in sys.argv # interactive interpreter
@@ -39,8 +41,16 @@ def main(args: list=sys.argv) -> None:
         with open(item, "r") as file:
             rpl.REPL(file.read().splitlines(), cf.config.iFlag)
 
-    # Off we go
-    if cf.config.iFlag: rpl.REPL()
+    # Start interactive session
+    if cf.config.iFlag:
+        try: rpl.REPL()
+
+        # Catch exiting exceptions and safely quit extensions
+        except BaseException as e: 
+            intrp.interpreter.exit_extensions(); print()
+            
+            # Don't print ctrl-c because I use it more than quit; only raise other unexpected errors
+            if type(e) != KeyboardInterrupt: raise e
 
 
 
