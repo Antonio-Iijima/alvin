@@ -8,7 +8,6 @@ import config as cf
 import parser as prs
 import evaluate as ev
 import keywords as kw
-import extensions as ext
 import interpreter as intrp
 
 
@@ -30,8 +29,18 @@ def REPL(stream: str = sys.stdin, loading: bool = False) -> None:
     expression = ""
 
     for line in stream:
+
+        # Handle commented lines
+        if prs.iscomment(line):
+            if "-/" in line:
+                if intrp.interpreter.COMMENT: intrp.interpreter.COMMENT -= 1
+                else: raise SyntaxError(f"unmatched closing comment in {line}")
+            elif "/-" in line: intrp.interpreter.COMMENT += 1
+            continue        
+        
+        # Otherwise continue building expression
         expression += f"{line}\n" if loading else line
-                           
+
         # If the expression is probably complete
         if prs.iscomplete(expression):
             
@@ -85,8 +94,8 @@ def interpret(line: str) -> any:
     
     # Handle interactive tools
     
-    # Ignore comments and empty lines
-    if line.startswith("--") or line == "": return None
+    # Ignore empty lines
+    if line == "": return None
     
     # Interpret using the Python interpreter
     elif line.startswith("python"): print(eval(line.removeprefix("python")))

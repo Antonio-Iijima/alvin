@@ -31,6 +31,10 @@ class Interpreter():
             "dev.env"     : self.show_env
         }
 
+        # Tracks expression comments
+        self.COMMENT = 0
+        self.SAVED_EXPR = ""
+
 
     def prompt(self, text=None) -> None:
         """Prints the interpreter prompt."""

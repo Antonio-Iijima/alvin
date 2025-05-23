@@ -3,6 +3,7 @@
 
 
 import keywords as kw
+import interpreter as intrp
 
 
 
@@ -11,6 +12,11 @@ import keywords as kw
 
 
 ## Basic syntax checking (parentheses, operators, etc.) and typing
+
+
+def iscomment(expr: str) -> bool:
+    """Checks for single- or multiline comments."""
+    return intrp.interpreter.COMMENT or expr.strip().startswith("--") or "-/" in expr or "/-" in expr
 
 
 def iscomplete(expr: str) -> bool:
