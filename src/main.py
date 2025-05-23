@@ -37,7 +37,7 @@ def main(args: list=sys.argv) -> None:
     # Read in files if necessary
     for item in args[1:]:
         with open(item, "r") as file:
-            rpl.REPL(file.read().splitlines(), True)
+            rpl.REPL(file.read().splitlines(), cf.config.iFlag)
 
     # Off we go
     if cf.config.iFlag: rpl.REPL()

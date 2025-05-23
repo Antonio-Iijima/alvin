@@ -2,7 +2,7 @@
 
 
 (def null. (x) 
-    (eq x '())) 
+    (eq x '()))
 
 (def and. (x y)
     (cond 
