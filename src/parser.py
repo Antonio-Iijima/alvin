@@ -21,7 +21,9 @@ def iscomment(expr: str) -> bool:
 
 def iscomplete(expr: str) -> bool:
     """Checks for *hopefully* complete expressions in the REPL."""
-    return ("@start" in expr and "@end" in expr) or ("@start" not in expr and expr.count("(") == expr.count(")"))
+    # Filter expressions that will never complete
+    if expr.count(")") > expr.count("("): raise SyntaxError(f"fatal expression: {" ".join(expr)}")
+    return all(ext in expr for ext in ("@start", "@end")) or ("@start" not in expr and expr.count("(") == expr.count(")"))
 
 
 def isperfectlybalanced(expr: list) -> bool: 
@@ -46,7 +48,7 @@ def syntax_check(expr: list) -> list:
 
     # Confirm that no two operators appear successively without correct parenthetical nesting
     for i, c in enumerate(expr):
-        if kw.iskeyword(c) and kw.iskeyword(i+1): raise SyntaxError(f"invalid expression structure {" ".join(expr)}")
+        if kw.iskeyword(c) and kw.iskeyword(i+1): raise SyntaxError(f"invalid expression structure: {" ".join(expr)}")
 
     return expr
 
