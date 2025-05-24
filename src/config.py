@@ -18,8 +18,8 @@ class Config:
 
         # Setup constants
 
-        # Useless details
-        self.VERSION = "3.2.3"
+        # Technical details
+        self.VERSION = "3.2.4"
         self.NAME = "Alvin"
 
         # Color customization
@@ -28,6 +28,11 @@ class Config:
         self.GOLD = '\033[33m'
         self.RED  = '\033[31m'
         self.END_COLOR = '\033[97m'
+
+        # Comment customization
+        self.SINGLE_COMMENT = "--"
+        self.MULTILINE_COMMENT_OPEN = "/-"
+        self.MULTILINE_COMMENT_CLOSE = "-/"
 
 
     def initialize(self, flags: dict, prompt_symbol: str = "(α) ") -> None:
