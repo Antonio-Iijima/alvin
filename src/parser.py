@@ -16,7 +16,7 @@ import interpreter as intrp
 
 def iscomment(expr: str) -> bool:
     """Checks for single- or multiline comments."""
-    return intrp.interpreter.COMMENT or expr.strip().startswith("--") or "-/" in expr or "/-" in expr
+    return intrp.interpreter.COMMENT_COUNT or any(comment in expr for comment in (intrp.interpreter.SINGLE_COMMENT, intrp.interpreter.MULTILINE_COMMENT_OPEN, intrp.interpreter.MULTILINE_COMMENT_CLOSE))
 
 
 def iscomplete(expr: str) -> bool:

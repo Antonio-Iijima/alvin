@@ -29,11 +29,6 @@ class Config:
         self.RED  = '\033[31m'
         self.END_COLOR = '\033[97m'
 
-        # Comment customization
-        self.SINGLE_COMMENT = "--"
-        self.MULTILINE_COMMENT_OPEN = "/-"
-        self.MULTILINE_COMMENT_CLOSE = "-/"
-
 
     def initialize(self, flags: dict, prompt_symbol: str = "(α) ") -> None:
         """Setup config."""

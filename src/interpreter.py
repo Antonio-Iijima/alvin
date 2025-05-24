@@ -32,7 +32,12 @@ class Interpreter():
         }
 
         # Tracks expression comments
-        self.COMMENT = 0
+        self.COMMENT_COUNT = 0
+        
+        # Comment customization
+        self.SINGLE_COMMENT = "--"
+        self.MULTILINE_COMMENT_OPEN = "/-"
+        self.MULTILINE_COMMENT_CLOSE = "-/"
 
 
     def prompt(self, text=None) -> None:
