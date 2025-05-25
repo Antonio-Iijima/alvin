@@ -17,7 +17,7 @@ def evaluate(expr):
 
     # Processing a single atom
 
-    # Look up variables in config, otherwise return as literal
+    # Look up variables in environment, otherwise return as literal
     if kw.isatom(expr): return cf.config.ENV.lookup(expr) if kw.isvariable(expr) else kw.rebool(expr) if kw.isbool(expr) else expr
 
     # Otherwise processing a list
@@ -58,10 +58,10 @@ def evaluate(expr):
             # Extensions
             elif HEAD in cf.config.EXTENSIONS: return cf.config.EXTENSIONS[HEAD](*TAIL)
 
-            # Unpack and evaluate 'cxr' expressions
+            # 'cxr' expressions
             elif kw.iscxr(HEAD): return kw.evcxr(HEAD[1:-1], evaluate(expr[1]))
 
-            # Special forms and functions with entirely unique evaluation requirements
+            # Special forms and functions with unique evaluation requirements
             match HEAD:
 
                 # Lambda function declarations

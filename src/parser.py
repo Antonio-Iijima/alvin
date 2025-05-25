@@ -21,8 +21,10 @@ def iscomment(expr: str) -> bool:
 
 def iscomplete(expr: str) -> bool:
     """Checks for *hopefully* complete expressions in the REPL."""
+    
     # Filter expressions that will never complete
     if expr.count(")") > expr.count("("): raise SyntaxError(f"fatal expression: {" ".join(expr)}")
+    
     return all(ext in expr for ext in ("@start", "@end")) or ("@start" not in expr and expr.count("(") == expr.count(")"))
 
 

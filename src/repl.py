@@ -105,7 +105,7 @@ def interpret(line: str) -> any:
     
     # Identify solitary keywords
     elif kw.iskeyword(line): print(f"{line} is an operator, built-in function or reserved word.")
-    
+
     # Match interpreter commands
     elif line in intrp.interpreter.INTERPRETER: intrp.interpreter.INTERPRETER[line]()
 

@@ -325,7 +325,6 @@ IRREGULAR = {
 }
 
 
-
 # Boolean operations convert their arguments to boolean values before executing
 BOOLEAN = {
     "and"  : AND,   "or"  : OR,

@@ -53,7 +53,7 @@ class Environment:
         """Assign `val` to evaluated `var` in an optional scope, by default current."""
 
         # Garbage collection in case of function
-        self.garbage_collect(var)
+        self.cleanup(var, scope)
 
         # Evaluate value and assign
         self.env[scope][var] = ev.evaluate(val)
@@ -87,7 +87,7 @@ class Environment:
         if scope == -1: raise NameError(f"cannot delete variable '{var}' before assignment.")
 
         # Garbage collection in case of function
-        self.garbage_collect(var)
+        self.cleanup(var, scope)
 
         # And remove
         self.env[scope].pop(var)
@@ -139,8 +139,8 @@ class Environment:
         self.env = other.env + self.env
 
 
-    def garbage_collect(self, var: str, scope: int = 0) -> None:
-        """Basic garbage collection only for the `FUNARG` environments attached to functions."""
+    def cleanup(self, var: str, scope: int = 0) -> None:
+        """Basic garbage collection for the `FUNARG` environments attached to functions."""
 
         # Get the current variable; if it is a function, remove its FUNARG environment
         current = self.env[scope].get(var, None); isinstance(current, dt.Function) and cf.config.FUNARG.pop(current.id) 
