@@ -23,6 +23,7 @@ class Interpreter():
             "keywords"    : self.show_keywords,
             "exit"        : self.quit,
             "quit"        : self.quit,
+            "flags"       : self.flags,
             "clear"       : self.clear,
             "dev.info"    : self.show_dev,
             "dev.funarg"  : self.show_funargs,
@@ -74,6 +75,7 @@ https://github.com/Antonio-Iijima/Alvin
 {cf.config.PROMPT_SYMBOL} clear     : clear the terminal 
 {cf.config.PROMPT_SYMBOL} exit/quit : exit the interpreter
 {cf.config.PROMPT_SYMBOL} python *. : evaluate *. using Python
+{cf.config.PROMPT_SYMBOL} flags     : display interpreter flags
 {cf.config.PROMPT_SYMBOL} keywords  : display all language keywords
 {cf.config.PROMPT_SYMBOL} dev.info  : useful developement/debugging tools"""
         
@@ -97,6 +99,15 @@ https://github.com/Antonio-Iijima/Alvin
         self.text_box("""Arrivederci!""", centered=True)
 
         exit()
+
+
+    def flags(self) -> None:
+        """Display current active and inactive flags."""
+
+        display = f"""Flags"""
+        for flag in cf.config.FLAGS: display += f"\n{flag} : {cf.config.FLAGS[flag]}"
+
+        self.text_box(display, centered=True)
 
 
     def show_funargs(self) -> None:
