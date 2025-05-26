@@ -61,12 +61,12 @@ This project has taken far too much of my time, and will probably continue to do
 3.	Make changes and push
 4.	Open a pull request 
 
-If you find a bug and just want to report it, please submit an issue.
+If you find a bug and just want to report it, please open an issue.
 
 
 ## Resources
 
-Further information on how the language works and how to use it can be found on the [Wiki](https://github.com/Antonio-Iijima/alvin/wiki) page. For a basic overview, Alvin is a primarily functional language with the following features:
+Further information on how the language works and how to use it can be found on the [Wiki](https://github.com/Antonio-Iijima/alvin/wiki). For a basic overview, Alvin is a primarily functional language with the following features:
 
 - Cambridge Polish syntax
 - Applicative-order evaluation
