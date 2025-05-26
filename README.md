@@ -36,7 +36,7 @@ You are now ready to start programming with Alvin.
 
 ## Usage
 
-The Alvin interpreter can be run interactively using the `-i` flag, or just used to run a file. To load files, provide their relative locations as commandline arguments to `main.py`. Several example files have been included with the project in the `examples/` folder:
+The Alvin interpreter can be run interactively using the `-i` flag, or it can just be used to run a file. To load files with the `-i` flag, provide their relative locations as commandline arguments to `main.py`. Several example files have been included with the project in the `examples/` folder:
 
 ```
 $ python3 main.py ../examples/lisp.alv -i
