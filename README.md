@@ -1,9 +1,8 @@
-<img src="https://github.com/Antonio-Iijima/alvin/blob/main/Alvin%20Logo.png?raw=true" width=30%>
-
-
 # The Alvin Programming Language
 
 Alvin is an interpreted Lisp-family programming language implemented in Python and designed for flexibility and extensibility. 
+
+<img src="https://github.com/Antonio-Iijima/alvin/blob/main/Alvin%20Logo.png?raw=true" width=30%>
 
 
 ## Table of Contents
