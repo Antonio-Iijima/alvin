@@ -67,7 +67,7 @@ If you find a bug and just want to report it, please submit an issue.
 
 ## Resources
 
-Further information on how the language works and how to use it can be found on the [Wiki]("https://github.com/Antonio-Iijima/alvin/wiki") page. For a basic overview, Alvin is a primarily functional language with the following features:
+Further information on how the language works and how to use it can be found on the [Wiki](https://github.com/Antonio-Iijima/alvin/wiki) page. For a basic overview, Alvin is a primarily functional language with the following features:
 
 - Cambridge Polish syntax
 - Applicative-order evaluation
@@ -87,4 +87,4 @@ There are several keywords and built-in functions reserved by the language. Ever
 ## License
 
 
-Alvin is licensed under a [GNU General Public License]("https://github.com/Antonio-Iijima/alvin/blob/main/LICENSE").
+Alvin is licensed under a [GNU General Public License](https://github.com/Antonio-Iijima/alvin/blob/main/LICENSE).
