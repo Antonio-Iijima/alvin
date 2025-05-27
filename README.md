@@ -18,7 +18,7 @@ Alvin is an interpreted Lisp-family programming language implemented in Python a
 
 Check if you have Python installed:
 
-```bash
+```
 $ python3 --version
 ```
 
@@ -26,7 +26,7 @@ If not, install it from the [Python website](https://www.python.org/).
 
 Once Python is installed, clone the repo:
 
-```bash
+```
 $ git clone https://github.com/Antonio-Iijima/alvin.git
 $ cd alvin/src/
 ```
