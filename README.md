@@ -78,7 +78,7 @@ Further information on how the language works and how to use it can be found on 
 - Closures
 - Curried functions
 - Reflexive lambda functions and anonymous recursion
-- Interactive language extension
+- Dynamic language extension
 
 There are several keywords and built-in functions reserved by the language. Everything else is meant to be user-defined.
 
