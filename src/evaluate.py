@@ -37,6 +37,9 @@ def evaluate(expr):
         # Evaluate function calls
         elif kw.isfunction(HEAD): return HEAD.eval(TAIL)
 
+        # Evaluate templates
+        elif kw.istemplate(HEAD): return HEAD.eval(*TAIL)
+        
         # If the head is a variable, replace it with its value and re-evaluate the expression
         elif kw.isvariable(HEAD): return evaluate([cf.config.ENV.lookup(HEAD), *TAIL])
 
@@ -63,6 +66,9 @@ def evaluate(expr):
 
             # Special forms and functions with unique evaluation requirements
             match HEAD:
+
+                # Create new template instances
+                case "new" : return cf.config.ENV.lookup(TAIL[0]).new(*TAIL[1:]) 
 
                 # Lambda function declarations
                 case "lambda": return dt.Function("lambda", expr[1], expr[2])

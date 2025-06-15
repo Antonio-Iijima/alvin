@@ -2,8 +2,8 @@
 
 
 
+import config as cf
 import keywords as kw
-import interpreter as intrp
 
 
 
@@ -16,7 +16,7 @@ import interpreter as intrp
 
 def iscomment(expr: str) -> bool:
     """Checks for single- or multiline comments."""
-    return intrp.interpreter.COMMENT_COUNT or any(comment in expr for comment in (intrp.interpreter.SINGLE_COMMENT, intrp.interpreter.MULTILINE_COMMENT_OPEN, intrp.interpreter.MULTILINE_COMMENT_CLOSE))
+    return cf.config.COMMENT_COUNTER or any(comment in expr for comment in (cf.config.SINGLE_COMMENT, cf.config.MULTILINE_COMMENT_OPEN, cf.config.MULTILINE_COMMENT_CLOSE))
 
 
 def iscomplete(expr: str) -> bool:

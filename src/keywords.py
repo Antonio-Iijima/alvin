@@ -50,6 +50,11 @@ def isfunction(x: dt.Function) -> bool:
     return isinstance(x, dt.Function)
 
 
+def istemplate(x: dt.Template | dt.Instance) -> bool:
+    """Unary `Template` and `Instance` predicate."""
+    return isinstance(x, (dt.Template, dt.Instance))
+
+
 def iscxr(x: str) -> bool:
     """Unary `car` and `cdr` predicate, generalized to include all abbreviated forms."""
     return re.match(r"^c[ad]+r$", str(x))
@@ -183,7 +188,7 @@ def until(cond: list | bool, inc: list, body: list) -> None:
             ev.evaluate(body)
             ev.evaluate(inc)
 
-    return cf.config.ENV.runlocal(logic, [cond, inc, body])
+    return cf.config.ENV.runlocal(logic, cond, inc, body)
 
 
 def let(bindings: list, body: list) -> any:
@@ -193,7 +198,7 @@ def let(bindings: list, body: list) -> any:
         for pair in bindings: cf.ENV.set(pair[0], pair[1])
         return ev.evaluate(body)
     
-    return cf.config.ENV.runlocal(logic, [bindings, body])
+    return cf.config.ENV.runlocal(logic, bindings, body)
 
 
 def do(exprlist: list, body: list) -> any:
@@ -203,7 +208,7 @@ def do(exprlist: list, body: list) -> any:
         for expr in exprlist: ev.evaluate(expr)
         return ev.evaluate(body)
     
-    return cf.config.ENV.runlocal(logic, [exprlist, body])
+    return cf.config.ENV.runlocal(logic, exprlist, body)
 
 
 def Alvin_eval(expr: any) -> any:
@@ -335,4 +340,4 @@ BOOLEAN = {
 
 # Set of all special forms and other functions having 
 # evaluation strategies handled explicitly by evaluate()
-SPECIAL = { "lambda", "until", "string?", "list?", "cond", "quote" }
+SPECIAL = { "lambda", "until", "string?", "list?", "cond", "quote", "new" }

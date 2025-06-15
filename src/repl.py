@@ -32,10 +32,10 @@ def REPL(stream: str = sys.stdin, loading: bool = False) -> None:
 
         # Handle commented lines
         if prs.iscomment(line):
-            if intrp.interpreter.MULTILINE_COMMENT_CLOSE in line:
-                if intrp.interpreter.COMMENT_COUNT: intrp.interpreter.COMMENT_COUNT -= 1
+            if cf.config.MULTILINE_COMMENT_CLOSE in line:
+                if cf.config.COMMENT_COUNTER: cf.config.COMMENT_COUNTER -= 1
                 else: raise SyntaxError(f"unmatched closing comment in {line}")
-            elif intrp.interpreter.MULTILINE_COMMENT_OPEN in line: intrp.interpreter.COMMENT_COUNT += 1
+            elif cf.config.MULTILINE_COMMENT_OPEN in line: cf.config.COMMENT_COUNTER += 1
             continue        
         
         # Otherwise continue building expression

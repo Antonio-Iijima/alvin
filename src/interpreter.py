@@ -19,26 +19,18 @@ class Interpreter():
         """Initialize exposed commands."""
 
         self.INTERPRETER = {
-            "help"        : self.help,
-            "keywords"    : self.show_keywords,
-            "exit"        : self.quit,
-            "quit"        : self.quit,
-            "flags"       : self.flags,
-            "clear"       : self.clear,
-            "dev.info"    : self.show_dev,
-            "dev.funarg"  : self.show_funargs,
-            "dev.globals" : self.show_globals,
-            "dev.imports" : self.show_imports,
-            "dev.env"     : self.show_env
+            "help"          : self.help,
+            "keywords"      : self.show_keywords,
+            "exit"          : self.quit,
+            "quit"          : self.quit,
+            "flags"         : self.flags,
+            "clear"         : self.clear,
+            "dev.info"      : self.show_dev,
+            "dev.closures"  : self.show_closures,
+            "dev.globals"   : self.show_globals,
+            "dev.imports"   : self.show_imports,
+            "dev.env"       : self.show_env
         }
-
-        # Tracks expression comments
-        self.COMMENT_COUNT = 0
-        
-        # Comment customization
-        self.SINGLE_COMMENT = "--"
-        self.MULTILINE_COMMENT_OPEN = "/-"
-        self.MULTILINE_COMMENT_CLOSE = "-/"
 
 
     def prompt(self, text=None) -> None:
@@ -110,13 +102,13 @@ https://github.com/Antonio-Iijima/Alvin
         self.text_box(display, centered=True)
 
 
-    def show_funargs(self) -> None:
+    def show_closures(self) -> None:
         """Display the current FUNARG environment."""
         
         print()
-        if cf.config.FUNARG:
-            for function, env in cf.config.FUNARG.items():
-                print(f"{function}:\n{env}")  
+        if cf.config.CLOSURES:
+            for entry, env in cf.config.CLOSURES.items():
+                print(f"{entry}:\n{env}")  
         else: print("No function environments found.")
         print()
               
@@ -304,7 +296,8 @@ https://github.com/Antonio-Iijima/Alvin
             cf.config.BOOLEAN, 
             cf.config.SPECIAL,
             cf.config.EXTENSIONS,
-            cf.config.ENVIRONMENT
+            cf.config.ENVIRONMENT,
+            cf.config.OBJECT
         ]
         
         keywords = [category for category in keywords if len(category) > 0]

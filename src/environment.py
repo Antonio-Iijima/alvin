@@ -17,14 +17,13 @@ import datatypes as dt
 class Environment:
     """Environment data structure, represented as a stack of dictionaries."""
 
-    def __init__(self, name: str = None, env: list = None) -> None:
+    def __init__(self, env: list = None) -> None:
         self.env = env or [{}]
-        self.name = name or ""
 
 
     def clone(self) -> "Environment":
         """Returns a deep copy of the environment."""
-        return Environment(env=copy.deepcopy(self.env))
+        return Environment(copy.deepcopy(self.env))
 
 
     def begin_scope(self) -> None:
@@ -59,9 +58,14 @@ class Environment:
         self.env[scope][var] = ev.evaluate(val)
 
 
-    def define(self, name: str, parameters: list, body: list) -> None:
+    def define(self, name: str, parameters: list, body: list,) -> None:
         """Define a named function."""
         self.env[0][name] = dt.Function(name, parameters, body)
+    
+       
+    def deftemplate(self, name: str, parameters: list, body: list,) -> None:
+        """Define a new template."""
+        self.env[0][name] = dt.Template(name, parameters, body)
 
 
     def update(self, var: str, val: any) -> None | str:
@@ -117,7 +121,7 @@ class Environment:
         else: return self.env[scope][var]
 
 
-    def runlocal(self, logic: callable, args: list) -> any:
+    def runlocal(self, logic: callable, *args) -> any:
         """Run any function in a local scope which is destroyed when the function returns."""
 
         # Begin a new local scope
@@ -143,7 +147,7 @@ class Environment:
         """Basic garbage collection for the `FUNARG` environments attached to functions."""
 
         # Get the current variable; if it is a function, remove its FUNARG environment
-        current = self.env[scope].get(var, None); isinstance(current, dt.Function) and cf.config.FUNARG.pop(current.id) 
+        current = self.env[scope].get(var, None); isinstance(current, dt.Function) and cf.config.CLOSURES.pop(current.id) 
 
 
     def __len__(self) -> int: return len(self.env)

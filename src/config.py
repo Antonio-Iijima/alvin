@@ -5,6 +5,7 @@
 import copy
 
 import keywords as kw
+import datatypes as dt
 import extensions as ext
 import environment as env
 
@@ -19,7 +20,7 @@ class Config:
         # Setup constants
 
         # Technical details
-        self.VERSION = "3.2.5"
+        self.VERSION = "4.0.0"
         self.NAME = "Alvin"
 
         # Color customization
@@ -28,6 +29,11 @@ class Config:
         self.GOLD = '\033[33m'
         self.RED  = '\033[31m'
         self.END_COLOR = '\033[97m'
+        
+        # Comment customization
+        self.SINGLE_COMMENT = "--"
+        self.MULTILINE_COMMENT_OPEN = "/-"
+        self.MULTILINE_COMMENT_CLOSE = "-/"
 
 
     def initialize(self, flags: dict, prompt_symbol: str = "(α) ") -> None:
@@ -46,14 +52,17 @@ class Config:
         # Track the number of programming errors by the user
         self.ERROR_COUNTER = 0
 
+        # Tracks expression comments
+        self.COMMENT_COUNTER = 0
+
         # Save the original size of the extensions file
         self.ORIGINAL_EXT_SIZE = len(open("extensions.py").readlines())
         
         # Save all the original extensions declared when the interpreter starts
         self.ORIGINAL_EXTENSIONS = copy.deepcopy(ext.EXTENSIONS)
 
-        # Function FUNARG environments, accessed by function IDs
-        self.FUNARG = {}
+        # Closure environments, accessed by ID
+        self.CLOSURES = {}
 
         # Declared global variables
         self.GLOBALS = {}
@@ -62,7 +71,7 @@ class Config:
         self.IMPORTS = {}
 
         # The Environment
-        self.ENV = env.Environment(name="env")
+        self.ENV = env.Environment()
 
         # Keyword groups
         self.REGULAR = kw.REGULAR
@@ -71,13 +80,15 @@ class Config:
         self.SPECIAL = kw.SPECIAL
         self.EXTENSIONS = ext.EXTENSIONS
 
+
         self.ENVIRONMENT = {
-            "def"     : self.ENV.define,
-            "set"     : self.ENV.set,
-            "update"  : self.ENV.update,
-            "del"     : self.ENV.delete,
-            "burrow"  : self.ENV.begin_scope,
-            "surface" : self.ENV.end_scope,
+            "def"         : self.ENV.define,
+            "deftemplate" : self.ENV.deftemplate,
+            "set"         : self.ENV.set,
+            "update"      : self.ENV.update,
+            "del"         : self.ENV.delete,
+            "burrow"      : self.ENV.begin_scope,
+            "surface"     : self.ENV.end_scope,
         }
         
         self.KEYWORDS = {
@@ -86,7 +97,7 @@ class Config:
             *self.BOOLEAN, 
             *self.SPECIAL,
             *self.EXTENSIONS,
-            *self.ENVIRONMENT
+            *self.ENVIRONMENT,
         }
         
         # Track keywords
