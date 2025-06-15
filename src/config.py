@@ -5,7 +5,6 @@
 import copy
 
 import keywords as kw
-import datatypes as dt
 import extensions as ext
 import environment as env
 

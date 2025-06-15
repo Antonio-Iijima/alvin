@@ -63,11 +63,12 @@ class Function(Closable):
             self.type = "method"
         elif name == "lambda": 
             self.type = name
-            self.name = f"{prs.convert(self.parameters)} {prs.convert(self.body)}"
         else:
             self.type = "function"
 
         super().__init__(name, parameters, body)
+            
+        if self.type == "lambda": self.name = f"{prs.convert(self.parameters)} {prs.convert(self.body)}" 
 
 
     def eval(self, args: list) -> any:
