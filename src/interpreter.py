@@ -147,10 +147,10 @@ https://github.com/Antonio-Iijima/Alvin
 
         display = f"""useful tools
                 
-{cf.config.PROMPT_SYMBOL} dev.funarg  : current FUNARGs
-{cf.config.PROMPT_SYMBOL} dev.env     : environment
-{cf.config.PROMPT_SYMBOL} dev.globals : global variables
-{cf.config.PROMPT_SYMBOL} dev.imports : imported modules"""
+{cf.config.PROMPT_SYMBOL} dev.closures : closures
+{cf.config.PROMPT_SYMBOL} dev.env      : environment
+{cf.config.PROMPT_SYMBOL} dev.globals  : global variables
+{cf.config.PROMPT_SYMBOL} dev.imports  : imported modules"""
         
         self.text_box(display)
 
