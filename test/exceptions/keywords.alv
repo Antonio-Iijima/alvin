@@ -1,0 +1,8 @@
+-- head
+(car 1)
+
+-- tail
+(cdr 1)
+
+-- load
+(load examples/input)

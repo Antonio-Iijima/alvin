@@ -1,0 +1,29 @@
+-- commandline
+help
+clear
+keywords
+dev.info
+dev.funarg
+dev.globals
+dev.imports
+f
+burrow
+python 1 + 2
+
+
+(load examples/closures.alv)
+(set c (counter 0))
+(global c 3)
+(import math)
+(math.pi)
+
+dev.funarg
+dev.globals
+dev.imports
+clear
+
+@start
+def f(x): return x + 1
+@end
+
+(f 1)
