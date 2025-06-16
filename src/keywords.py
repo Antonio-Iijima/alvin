@@ -42,7 +42,7 @@ def isimport(x: str) -> bool:
 
 def isnumber(x: str | int | float) -> bool: 
     """Unary `int` or `float` predicate."""
-    return re.match(r"^[-]?[0-9]*[.]?[0-9]+$", str(x))
+    return bool(re.match(r"^[-]?[0-9]*[.]?[0-9]+$", str(x)))
 
 
 def isfunction(x: dt.Function) -> bool: 
@@ -143,7 +143,7 @@ def tail(x: list) -> list:
 
 def evcxr(x: str, output: any) -> any:
     """Tail-recursive evaluation of `cxr` expressions (arbitrary combinations of `car` and `cdr`)."""
-    
+
     # Return the final output if all head and tail calls have been processed
     if not x: return output
 
@@ -195,7 +195,7 @@ def let(bindings: list, body: list) -> any:
     """Binds all variables in `bindings` and evaluates `body` in a local scope."""
 
     def logic(bindings: list, body: list) -> any:
-        for pair in bindings: cf.ENV.set(pair[0], pair[1])
+        for pair in bindings: cf.config.ENV.set(pair[0], pair[1])
         return ev.evaluate(body)
     
     return cf.config.ENV.runlocal(logic, bindings, body)
