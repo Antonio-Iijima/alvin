@@ -2,6 +2,7 @@
 
 
 
+import os
 import copy
 
 import keywords as kw
@@ -19,7 +20,7 @@ class Config:
         # Setup constants
 
         # Technical details
-        self.VERSION = "4.0.1"
+        self.VERSION = "4.0.2"
         self.NAME = "Alvin"
 
         # Color customization
@@ -33,6 +34,9 @@ class Config:
         self.SINGLE_COMMENT = "--"
         self.MULTILINE_COMMENT_OPEN = "/-"
         self.MULTILINE_COMMENT_CLOSE = "-/"
+
+        # src/ path
+        self.PATH = os.path.abspath(__file__ + "/../..")
 
 
     def initialize(self, flags: dict, prompt_symbol: str = "(α) ") -> None:
@@ -55,7 +59,7 @@ class Config:
         self.COMMENT_COUNTER = 0
 
         # Save the original size of the extensions file
-        self.ORIGINAL_EXT_SIZE = len(open("extensions.py").readlines())
+        self.ORIGINAL_EXT_SIZE = len(open(f"{self.PATH}/src/extensions.py").readlines())
         
         # Save all the original extensions declared when the interpreter starts
         self.ORIGINAL_EXTENSIONS = copy.deepcopy(ext.EXTENSIONS)
@@ -79,15 +83,14 @@ class Config:
         self.SPECIAL = kw.SPECIAL
         self.EXTENSIONS = ext.EXTENSIONS
 
-
         self.ENVIRONMENT = {
-            "def"         : self.ENV.define,
-            "deftemplate" : self.ENV.deftemplate,
-            "set"         : self.ENV.set,
-            "update"      : self.ENV.update,
-            "del"         : self.ENV.delete,
-            "burrow"      : self.ENV.begin_scope,
-            "surface"     : self.ENV.end_scope,
+            "def"      : self.ENV.define,
+            "template" : self.ENV.deftemplate,
+            "set"      : self.ENV.set,
+            "update"   : self.ENV.update,
+            "del"      : self.ENV.delete,
+            "burrow"   : self.ENV.begin_scope,
+            "surface"  : self.ENV.end_scope,
         }
         
         self.KEYWORDS = {
@@ -104,7 +107,7 @@ class Config:
         self.ADDED_KEYWORD_NUM = 0
 
 
-    def set_color(self, text: str, color: str = "") -> str:
+    def set_color(self, text: str, color: str = None) -> str:
         """Return text formatted according to the provided color."""
 
         colors = {

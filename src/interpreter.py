@@ -245,10 +245,10 @@ https://github.com/Antonio-Iijima/Alvin
         extension = pycode.removeprefix("@start").removesuffix("@end").strip()
 
         # Get the current contents of the extensions.py file
-        contents = open("extensions.py").readlines()
+        contents = open(f"{cf.config.PATH}/src/extensions.py").readlines()
         
         # Write the new extensions to beginning of the file
-        with open("extensions.py", "w") as file:
+        with open(f"{cf.config.PATH}/src/extensions.py", "w") as file:
             file.writelines([f"{extension}\n\n", *contents])
         
         # Reload extensions to make changes visible
@@ -266,7 +266,7 @@ https://github.com/Antonio-Iijima/Alvin
         """Safely save or remove any extensions added in an interactive interpreter session."""
 
         # Save the contents of the extensions.py file
-        contents = open("extensions.py").readlines()
+        contents = open(f"{cf.config.PATH}/src/extensions.py").readlines()
 
         # Print informational text if saving new extensions
         if cf.config.pFlag:
@@ -283,7 +283,7 @@ https://github.com/Antonio-Iijima/Alvin
 
         # Otherwise remove them
         else:
-            with open("extensions.py", "w") as file:
+            with open(f"{cf.config.PATH}/src/extensions.py", "w") as file:
                 file.writelines(contents[-cf.config.ORIGINAL_EXT_SIZE:])
     
 
