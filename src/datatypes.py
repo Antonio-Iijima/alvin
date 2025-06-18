@@ -29,23 +29,6 @@ class Closable:
         cf.config.CLOSURES[self.id] = env.Environment()
 
 
-    def runClosed(self, logic: callable, *args) -> any:
-            """Run the provided code in a local scope with closure."""
-
-            # Extend the general environment
-            cf.config.ENV.extend(cf.config.CLOSURES[self.id])
-            
-            # Evaluate the passed function
-            try:
-                value = cf.config.ENV.runlocal(logic, *args)
-
-            # Safely end the extended scopes
-            finally:
-                cf.config.ENV.end_scope(len(cf.config.CLOSURES[self.id]))
-
-            return value
-
-
     def generate_id(self, k: int = 15) -> str: 
         """Generate a randomized identification string between 0 and k digits long."""
         return f"ID:{random.randint(0, 10**k)}.{self.type}.{self.name}"
@@ -105,7 +88,7 @@ class Function(Closable):
 
         # Confirm function arity
         if len(self.parameters) != len(args): 
-            raise TypeError(f"{self.name} takes {len(self.parameters)} argument{"s"*bool(len(self.parameters)-1)} but {len(args)} were given") # pragma: no cover
+            raise TypeError(f"{self.name} takes {len(self.parameters)} argument{"s"*bool(len(self.parameters)-1)} but {len(args)} were given")
         
         # Execute the actual function logic in local scope
         return cf.config.CLOSURES[self.id].runlocal(logic, args)
@@ -129,7 +112,7 @@ class Template(Closable):
         # Set initialization function if included
         for method in self.body:
             if method[0] == "init":
-                self.init = method[1]
+                self.init = method[1:]
                 break
 
         # Save template variables to internal environment
@@ -142,14 +125,18 @@ class Template(Closable):
     def new(self, args: list) -> "Instance":
         """Create a new template instance."""
 
+        def logic(init: list) -> any:
+            """Evaluate all initialization statements."""
+            return kw.evlist(init)
+
         # Instantiate
         newInstance = Instance(self.name, self.parameters, args)
 
         # Inherit template variables and methods
-        cf.config.CLOSURES[newInstance.id].extend(cf.config.CLOSURES[self.id])
+        cf.config.CLOSURES[newInstance.id].env += cf.config.CLOSURES[self.id].env
 
         # Run initialization function
-        if self.init: newInstance.runClosed(kw.evlist, self.init)
+        if self.init: cf.config.ENV.runClosed(cf.config.CLOSURES[newInstance.id], logic, self.init)
             
         return newInstance
     
@@ -174,8 +161,5 @@ class Instance(Closable):
             """Method evaluation logic."""
             return cf.config.ENV.lookup(method).eval(args)
         
-        # Applicative order evaluation for arguments
-        args = [] if args == None else kw.evlist(args)
-
         # Execute logic in local scope
-        return self.runClosed(logic, method, args)
+        return cf.config.ENV.runClosed(cf.config.CLOSURES[self.id], logic, method, args)

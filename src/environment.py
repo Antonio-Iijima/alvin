@@ -63,7 +63,7 @@ class Environment:
         self.env[0][name] = dt.Function(name, parameters, body)
     
        
-    def deftemplate(self, name: str, parameters: list, body: list,) -> None:
+    def deftemplate(self, name: str, parameters: list, *body: list,) -> None:
         """Define a new template."""
         self.env[0][name] = dt.Template(name, parameters, body)
 
@@ -112,7 +112,7 @@ class Environment:
         if scope == -1: 
 
             # Check if it is the name of an imported module
-            if var in cf.config.IMPORTS: print(f"'{var}'{f" (or '{cf.config.IMPORTS[var].__name__}') " if cf.config.IMPORTS[var].__name__ != var else ""}is an imported module.")
+            if var in cf.config.IMPORTS: print(f"'{var}'{"" if cf.config.IMPORTS[var].__name__ == var else f" (or {cf.config.IMPORTS[var].__name__})"} is an imported module.")
 
             # Otherwise raise error
             else: raise ValueError(f"variable {var} is not defined.")
@@ -134,6 +134,25 @@ class Environment:
         # Ensure local scope is always ended
         finally: 
             self.end_scope()
+
+        return value
+
+
+    def runClosed(self, closure: "Environment", logic: callable, *args) -> any:
+        """Extended version of the runLocal method which allows for the closure of a function."""
+
+        # Extend the general environment
+        self.extend(closure)
+        self.begin_scope()
+
+        # Evaluate the passed function
+        try:
+            value = logic(*args)
+
+        # Safely end the extended scopes
+        finally:
+            closure.env = self.env[:len(closure)+1]
+            self.end_scope(len(closure))
 
         return value
 

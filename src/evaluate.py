@@ -90,4 +90,4 @@ def evaluate(expr):
         return kw.evlist(expr)
 
     # Otherwise head is a list
-    return expr # evaluate([evaluate(expr[0]), *expr[1:]])
+    evaluated = [evaluate(expr[0]), *expr[1:]]; return expr if expr == evaluated else evaluate(evaluated)
