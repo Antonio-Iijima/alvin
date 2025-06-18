@@ -4,18 +4,16 @@ import subprocess
 
 
 
-def test(directory='.', args=[]):
-    
-    # Execute all test files
-    for item in os.listdir(directory):
-        if item in ["exceptions"]: continue
-        if item.endswith('.alv'):
-            print(f"\nFILE: {directory}/{item}")
+def test(filepath='.', args=[]):
 
-            subprocess.run(f"coverage run --parallel-mode ../src/main.py {directory}/{item} {" ".join(args)}", shell=True)
-            print()
+    if os.path.isfile(filepath) and filepath.endswith('.alv'):
+        print(f"\nFILE: {filepath}")
+        subprocess.run(f"coverage run --parallel-mode ../src/main.py {filepath} {" ".join(args)}", shell=True)
+        print()
 
-        elif os.path.isdir(item) and item != "htmlcov": test(f"{directory}/{item}", args)
+    elif os.path.isdir(filepath):
+        for file in os.listdir(filepath): 
+            if file not in ["htmlcov"]: test(f"{filepath}/{file}", args)
 
 
 def main(initialDirectory = "../test", withFlags=False):
