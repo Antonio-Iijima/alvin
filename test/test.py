@@ -16,11 +16,11 @@ def test(filepath='.', args=[]):
             if file not in ["htmlcov"]: test(f"{filepath}/{file}", args)
 
 
-def main(initialDirectory = "../test", withFlags=False):
+def main(initialDirectory = "../test", withFlags=""):
     print("\nRunning without flags\n")
     test(initialDirectory)
 
-    if withFlags:
+    if withFlags == "-f":
         for flag in ["-i", "-d", "-p", "-z"]:
             print(f"Running with {flag} flag")
             test(initialDirectory, args = [flag])
