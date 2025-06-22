@@ -25,7 +25,7 @@ def REPL(stream: str = sys.stdin, loading: bool = False) -> None:
             intrp.interpreter.prompt()
     else: print("--- Alvin ---")
         
-    # Initialize expresssion
+    # Initialize expression
     expression = ""
 
     for line in stream:

@@ -296,8 +296,7 @@ https://github.com/Antonio-Iijima/Alvin
             cf.config.BOOLEAN, 
             cf.config.SPECIAL,
             cf.config.EXTENSIONS,
-            cf.config.ENVIRONMENT,
-            cf.config.OBJECT
+            cf.config.ENVIRONMENT
         ]
         
         keywords = [category for category in keywords if len(category) > 0]
