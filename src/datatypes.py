@@ -25,7 +25,7 @@ class Closable:
         # Generate randomized id
         self.id = self.generate_id()
 
-        # Create FUNARG environment
+        # Create closed environment
         cf.config.CLOSURES[self.id] = env.Environment()
 
 

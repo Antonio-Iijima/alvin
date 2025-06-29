@@ -3,10 +3,12 @@
 
 
 import copy
+import importlib
 
 import config as cf
 import evaluate as ev
 import datatypes as dt
+import extensions as ext
 
 
 
@@ -95,6 +97,48 @@ class Environment:
 
         # And remove
         self.env[scope].pop(var)
+
+
+    def delex(self, extension: str) -> None:
+        """Delete an extension."""
+
+        # Validate that extension exists
+        valid = any(extension == entry[0] for entry in cf.config.EXTENSION_LOG)
+
+        if valid:
+
+            # Bookend indices
+            start = end = 0
+
+            for (name, idx) in cf.config.EXTENSION_LOG:
+                end += idx
+                if name == extension: break
+                start += idx
+
+            # Get the current contents of the extensions.py file
+            contents = open(f"{cf.config.PATH}/src/extensions.py").readlines()
+            
+            # Excise selected extension
+            contents = contents[:start] + contents[end:]
+            
+            # Rewrite extensions.py
+            with open(f"{cf.config.PATH}/src/extensions.py", "w") as file:
+                file.writelines(contents)
+                
+            # Reload extensions to make changes visible
+            importlib.reload(ext)
+
+            # Decrement total keywords
+            cf.config.ADDED_KEYWORD_NUM -= 1
+
+            # Remove entry from log
+            cf.config.EXTENSION_LOG.pop(0)
+            
+            # Update external references
+            cf.config.EXTENSIONS.pop(extension)
+            cf.config.KEYWORDS.remove(extension)
+            
+        else: raise NameError(f"cannot delete extension '{extension}' before assignment.")
 
 
     def match_arguments(self, parameters: list, args: list) -> None:

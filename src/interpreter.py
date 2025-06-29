@@ -239,23 +239,27 @@ https://github.com/Antonio-Iijima/Alvin
         print()
 
 
-    def extend(self, pycode: str) -> None:
+    def extend(self, code: str) -> None:
         """Add extensions in Python to Alvin."""
 
-        extension = pycode.removeprefix("@start").removesuffix("@end").strip()
+        extension = code.removeprefix("@start").removesuffix("@end").strip() + "\n\n"
 
         # Get the current contents of the extensions.py file
         contents = open(f"{cf.config.PATH}/src/extensions.py").readlines()
         
         # Write the new extensions to beginning of the file
         with open(f"{cf.config.PATH}/src/extensions.py", "w") as file:
-            file.writelines([f"{extension}\n\n", *contents])
+            file.writelines([extension, *contents])
         
         # Reload extensions to make changes visible
         importlib.reload(ext)
 
         # Increment total keywords
         cf.config.ADDED_KEYWORD_NUM += 1
+
+        # Log size of new extension
+        latest = set(ext.EXTENSIONS).difference(set(cf.config.EXTENSIONS)).pop()
+        cf.config.EXTENSION_LOG.insert(0, (latest, len(extension.splitlines())))
 
         # Update external references
         cf.config.EXTENSIONS.update(ext.EXTENSIONS)

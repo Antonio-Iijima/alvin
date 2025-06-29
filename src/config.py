@@ -1,4 +1,4 @@
-"""Globally acessible variables and config settings."""
+"""Globally accessible variables and config settings."""
 
 
 
@@ -20,7 +20,7 @@ class Config:
         # Setup constants
 
         # Technical details
-        self.VERSION = "4.0.3"
+        self.VERSION = "4.1.3"
         self.NAME = "Alvin"
 
         # Color customization
@@ -64,6 +64,9 @@ class Config:
         # Save all the original extensions declared when the interpreter starts
         self.ORIGINAL_EXTENSIONS = copy.deepcopy(ext.EXTENSIONS)
 
+        # Save extension length
+        self.EXTENSION_LOG = [("loop", 4)]
+
         # Closure environments, accessed by ID
         self.CLOSURES = {}
 
@@ -91,6 +94,7 @@ class Config:
             "del"      : self.ENV.delete,
             "burrow"   : self.ENV.begin_scope,
             "surface"  : self.ENV.end_scope,
+            "delex"    : self.ENV.delex
         }
         
         self.KEYWORDS = {
