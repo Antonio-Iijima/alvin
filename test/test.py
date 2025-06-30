@@ -16,7 +16,7 @@ def test(filepath='.', args=[]):
             if file not in ["htmlcov"]: test(f"{filepath}/{file}", args)
 
 
-def main(initialDirectory = "../test", withFlags=""):
+def main(initialDirectory = "../test", withFlags="-f"):
     print("\nRunning without flags\n")
     test(initialDirectory)
 

@@ -3,11 +3,11 @@
 
 
 import os
-import copy
 
 import keywords as kw
 import extensions as ext
 import environment as env
+import interpreter as intrp
 
 
 
@@ -20,7 +20,7 @@ class Config:
         # Setup constants
 
         # Technical details
-        self.VERSION = "4.1.3"
+        self.VERSION = "4.2.3"
         self.NAME = "Alvin"
 
         # Color customization
@@ -58,14 +58,16 @@ class Config:
         # Tracks expression comments
         self.COMMENT_COUNTER = 0
 
-        # Save the original size of the extensions file
-        self.ORIGINAL_EXT_SIZE = len(open(f"{self.PATH}/src/extensions.py").readlines())
-        
-        # Save all the original extensions declared when the interpreter starts
-        self.ORIGINAL_EXTENSIONS = copy.deepcopy(ext.EXTENSIONS)
+        # Initialize extensions
 
-        # Save extension length
-        self.EXTENSION_LOG = [("loop", 4)]
+        # Save all the original extensions declared when the interpreter starts
+        self.ORIGINAL_EXTENSIONS = open(f"{self.PATH}/src/extensions.py").read()
+
+        # Initialize extension log
+        self.EXTENSION_INDEX = []
+
+        # Track new extensions
+        self.EXTENSION_LOG = set()
 
         # Closure environments, accessed by ID
         self.CLOSURES = {}
@@ -79,12 +81,13 @@ class Config:
         # The Environment
         self.ENV = env.Environment()
 
-        # Keyword groups
+        # Other keyword groups
         self.REGULAR = kw.REGULAR
         self.IRREGULAR = kw.IRREGULAR
         self.BOOLEAN = kw.BOOLEAN
         self.SPECIAL = kw.SPECIAL
-        self.EXTENSIONS = ext.EXTENSIONS
+        self.EXTENSIONS = {}
+
 
         self.ENVIRONMENT = {
             "def"      : self.ENV.define,
@@ -103,12 +106,15 @@ class Config:
             *self.BOOLEAN, 
             *self.SPECIAL,
             *self.EXTENSIONS,
-            *self.ENVIRONMENT,
+            *self.ENVIRONMENT
         }
         
         # Track keywords
         self.INITIAL_KEYWORD_NUM = len(self.KEYWORDS)
         self.ADDED_KEYWORD_NUM = 0
+
+        # Load extensions
+        intrp.interpreter.extend(self.ORIGINAL_EXTENSIONS, False)
 
 
     def set_color(self, text: str, color: str = None) -> str:

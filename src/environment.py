@@ -103,16 +103,18 @@ class Environment:
         """Delete an extension."""
 
         # Validate that extension exists
-        valid = any(extension == entry[0] for entry in cf.config.EXTENSION_LOG)
+        valid = extension in cf.config.EXTENSIONS
 
         if valid:
 
             # Bookend indices
             start = end = 0
 
-            for (name, idx) in cf.config.EXTENSION_LOG:
+            for i, (name, idx) in enumerate(cf.config.EXTENSION_INDEX):
                 end += idx
-                if name == extension: break
+                if name == extension: 
+                    # Remove entry from index
+                    cf.config.EXTENSION_INDEX.pop(i); break
                 start += idx
 
             # Get the current contents of the extensions.py file
@@ -128,16 +130,16 @@ class Environment:
             # Reload extensions to make changes visible
             importlib.reload(ext)
 
+            # Remove entry from log
+            cf.config.EXTENSION_LOG.remove(extension)
+
+            # Remove entry from keywords
+            cf.config.EXTENSIONS.pop(extension)
+            cf.config.KEYWORDS.remove(extension)
+
             # Decrement total keywords
             cf.config.ADDED_KEYWORD_NUM -= 1
 
-            # Remove entry from log
-            cf.config.EXTENSION_LOG.pop(0)
-            
-            # Update external references
-            cf.config.EXTENSIONS.pop(extension)
-            cf.config.KEYWORDS.remove(extension)
-            
         else: raise NameError(f"cannot delete extension '{extension}' before assignment.")
 
 
