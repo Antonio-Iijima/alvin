@@ -1,3 +1,5 @@
+-- test loop
+
 (def ctr (n) 
   (lambda () (do ((update n (+ n 1))) n)))
 

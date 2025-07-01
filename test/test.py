@@ -4,7 +4,8 @@ import subprocess
 
 
 
-def test(filepath='.', args=[]):
+def test(filepath: str = '.', args: list = None):
+    args = args or []
 
     if os.path.isfile(filepath) and filepath.endswith('.alv'):
         print(f"\nFILE: {filepath}")
@@ -16,7 +17,7 @@ def test(filepath='.', args=[]):
             if file not in ["htmlcov"]: test(f"{filepath}/{file}", args)
 
 
-def main(initialDirectory = "../test", withFlags="-f"):
+def main(initialDirectory: str = "../test", withFlags: str = "-f"):
     print("\nRunning without flags\n")
     test(initialDirectory)
 

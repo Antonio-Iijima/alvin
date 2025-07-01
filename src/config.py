@@ -20,7 +20,7 @@ class Config:
         # Setup constants
 
         # Technical details
-        self.VERSION = "4.2.3"
+        self.VERSION = "4.2.4"
         self.NAME = "Alvin"
 
         # Color customization
@@ -111,7 +111,6 @@ class Config:
         
         # Track keywords
         self.INITIAL_KEYWORD_NUM = len(self.KEYWORDS)
-        self.ADDED_KEYWORD_NUM = 0
 
         # Load extensions
         intrp.interpreter.extend(self.ORIGINAL_EXTENSIONS, False)

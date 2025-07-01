@@ -69,7 +69,7 @@ https://github.com/Antonio-Iijima/Alvin
 {cf.config.PROMPT_SYMBOL} python *. : evaluate *. using Python
 {cf.config.PROMPT_SYMBOL} flags     : display interpreter flags
 {cf.config.PROMPT_SYMBOL} keywords  : display all language keywords
-{cf.config.PROMPT_SYMBOL} dev.info  : useful developement/debugging tools"""
+{cf.config.PROMPT_SYMBOL} dev.info  : useful development/debugging tools"""
         
         self.text_box(display)
 
@@ -85,7 +85,7 @@ https://github.com/Antonio-Iijima/Alvin
         self.exit_extensions()
 
         if cf.config.zFlag:
-            net = cf.config.ERROR_COUNTER - cf.config.ADDED_KEYWORD_NUM
+            net = cf.config.ERROR_COUNTER - (len(cf.config.KEYWORDS) - cf.config.INITIAL_KEYWORD_NUM)
             print(f"\n{cf.config.PURPLE}You made {cf.config.ERROR_COUNTER} error{"s"*(cf.config.ERROR_COUNTER!=1)} with a net loss of {net} function{"s"*(abs(net)!=1)}.{cf.config.END_COLOR}")
 
         self.text_box("""Arrivederci!""", centered=True)
@@ -238,7 +238,7 @@ https://github.com/Antonio-Iijima/Alvin
         print(cf.config.set_color(bottom))
         print()
 
-
+        
     def extend(self, code: str, writable: bool = True) -> None:
         """Add extensions in Python to Alvin."""    
 
@@ -251,6 +251,9 @@ https://github.com/Antonio-Iijima/Alvin
         # Add individual extensions
         for extension in ext_list:
 
+            # Separate <name> as <alias>
+            name, alias = extension[:extension.find("\n")].split(" as ")
+            
             if writable:
                 
                 extension = f"# INCLUDE {extension}\n\n\n"    
@@ -261,21 +264,19 @@ https://github.com/Antonio-Iijima/Alvin
                 with open(f"{cf.config.PATH}/src/extensions.py", "w") as file: 
                     file.writelines(extension + contents)
 
+                # Reload extension file to show changes
                 importlib.reload(ext)
-            
-            # Separate <name> as <alias> line and create index entry
-            name, alias = extension[:extension.find("\n")].split(" as ")
-            cf.config.EXTENSION_INDEX.insert(0, (alias, len(extension.splitlines())))
 
-        # Add entry to log
-        cf.config.EXTENSION_LOG.add(alias)
+                # Add entry to log
+                cf.config.EXTENSION_LOG.add(alias)
+
+            # Create index entry
+            cf.config.EXTENSION_INDEX.insert(0, (alias, len(extension.splitlines())))
 
         # Add entry to keywords
         cf.config.EXTENSIONS[alias] = ext.EXTENSIONS.get(name)
         cf.config.KEYWORDS.add(alias)
 
-        # Increment total keywords
-        cf.config.ADDED_KEYWORD_NUM += 1
 
 
     def exit_extensions(self) -> None:

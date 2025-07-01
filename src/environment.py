@@ -137,9 +137,6 @@ class Environment:
             cf.config.EXTENSIONS.pop(extension)
             cf.config.KEYWORDS.remove(extension)
 
-            # Decrement total keywords
-            cf.config.ADDED_KEYWORD_NUM -= 1
-
         else: raise NameError(f"cannot delete extension '{extension}' before assignment.")
 
 
