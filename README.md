@@ -1,3 +1,5 @@
+## NB - WIKI AND README UNDER REVISION - CONTENT IS NOT CURRENT
+
 # The Alvin Programming Language
 
 Alvin is an interpreted Lisp-family programming language implemented in Python and designed for flexibility and extensibility. 
