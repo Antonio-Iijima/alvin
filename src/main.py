@@ -14,10 +14,10 @@ import interpreter as intrp
 
 
 
-def main(args: list=sys.argv) -> None:
+def main(args: list = sys.argv) -> None:
     """Main program."""
 
-    # Because writing a language in Python is really inefficient
+    # Because implementing a language in Python is really inefficient
     sys.setrecursionlimit(10**5)
 
     # Read in flags
@@ -39,7 +39,7 @@ def main(args: list=sys.argv) -> None:
     # Read in files if necessary
     for item in args[1:]:
         with open(item, "r") as file:
-            rpl.REPL(file.read().splitlines(), cf.config.iFlag)
+            rpl.REPL(file.read().splitlines(), True)
 
     # Start interactive session
     if cf.config.iFlag:

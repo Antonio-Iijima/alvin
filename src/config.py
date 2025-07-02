@@ -20,7 +20,7 @@ class Config:
         # Setup constants
 
         # Technical details
-        self.VERSION = "4.2.4"
+        self.VERSION = "4.2.5"
         self.NAME = "Alvin"
 
         # Color customization
@@ -67,7 +67,7 @@ class Config:
         self.EXTENSION_INDEX = []
 
         # Track new extensions
-        self.EXTENSION_LOG = set()
+        self.EXTENSION_LOG = []
 
         # Closure environments, accessed by ID
         self.CLOSURES = {}

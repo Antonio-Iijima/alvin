@@ -1,0 +1,476 @@
+
+Running without flags
+
+
+FILE: ../test/interpreter//del_keywords.alv
+['loop']
+[('loop', 8)]
+--- Alvin ---
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+
+
+FILE: ../test/interpreter//dev_commands.alv
+['loop']
+[('loop', 8)]
+--- Alvin ---
+
+[31m╔══════════════════════════════════════╗[97m
+[31m║[97m useful tools                         [31m║[97m
+[31m║[97m                                      [31m║[97m
+[31m║[97m (α)  dev.closures : closures         [31m║[97m
+[31m║[97m (α)  dev.env      : environment      [31m║[97m
+[31m║[97m (α)  dev.globals  : global variables [31m║[97m
+[31m║[97m (α)  dev.imports  : imported modules [31m║[97m
+[31m╚══════════════════════════════════════╝[97m
+
+
+No function environments found.
+
+
+No global variables found.
+
+
+No imported modules found.
+
+
+Scope 0
+
+
+
+ID:126815484152795.function.ctr:
+
+Scope 0
+
+
+
+
+Global variables:
+ x : 1
+
+
+Imported modules:
+ math alias m
+
+
+
+FILE: ../test/interpreter//extensions.alv
+['loop']
+[('loop', 8)]
+--- Alvin ---
+['func1', 'loop']
+[('func1', 4), ('loop', 8)]
+2
+['func2', 'func1', 'loop']
+[('func2', 4), ('func1', 4), ('loop', 8)]
+9
+
+[31m╔══════════════╗[97m
+[31m║[97m Arrivederci! [31m║[97m
+[31m╚══════════════╝[97m
+
+
+
+FILE: ../test/interpreter//help_commands.alv
+[H[2J[3J['loop']
+[('loop', 8)]
+--- Alvin ---
+
+[31m╔══════════════════════════════════════════════════════════════════════════════════╗[97m
+[31m║[97m The Alvin programming language was developed as an independent research project, [31m║[97m
+[31m║[97m which began during CSCI 370: Programming Languages at Ave Maria University.      [31m║[97m
+[31m║[97m                                                                                  [31m║[97m
+[31m║[97m Documentation can be found on GitHub:                                            [31m║[97m
+[31m║[97m https://github.com/Antonio-Iijima/Alvin                                          [31m║[97m
+[31m║[97m                                                                                  [31m║[97m
+[31m║[97m (α)  clear     : clear the terminal                                              [31m║[97m
+[31m║[97m (α)  exit/quit : exit the interpreter                                            [31m║[97m
+[31m║[97m (α)  python *. : evaluate *. using Python                                        [31m║[97m
+[31m║[97m (α)  flags     : display interpreter flags                                       [31m║[97m
+[31m║[97m (α)  keywords  : display all language keywords                                   [31m║[97m
+[31m║[97m (α)  dev.info  : useful development/debugging tools                              [31m║[97m
+[31m╚══════════════════════════════════════════════════════════════════════════════════╝[97m
+
+
+[31m╔════════════════════════════════╗[97m
+[31m║[97m        KEYWORDS (59/58)        [31m║[97m
+[31m║[97m                                [31m║[97m
+[31m║[97m          REGULAR (29)          [31m║[97m
+[31m║[97m                                [31m║[97m
+[31m║[97m !=        %         *          [31m║[97m
+[31m║[97m **        +         ++         [31m║[97m
+[31m║[97m -         /         //         [31m║[97m
+[31m║[97m <         <=        ==         [31m║[97m
+[31m║[97m >         >=        append     [31m║[97m
+[31m║[97m atom?     bool?     cons       [31m║[97m
+[31m║[97m elem      eq        len        [31m║[97m
+[31m║[97m list      null?     number?    [31m║[97m
+[31m║[97m ref       setref    show       [31m║[97m
+[31m║[97m sort      usrin                [31m║[97m
+[31m║[97m                                [31m║[97m
+[31m║[97m         IRREGULAR (8)          [31m║[97m
+[31m║[97m                                [31m║[97m
+[31m║[97m do        eval      getfile    [31m║[97m
+[31m║[97m global    import    let        [31m║[97m
+[31m║[97m load      repeat               [31m║[97m
+[31m║[97m                                [31m║[97m
+[31m║[97m          BOOLEAN (6)           [31m║[97m
+[31m║[97m                                [31m║[97m
+[31m║[97m and       nand      nor        [31m║[97m
+[31m║[97m not       or        xor        [31m║[97m
+[31m║[97m                                [31m║[97m
+[31m║[97m          SPECIAL (7)           [31m║[97m
+[31m║[97m                                [31m║[97m
+[31m║[97m cond      lambda    list?      [31m║[97m
+[31m║[97m new       quote     string?    [31m║[97m
+[31m║[97m until                          [31m║[97m
+[31m║[97m                                [31m║[97m
+[31m║[97m        ENVIRONMENT (8)         [31m║[97m
+[31m║[97m                                [31m║[97m
+[31m║[97m burrow    def       del        [31m║[97m
+[31m║[97m delex     set       surface    [31m║[97m
+[31m║[97m template  update               [31m║[97m
+[31m║[97m                                [31m║[97m
+[31m║[97m         EXTENSIONS (1)         [31m║[97m
+[31m║[97m                                [31m║[97m
+[31m║[97m loop                           [31m║[97m
+[31m╚════════════════════════════════╝[97m
+
+
+[31m╔════════════╗[97m
+[31m║[97m   Flags    [31m║[97m
+[31m║[97m -i : False [31m║[97m
+[31m║[97m -d : False [31m║[97m
+[31m║[97m -p : False [31m║[97m
+[31m║[97m -z : False [31m║[97m
+[31m╚════════════╝[97m
+
+
+[31m╔════════════════════════╗[97m
+[31m║[97m Welcome to the Alvin   [31m║[97m
+[31m║[97m  Programming Language  [31m║[97m
+[31m╚════════════════════════╝[97m
+
+Enter 'help' to show further information
+
+[31m╔══════════════╗[97m
+[31m║[97m Arrivederci! [31m║[97m
+[31m╚══════════════╝[97m
+
+
+Running with -p flag
+
+FILE: ../test/interpreter//del_keywords.alv
+['loop']
+[('loop', 8)]
+--- Alvin ---
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+[33m
+The following extensions have been saved:
+loop
+[97m
+
+FILE: ../test/interpreter//dev_commands.alv
+['loop']
+[('loop', 8)]
+--- Alvin ---
+
+[33m╔══════════════════════════════════════╗[97m
+[33m║[97m useful tools                         [33m║[97m
+[33m║[97m                                      [33m║[97m
+[33m║[97m (α)  dev.closures : closures         [33m║[97m
+[33m║[97m (α)  dev.env      : environment      [33m║[97m
+[33m║[97m (α)  dev.globals  : global variables [33m║[97m
+[33m║[97m (α)  dev.imports  : imported modules [33m║[97m
+[33m╚══════════════════════════════════════╝[97m
+
+
+No function environments found.
+
+
+No global variables found.
+
+
+No imported modules found.
+
+
+Scope 0
+
+
+
+ID:596049145876960.function.ctr:
+
+Scope 0
+
+
+
+
+Global variables:
+ x : 1
+
+
+Imported modules:
+ math alias m
+
+[33m
+The following extensions have been saved:
+loop
+[97m
+
+FILE: ../test/interpreter//extensions.alv
+['loop']
+[('loop', 8)]
+--- Alvin ---
+['func1', 'loop']
+[('func1', 4), ('loop', 8)]
+2
+['func2', 'func1', 'loop']
+[('func2', 4), ('func1', 4), ('loop', 8)]
+9
+[33m
+The following extensions have been saved:
+loop
+[97m
+[33m╔══════════════╗[97m
+[33m║[97m Arrivederci! [33m║[97m
+[33m╚══════════════╝[97m
+
+
+
+FILE: ../test/interpreter//help_commands.alv
+[H[2J[3J['loop']
+[('loop', 8)]
+--- Alvin ---
+
+[33m╔══════════════════════════════════════════════════════════════════════════════════╗[97m
+[33m║[97m The Alvin programming language was developed as an independent research project, [33m║[97m
+[33m║[97m which began during CSCI 370: Programming Languages at Ave Maria University.      [33m║[97m
+[33m║[97m                                                                                  [33m║[97m
+[33m║[97m Documentation can be found on GitHub:                                            [33m║[97m
+[33m║[97m https://github.com/Antonio-Iijima/Alvin                                          [33m║[97m
+[33m║[97m                                                                                  [33m║[97m
+[33m║[97m (α)  clear     : clear the terminal                                              [33m║[97m
+[33m║[97m (α)  exit/quit : exit the interpreter                                            [33m║[97m
+[33m║[97m (α)  python *. : evaluate *. using Python                                        [33m║[97m
+[33m║[97m (α)  flags     : display interpreter flags                                       [33m║[97m
+[33m║[97m (α)  keywords  : display all language keywords                                   [33m║[97m
+[33m║[97m (α)  dev.info  : useful development/debugging tools                              [33m║[97m
+[33m╚══════════════════════════════════════════════════════════════════════════════════╝[97m
+
+
+[33m╔════════════════════════════════╗[97m
+[33m║[97m        KEYWORDS (59/58)        [33m║[97m
+[33m║[97m                                [33m║[97m
+[33m║[97m          REGULAR (29)          [33m║[97m
+[33m║[97m                                [33m║[97m
+[33m║[97m !=        %         *          [33m║[97m
+[33m║[97m **        +         ++         [33m║[97m
+[33m║[97m -         /         //         [33m║[97m
+[33m║[97m <         <=        ==         [33m║[97m
+[33m║[97m >         >=        append     [33m║[97m
+[33m║[97m atom?     bool?     cons       [33m║[97m
+[33m║[97m elem      eq        len        [33m║[97m
+[33m║[97m list      null?     number?    [33m║[97m
+[33m║[97m ref       setref    show       [33m║[97m
+[33m║[97m sort      usrin                [33m║[97m
+[33m║[97m                                [33m║[97m
+[33m║[97m         IRREGULAR (8)          [33m║[97m
+[33m║[97m                                [33m║[97m
+[33m║[97m do        eval      getfile    [33m║[97m
+[33m║[97m global    import    let        [33m║[97m
+[33m║[97m load      repeat               [33m║[97m
+[33m║[97m                                [33m║[97m
+[33m║[97m          BOOLEAN (6)           [33m║[97m
+[33m║[97m                                [33m║[97m
+[33m║[97m and       nand      nor        [33m║[97m
+[33m║[97m not       or        xor        [33m║[97m
+[33m║[97m                                [33m║[97m
+[33m║[97m          SPECIAL (7)           [33m║[97m
+[33m║[97m                                [33m║[97m
+[33m║[97m cond      lambda    list?      [33m║[97m
+[33m║[97m new       quote     string?    [33m║[97m
+[33m║[97m until                          [33m║[97m
+[33m║[97m                                [33m║[97m
+[33m║[97m        ENVIRONMENT (8)         [33m║[97m
+[33m║[97m                                [33m║[97m
+[33m║[97m burrow    def       del        [33m║[97m
+[33m║[97m delex     set       surface    [33m║[97m
+[33m║[97m template  update               [33m║[97m
+[33m║[97m                                [33m║[97m
+[33m║[97m         EXTENSIONS (1)         [33m║[97m
+[33m║[97m                                [33m║[97m
+[33m║[97m loop                           [33m║[97m
+[33m╚════════════════════════════════╝[97m
+
+
+[33m╔════════════╗[97m
+[33m║[97m   Flags    [33m║[97m
+[33m║[97m -i : False [33m║[97m
+[33m║[97m -d : False [33m║[97m
+[33m║[97m -p : True  [33m║[97m
+[33m║[97m -z : False [33m║[97m
+[33m╚════════════╝[97m
+
+
+[33m╔════════════════════════╗[97m
+[33m║[97m Welcome to the Alvin   [33m║[97m
+[33m║[97m  Programming Language  [33m║[97m
+[33m╚════════════════════════╝[97m
+
+Permanent extensions enabled
+Enter 'help' to show further information
+[33m
+The following extensions have been saved:
+loop
+[97m
+[33m╔══════════════╗[97m
+[33m║[97m Arrivederci! [33m║[97m
+[33m╚══════════════╝[97m
+
+
+Combined data file .coverage.work-laptop.66412.XmKqqnax
+Combined data file .coverage.work-laptop.66415.XShFiFrx
+Combined data file .coverage.work-laptop.66418.Xkjfitlx
+Combined data file .coverage.work-laptop.66421.XNsiorVx
+Combined data file .coverage.work-laptop.66427.XpoezSIx
+Combined data file .coverage.work-laptop.66430.XKcOsqzx
+Combined data file .coverage.work-laptop.66433.XcTiRrzx
+Combined data file .coverage.work-laptop.66442.XLWDwJkx
+Name                                       Stmts   Miss  Cover
+--------------------------------------------------------------
+/home/ai/github/alvin/src/config.py           46      0   100%
+/home/ai/github/alvin/src/datatypes.py        69     39    43%
+/home/ai/github/alvin/src/environment.py      88     31    65%
+/home/ai/github/alvin/src/evaluate.py         29     11    62%
+/home/ai/github/alvin/src/extensions.py        5      3    40%
+/home/ai/github/alvin/src/interpreter.py     137     17    88%
+/home/ai/github/alvin/src/keywords.py        126     42    67%
+/home/ai/github/alvin/src/main.py             24      4    83%
+/home/ai/github/alvin/src/parser.py           52      1    98%
+/home/ai/github/alvin/src/repl.py             43      9    79%
+--------------------------------------------------------------
+TOTAL                                        619    157    75%
+Wrote HTML report to htmlcov/index.html

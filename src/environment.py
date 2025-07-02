@@ -113,6 +113,7 @@ class Environment:
             for i, (name, idx) in enumerate(cf.config.EXTENSION_INDEX):
                 end += idx
                 if name == extension: 
+                    
                     # Remove entry from index
                     cf.config.EXTENSION_INDEX.pop(i); break
                 start += idx
@@ -121,7 +122,7 @@ class Environment:
             contents = open(f"{cf.config.PATH}/src/extensions.py").readlines()
             
             # Excise selected extension
-            contents = contents[:start] + contents[end:]
+            contents = contents[:start] + contents[end:]    
             
             # Rewrite extensions.py
             with open(f"{cf.config.PATH}/src/extensions.py", "w") as file:
@@ -137,7 +138,7 @@ class Environment:
             cf.config.EXTENSIONS.pop(extension)
             cf.config.KEYWORDS.remove(extension)
 
-        else: raise NameError(f"cannot delete extension '{extension}' before assignment.")
+        else: raise NameError(f"extension '{extension}' not found.")
 
 
     def match_arguments(self, parameters: list, args: list) -> None:

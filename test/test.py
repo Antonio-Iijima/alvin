@@ -1,36 +1,33 @@
 import os
 import sys
-import subprocess
 
 
 
-def test(filepath: str = '.', args: list = None):
-    args = args or []
+def test(filepath: str = '.', args: list = []):
 
     if os.path.isfile(filepath) and filepath.endswith('.alv'):
-        print(f"\nFILE: {filepath}")
-        subprocess.run(f"coverage run --parallel-mode ../src/main.py {filepath} {" ".join(args)}", shell=True)
-        print()
+        os.system(f"echo '\nFILE: {filepath}'")
+        os.system(f"coverage run --parallel-mode ../src/main.py {filepath} {" ".join(args)} && echo")
 
     elif os.path.isdir(filepath):
-        for file in os.listdir(filepath): 
+        for file in sorted(os.listdir(filepath)): 
             if file not in ["htmlcov"]: test(f"{filepath}/{file}", args)
 
 
-def main(initialDirectory: str = "../test", withFlags: str = "-f"):
-    print("\nRunning without flags\n")
+def main(initialDirectory: str = "../test", *flags):
+
+    os.system("echo '\nRunning without flags\n'")
     test(initialDirectory)
+    
+    for flag in flags:
+        os.system(f"echo 'Running with {flag} flag'")
+        test(initialDirectory, args = [flag])
 
-    if withFlags == "-f":
-        for flag in ["-i", "-d", "-p", "-z"]:
-            print(f"Running with {flag} flag")
-            test(initialDirectory, args = [flag])
+    os.system("coverage combine")
 
-    subprocess.run("coverage combine", shell=True)
-    print()
-    subprocess.run("coverage report", shell=True)
-    print()
-    subprocess.run("coverage html", shell=True)
+    os.system("coverage report")
+
+    os.system("coverage html")
 
 
 

@@ -243,41 +243,42 @@ https://github.com/Antonio-Iijima/Alvin
         """Add extensions in Python to Alvin."""    
 
         # Segment code into list of strings by individual extension
-        include, *exclude = code.removeprefix("@start").removesuffix("@end").strip().split("# EXCLUDE")
-
+        include, *exclude = code.removeprefix("@start").removesuffix("@end").strip().split("#EXCLUDE")
+        
         # Remove leading empty string
-        ext_list = include.split("# INCLUDE ")[1:]
+        ext_list = include.split("#INCLUDE ")[1:]
 
         # Add individual extensions
         for extension in ext_list:
 
             # Separate <name> as <alias>
             name, alias = extension[:extension.find("\n")].split(" as ")
-            
+
             if writable:
                 
-                extension = f"# INCLUDE {extension}\n\n\n"    
+                extension = f"#INCLUDE {extension}\n\n\n"    
                 
                 # Get the current contents of the extensions.py file
                 contents = open(f"{cf.config.PATH}/src/extensions.py").read()
 
                 with open(f"{cf.config.PATH}/src/extensions.py", "w") as file: 
                     file.writelines(extension + contents)
-
+                    
                 # Reload extension file to show changes
                 importlib.reload(ext)
 
-                # Add entry to log
-                cf.config.EXTENSION_LOG.add(alias)
+            index = 0 if writable else len(cf.config.EXTENSION_LOG)
+
+            # Add entry to log
+            cf.config.EXTENSION_LOG.insert(index, (alias))
 
             # Create index entry
-            cf.config.EXTENSION_INDEX.insert(0, (alias, len(extension.splitlines())))
+            cf.config.EXTENSION_INDEX.insert(index, (alias, len(extension.splitlines())))
 
-        # Add entry to keywords
-        cf.config.EXTENSIONS[alias] = ext.EXTENSIONS.get(name)
-        cf.config.KEYWORDS.add(alias)
-
-
+            # Add entry to keywords
+            cf.config.EXTENSIONS[alias] = ext.EXTENSIONS.get(name)
+            cf.config.KEYWORDS.add(alias)
+            
 
     def exit_extensions(self) -> None:
         """Safely save or remove any extensions added in an interactive interpreter session."""
@@ -287,9 +288,9 @@ https://github.com/Antonio-Iijima/Alvin
             print(cf.config.GOLD)
 
             if len(cf.config.EXTENSION_LOG) > 0:
-                print("The following new extensions have been saved:")
+                print("The following extensions have been saved:")
                 for ext in cf.config.EXTENSION_LOG: print(ext)
-            else: print("No extensions added.")
+            else: print("No extensions saved.")
 
             print(cf.config.END_COLOR, end='')
 

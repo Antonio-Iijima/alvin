@@ -16,11 +16,14 @@ import interpreter as intrp
 
 
 
-def REPL(stream: str = sys.stdin, loading: bool = False) -> None:
+def REPL(stream: str = sys.stdin, loadingFile: bool = False) -> None:
     """Process a stream or load a file."""
     
+    # Selectively display prompts/interactions
+    showContent = cf.config.iFlag and not loadingFile
+
     if cf.config.iFlag:
-        if not loading: 
+        if not loadingFile: 
             intrp.interpreter.welcome()
             intrp.interpreter.prompt()
     else: print("--- Alvin ---")
@@ -39,12 +42,12 @@ def REPL(stream: str = sys.stdin, loading: bool = False) -> None:
             continue        
         
         # Otherwise continue building expression
-        expression += f"{line}\n" if loading else line
+        expression += f"{line}\n" if loadingFile else line
 
         # If the expression is probably complete
         if prs.iscomplete(expression):
             
-            try: run(expression, loading)
+            try: run(expression, cf.config.iFlag)
 
             except Exception as e:
 
@@ -62,12 +65,12 @@ def REPL(stream: str = sys.stdin, loading: bool = False) -> None:
                     if cf.config.zFlag: intrp.interpreter.del_random_keyword()
             
             #  Print the prompt again and reset the expression
-            if cf.config.iFlag and not loading: intrp.interpreter.prompt()
+            if showContent: intrp.interpreter.prompt()
 
             expression = ""
 
         # Otherwise print the 'interim' prompt for multiline expressions
-        elif cf.config.iFlag and not loading: intrp.interpreter.prompt(">   ")
+        elif showContent: intrp.interpreter.prompt(">   ")
 
     # If we get ot the end of the stream without seeing the quit() command (e.g. when loading a file)
     else:
@@ -79,14 +82,14 @@ def REPL(stream: str = sys.stdin, loading: bool = False) -> None:
 
 
 
-def run(line: str, loading: bool = False) -> None:
+def run(line: str, loadingFile: bool = False) -> None:
     """Execute a complete expression and print output, if any."""
 
     output = interpret(line.strip())
 
     # If the output is None, then the line probably has its own internal 
     # output solution, so don't print it. Otherwise print the output.
-    if not loading and output is not None: print(output)
+    if not (loadingFile or output is None): print(output)
 
 
 def interpret(line: str) -> any:
