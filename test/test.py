@@ -20,7 +20,7 @@ def main(initialDirectory: str = "../test", *flags):
     test(initialDirectory)
     
     for flag in flags:
-        os.system(f"echo 'Running with {flag} flag'")
+        os.system(f"echo '\nRunning with {flag} flag\n'")
         test(initialDirectory, args = [flag])
 
     os.system("coverage combine")

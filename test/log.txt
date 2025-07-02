@@ -2,9 +2,100 @@
 Running without flags
 
 
-FILE: ../test/interpreter//del_keywords.alv
-['loop']
-[('loop', 8)]
+FILE: ../test//datatypes/functions.alv
+--- Alvin ---
+2
+2
+4
+
+
+FILE: ../test//datatypes/templates.alv
+--- Alvin ---
+#t
+#t
+
+
+FILE: ../test//environment/closures.alv
+--- Alvin ---
+1
+2
+<lambda () (do ((update n (+ n 1))) n)>
+
+ID:833807182331979.function.counter:
+
+Scope 0
+
+
+ID:37979788364282.lambda.lambda:
+
+Scope 0
+
+ n : 2
+
+Scope 1
+
+
+
+
+
+FILE: ../test//environment/def.alv
+--- Alvin ---
+2
+6
+
+
+FILE: ../test//environment/imports.alv
+--- Alvin ---
+3.141592653589793
+'math' is an imported module.
+3.141592653589793
+'m' (or math) is an imported module.
+
+
+FILE: ../test//exceptions/datatypes.alv
+--- Alvin ---
+TypeError: f takes 1 argument but 0 were given
+TypeError: f takes 1 argument but 2 were given
+
+
+FILE: ../test//exceptions/environment.alv
+--- Alvin ---
+ValueError: variable x is not defined.
+
+
+FILE: ../test//exceptions/keywords.alv
+--- Alvin ---
+TypeError: unsupported argument for 'car': 1
+TypeError: unsupported argument for 'cdr': 1
+
+
+FILE: ../test//exceptions/repl.alv
+--- Alvin ---
+
+FILE: ../test//extensions/functions.alv
+--- Alvin ---
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+
+
+FILE: ../test//extensions/permanent_A.alv
+--- Alvin ---
+
+
+FILE: ../test//extensions/permanent_B.alv
+--- Alvin ---
+NameError: extension 'permanent' not found.
+
+
+FILE: ../test//interpreter/del_keywords.alv
 --- Alvin ---
 ValueError: variable what is not defined.
 ValueError: variable what is not defined.
@@ -71,9 +162,7 @@ ValueError: variable what is not defined.
 ValueError: variable what is not defined.
 
 
-FILE: ../test/interpreter//dev_commands.alv
-['loop']
-[('loop', 8)]
+FILE: ../test//interpreter/dev_commands.alv
 --- Alvin ---
 
 [31m╔══════════════════════════════════════╗[97m
@@ -99,7 +188,7 @@ Scope 0
 
 
 
-ID:126815484152795.function.ctr:
+ID:592387879749184.function.ctr:
 
 Scope 0
 
@@ -115,15 +204,17 @@ Imported modules:
 
 
 
-FILE: ../test/interpreter//extensions.alv
-['loop']
-[('loop', 8)]
+FILE: ../test//interpreter/ext_A.alv
 --- Alvin ---
-['func1', 'loop']
-[('func1', 4), ('loop', 8)]
+
+
+FILE: ../test//interpreter/ext_B.alv
+--- Alvin ---
+
+
+FILE: ../test//interpreter/extensions.alv
+--- Alvin ---
 2
-['func2', 'func1', 'loop']
-[('func2', 4), ('func1', 4), ('loop', 8)]
 9
 
 [31m╔══════════════╗[97m
@@ -132,10 +223,8 @@ FILE: ../test/interpreter//extensions.alv
 
 
 
-FILE: ../test/interpreter//help_commands.alv
-[H[2J[3J['loop']
-[('loop', 8)]
---- Alvin ---
+FILE: ../test//interpreter/help_commands.alv
+[H[2J[3J--- Alvin ---
 
 [31m╔══════════════════════════════════════════════════════════════════════════════════╗[97m
 [31m║[97m The Alvin programming language was developed as an independent research project, [31m║[97m
@@ -219,11 +308,776 @@ Enter 'help' to show further information
 [31m╚══════════════╝[97m
 
 
+
+FILE: ../test//keywords/basic.alv
+--- Alvin ---
+(1 2 3 4)
+(1 2 3)
+1
+#t
+#f
+3
+4
+1
+(2 3)
+2
+(2)
+(1 2 3)
+
+
+FILE: ../test//keywords/complex.alv
+--- Alvin ---
+1
+0
+1
+4
+9
+16
+25
+7
+(13 15)
+3
+--- Alvin ---
+3.141592653589793
+1
+
+
+FILE: ../test//keywords/logic.alv
+--- Alvin ---
+#f
+#f
+#f
+#t
+#f
+#t
+#f
+#f
+#t
+#t
+#t
+#f
+#t
+#t
+#f
+#t
+#f
+#f
+#f
+#t
+#t
+#t
+#f
+
+
+FILE: ../test//keywords/mathematics.alv
+--- Alvin ---
+#f
+#t
+#t
+#f
+#t
+#f
+#t
+#t
+#f
+#t
+#t
+#f
+#f
+#f
+#t
+#f
+3
+1
+12
+2.5
+2
+8
+2
+3
+
+
+FILE: ../test//keywords/predicates.alv
+--- Alvin ---
+#f
+#t
+#t
+#f
+#t
+#f
+#t
+#t
+#f
+#f
+#f
+#t
+#t
+
+
+FILE: ../test//main/flags.alv
+--- Alvin ---
+
+[31m╔════════════╗[97m
+[31m║[97m   Flags    [31m║[97m
+[31m║[97m -i : False [31m║[97m
+[31m║[97m -d : False [31m║[97m
+[31m║[97m -p : False [31m║[97m
+[31m║[97m -z : False [31m║[97m
+[31m╚════════════╝[97m
+
+
+
+FILE: ../test//repl/commands.alv
+--- Alvin ---
+3
+3
+and is an operator, built-in function or reserved word.
+
+
+FILE: ../test//repl/comments.alv
+--- Alvin ---
+
+
+Running with -i flag
+
+
+FILE: ../test//datatypes/functions.alv
+
+[31m╔════════════════════════╗[97m
+[31m║[97m Welcome to the Alvin   [31m║[97m
+[31m║[97m  Programming Language  [31m║[97m
+[31m╚════════════════════════╝[97m
+
+Alvin v4.2.5, running in interactive mode
+Enter 'help' to show further information
+[31m(α) [97m
+[31m╔══════════════╗[97m
+[31m║[97m Arrivederci! [31m║[97m
+[31m╚══════════════╝[97m
+
+
+
+
+FILE: ../test//datatypes/templates.alv
+
+[31m╔════════════════════════╗[97m
+[31m║[97m Welcome to the Alvin   [31m║[97m
+[31m║[97m  Programming Language  [31m║[97m
+[31m╚════════════════════════╝[97m
+
+Alvin v4.2.5, running in interactive mode
+Enter 'help' to show further information
+[31m(α) [97m
+
+FILE: ../test//environment/closures.alv
+
+ID:418248092007756.function.counter:
+
+Scope 0
+
+
+ID:674447972683542.lambda.lambda:
+
+Scope 0
+
+ n : 2
+
+Scope 1
+
+
+
+
+[31m╔════════════════════════╗[97m
+[31m║[97m Welcome to the Alvin   [31m║[97m
+[31m║[97m  Programming Language  [31m║[97m
+[31m╚════════════════════════╝[97m
+
+Alvin v4.2.5, running in interactive mode
+Enter 'help' to show further information
+[31m(α) [97m
+
+FILE: ../test//environment/def.alv
+
+[31m╔════════════════════════╗[97m
+[31m║[97m Welcome to the Alvin   [31m║[97m
+[31m║[97m  Programming Language  [31m║[97m
+[31m╚════════════════════════╝[97m
+
+Alvin v4.2.5, running in interactive mode
+Enter 'help' to show further information
+[31m(α) [97m
+
+FILE: ../test//environment/imports.alv
+'math' is an imported module.
+'m' (or math) is an imported module.
+
+[31m╔════════════════════════╗[97m
+[31m║[97m Welcome to the Alvin   [31m║[97m
+[31m║[97m  Programming Language  [31m║[97m
+[31m╚════════════════════════╝[97m
+
+Alvin v4.2.5, running in interactive mode
+Enter 'help' to show further information
+[31m(α) [97m
+
+FILE: ../test//exceptions/datatypes.alv
+TypeError: f takes 1 argument but 0 were given
+TypeError: f takes 1 argument but 2 were given
+
+[31m╔════════════════════════╗[97m
+[31m║[97m Welcome to the Alvin   [31m║[97m
+[31m║[97m  Programming Language  [31m║[97m
+[31m╚════════════════════════╝[97m
+
+Alvin v4.2.5, running in interactive mode
+Enter 'help' to show further information
+[31m(α) [97m
+
+FILE: ../test//exceptions/environment.alv
+ValueError: variable x is not defined.
+
+[31m╔════════════════════════╗[97m
+[31m║[97m Welcome to the Alvin   [31m║[97m
+[31m║[97m  Programming Language  [31m║[97m
+[31m╚════════════════════════╝[97m
+
+Alvin v4.2.5, running in interactive mode
+Enter 'help' to show further information
+[31m(α) [97m
+
+FILE: ../test//exceptions/keywords.alv
+TypeError: unsupported argument for 'car': 1
+TypeError: unsupported argument for 'cdr': 1
+
+[31m╔════════════════════════╗[97m
+[31m║[97m Welcome to the Alvin   [31m║[97m
+[31m║[97m  Programming Language  [31m║[97m
+[31m╚════════════════════════╝[97m
+
+Alvin v4.2.5, running in interactive mode
+Enter 'help' to show further information
+[31m(α) [97m
+
+FILE: ../test//exceptions/repl.alv
+
+FILE: ../test//extensions/functions.alv
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+
+[31m╔════════════════════════╗[97m
+[31m║[97m Welcome to the Alvin   [31m║[97m
+[31m║[97m  Programming Language  [31m║[97m
+[31m╚════════════════════════╝[97m
+
+Alvin v4.2.5, running in interactive mode
+Enter 'help' to show further information
+[31m(α) [97m
+
+FILE: ../test//extensions/permanent_A.alv
+
+[31m╔════════════════════════╗[97m
+[31m║[97m Welcome to the Alvin   [31m║[97m
+[31m║[97m  Programming Language  [31m║[97m
+[31m╚════════════════════════╝[97m
+
+Alvin v4.2.5, running in interactive mode
+Enter 'help' to show further information
+[31m(α) [97m
+
+FILE: ../test//extensions/permanent_B.alv
+
+[31m╔════════════════════════╗[97m
+[31m║[97m Welcome to the Alvin   [31m║[97m
+[31m║[97m  Programming Language  [31m║[97m
+[31m╚════════════════════════╝[97m
+
+Alvin v4.2.5, running in interactive mode
+Enter 'help' to show further information
+[31m(α) [97m
+
+FILE: ../test//interpreter/del_keywords.alv
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+ValueError: variable what is not defined.
+
+[31m╔════════════════════════╗[97m
+[31m║[97m Welcome to the Alvin   [31m║[97m
+[31m║[97m  Programming Language  [31m║[97m
+[31m╚════════════════════════╝[97m
+
+Alvin v4.2.5, running in interactive mode
+Enter 'help' to show further information
+[31m(α) [97m
+
+FILE: ../test//interpreter/dev_commands.alv
+
+[31m╔══════════════════════════════════════╗[97m
+[31m║[97m useful tools                         [31m║[97m
+[31m║[97m                                      [31m║[97m
+[31m║[97m (α)  dev.closures : closures         [31m║[97m
+[31m║[97m (α)  dev.env      : environment      [31m║[97m
+[31m║[97m (α)  dev.globals  : global variables [31m║[97m
+[31m║[97m (α)  dev.imports  : imported modules [31m║[97m
+[31m╚══════════════════════════════════════╝[97m
+
+
+No function environments found.
+
+
+No global variables found.
+
+
+No imported modules found.
+
+
+Scope 0
+
+
+
+ID:578799150168775.function.ctr:
+
+Scope 0
+
+
+
+
+Global variables:
+ x : 1
+
+
+Imported modules:
+ math alias m
+
+
+[31m╔════════════════════════╗[97m
+[31m║[97m Welcome to the Alvin   [31m║[97m
+[31m║[97m  Programming Language  [31m║[97m
+[31m╚════════════════════════╝[97m
+
+Alvin v4.2.5, running in interactive mode
+Enter 'help' to show further information
+[31m(α) [97m
+
+FILE: ../test//interpreter/ext_A.alv
+
+[31m╔════════════════════════╗[97m
+[31m║[97m Welcome to the Alvin   [31m║[97m
+[31m║[97m  Programming Language  [31m║[97m
+[31m╚════════════════════════╝[97m
+
+Alvin v4.2.5, running in interactive mode
+Enter 'help' to show further information
+[31m(α) [97m
+
+FILE: ../test//interpreter/ext_B.alv
+
+[31m╔════════════════════════╗[97m
+[31m║[97m Welcome to the Alvin   [31m║[97m
+[31m║[97m  Programming Language  [31m║[97m
+[31m╚════════════════════════╝[97m
+
+Alvin v4.2.5, running in interactive mode
+Enter 'help' to show further information
+[31m(α) [97m
+
+FILE: ../test//interpreter/extensions.alv
+
+[31m╔══════════════╗[97m
+[31m║[97m Arrivederci! [31m║[97m
+[31m╚══════════════╝[97m
+
+
+
+FILE: ../test//interpreter/help_commands.alv
+[H[2J[3J
+[31m╔══════════════════════════════════════════════════════════════════════════════════╗[97m
+[31m║[97m The Alvin programming language was developed as an independent research project, [31m║[97m
+[31m║[97m which began during CSCI 370: Programming Languages at Ave Maria University.      [31m║[97m
+[31m║[97m                                                                                  [31m║[97m
+[31m║[97m Documentation can be found on GitHub:                                            [31m║[97m
+[31m║[97m https://github.com/Antonio-Iijima/Alvin                                          [31m║[97m
+[31m║[97m                                                                                  [31m║[97m
+[31m║[97m (α)  clear     : clear the terminal                                              [31m║[97m
+[31m║[97m (α)  exit/quit : exit the interpreter                                            [31m║[97m
+[31m║[97m (α)  python *. : evaluate *. using Python                                        [31m║[97m
+[31m║[97m (α)  flags     : display interpreter flags                                       [31m║[97m
+[31m║[97m (α)  keywords  : display all language keywords                                   [31m║[97m
+[31m║[97m (α)  dev.info  : useful development/debugging tools                              [31m║[97m
+[31m╚══════════════════════════════════════════════════════════════════════════════════╝[97m
+
+
+[31m╔════════════════════════════════╗[97m
+[31m║[97m        KEYWORDS (59/58)        [31m║[97m
+[31m║[97m                                [31m║[97m
+[31m║[97m          REGULAR (29)          [31m║[97m
+[31m║[97m                                [31m║[97m
+[31m║[97m !=        %         *          [31m║[97m
+[31m║[97m **        +         ++         [31m║[97m
+[31m║[97m -         /         //         [31m║[97m
+[31m║[97m <         <=        ==         [31m║[97m
+[31m║[97m >         >=        append     [31m║[97m
+[31m║[97m atom?     bool?     cons       [31m║[97m
+[31m║[97m elem      eq        len        [31m║[97m
+[31m║[97m list      null?     number?    [31m║[97m
+[31m║[97m ref       setref    show       [31m║[97m
+[31m║[97m sort      usrin                [31m║[97m
+[31m║[97m                                [31m║[97m
+[31m║[97m         IRREGULAR (8)          [31m║[97m
+[31m║[97m                                [31m║[97m
+[31m║[97m do        eval      getfile    [31m║[97m
+[31m║[97m global    import    let        [31m║[97m
+[31m║[97m load      repeat               [31m║[97m
+[31m║[97m                                [31m║[97m
+[31m║[97m          BOOLEAN (6)           [31m║[97m
+[31m║[97m                                [31m║[97m
+[31m║[97m and       nand      nor        [31m║[97m
+[31m║[97m not       or        xor        [31m║[97m
+[31m║[97m                                [31m║[97m
+[31m║[97m          SPECIAL (7)           [31m║[97m
+[31m║[97m                                [31m║[97m
+[31m║[97m cond      lambda    list?      [31m║[97m
+[31m║[97m new       quote     string?    [31m║[97m
+[31m║[97m until                          [31m║[97m
+[31m║[97m                                [31m║[97m
+[31m║[97m        ENVIRONMENT (8)         [31m║[97m
+[31m║[97m                                [31m║[97m
+[31m║[97m burrow    def       del        [31m║[97m
+[31m║[97m delex     set       surface    [31m║[97m
+[31m║[97m template  update               [31m║[97m
+[31m║[97m                                [31m║[97m
+[31m║[97m         EXTENSIONS (1)         [31m║[97m
+[31m║[97m                                [31m║[97m
+[31m║[97m loop                           [31m║[97m
+[31m╚════════════════════════════════╝[97m
+
+
+[31m╔════════════╗[97m
+[31m║[97m   Flags    [31m║[97m
+[31m║[97m -i : True  [31m║[97m
+[31m║[97m -d : False [31m║[97m
+[31m║[97m -p : False [31m║[97m
+[31m║[97m -z : False [31m║[97m
+[31m╚════════════╝[97m
+
+
+[31m╔════════════════════════╗[97m
+[31m║[97m Welcome to the Alvin   [31m║[97m
+[31m║[97m  Programming Language  [31m║[97m
+[31m╚════════════════════════╝[97m
+
+Alvin v4.2.5, running in interactive mode
+Enter 'help' to show further information
+
+[31m╔══════════════╗[97m
+[31m║[97m Arrivederci! [31m║[97m
+[31m╚══════════════╝[97m
+
+
+
+FILE: ../test//keywords/basic.alv
+1
+
+[31m╔════════════════════════╗[97m
+[31m║[97m Welcome to the Alvin   [31m║[97m
+[31m║[97m  Programming Language  [31m║[97m
+[31m╚════════════════════════╝[97m
+
+Alvin v4.2.5, running in interactive mode
+Enter 'help' to show further information
+[31m(α) [97m
+
+FILE: ../test//keywords/complex.alv
+0
+1
+4
+9
+16
+25
+
+[31m╔════════════════════════╗[97m
+[31m║[97m Welcome to the Alvin   [31m║[97m
+[31m║[97m  Programming Language  [31m║[97m
+[31m╚════════════════════════╝[97m
+
+Alvin v4.2.5, running in interactive mode
+Enter 'help' to show further information
+[31m(α) [97m
+
+FILE: ../test//keywords/logic.alv
+
+[31m╔════════════════════════╗[97m
+[31m║[97m Welcome to the Alvin   [31m║[97m
+[31m║[97m  Programming Language  [31m║[97m
+[31m╚════════════════════════╝[97m
+
+Alvin v4.2.5, running in interactive mode
+Enter 'help' to show further information
+[31m(α) [97m
+
+FILE: ../test//keywords/mathematics.alv
+
+[31m╔════════════════════════╗[97m
+[31m║[97m Welcome to the Alvin   [31m║[97m
+[31m║[97m  Programming Language  [31m║[97m
+[31m╚════════════════════════╝[97m
+
+Alvin v4.2.5, running in interactive mode
+Enter 'help' to show further information
+[31m(α) [97m
+
+FILE: ../test//keywords/predicates.alv
+
+[31m╔════════════════════════╗[97m
+[31m║[97m Welcome to the Alvin   [31m║[97m
+[31m║[97m  Programming Language  [31m║[97m
+[31m╚════════════════════════╝[97m
+
+Alvin v4.2.5, running in interactive mode
+Enter 'help' to show further information
+[31m(α) [97m
+
+FILE: ../test//main/flags.alv
+
+[31m╔════════════╗[97m
+[31m║[97m   Flags    [31m║[97m
+[31m║[97m -i : True  [31m║[97m
+[31m║[97m -d : False [31m║[97m
+[31m║[97m -p : False [31m║[97m
+[31m║[97m -z : False [31m║[97m
+[31m╚════════════╝[97m
+
+
+[31m╔════════════════════════╗[97m
+[31m║[97m Welcome to the Alvin   [31m║[97m
+[31m║[97m  Programming Language  [31m║[97m
+[31m╚════════════════════════╝[97m
+
+Alvin v4.2.5, running in interactive mode
+Enter 'help' to show further information
+[31m(α) [97m
+
+FILE: ../test//repl/commands.alv
+3
+and is an operator, built-in function or reserved word.
+
+[31m╔════════════════════════╗[97m
+[31m║[97m Welcome to the Alvin   [31m║[97m
+[31m║[97m  Programming Language  [31m║[97m
+[31m╚════════════════════════╝[97m
+
+Alvin v4.2.5, running in interactive mode
+Enter 'help' to show further information
+[31m(α) [97m
+
+FILE: ../test//repl/comments.alv
+
+[31m╔════════════════════════╗[97m
+[31m║[97m Welcome to the Alvin   [31m║[97m
+[31m║[97m  Programming Language  [31m║[97m
+[31m╚════════════════════════╝[97m
+
+Alvin v4.2.5, running in interactive mode
+Enter 'help' to show further information
+[31m(α) [97m
+
 Running with -p flag
 
-FILE: ../test/interpreter//del_keywords.alv
-['loop']
-[('loop', 8)]
+
+FILE: ../test//datatypes/functions.alv
+--- Alvin ---
+2
+2
+4
+[33m
+The following extensions have been saved:
+loop
+[97m
+
+FILE: ../test//datatypes/templates.alv
+--- Alvin ---
+#t
+#t
+[33m
+The following extensions have been saved:
+loop
+[97m
+
+FILE: ../test//environment/closures.alv
+--- Alvin ---
+1
+2
+<lambda () (do ((update n (+ n 1))) n)>
+
+ID:496199915998174.function.counter:
+
+Scope 0
+
+
+ID:77948373346306.lambda.lambda:
+
+Scope 0
+
+ n : 2
+
+Scope 1
+
+
+
+[33m
+The following extensions have been saved:
+loop
+[97m
+
+FILE: ../test//environment/def.alv
+--- Alvin ---
+2
+6
+[33m
+The following extensions have been saved:
+loop
+[97m
+
+FILE: ../test//environment/imports.alv
+--- Alvin ---
+3.141592653589793
+'math' is an imported module.
+3.141592653589793
+'m' (or math) is an imported module.
+[33m
+The following extensions have been saved:
+loop
+[97m
+
+FILE: ../test//exceptions/datatypes.alv
+--- Alvin ---
+TypeError: f takes 1 argument but 0 were given
+TypeError: f takes 1 argument but 2 were given
+[33m
+The following extensions have been saved:
+loop
+[97m
+
+FILE: ../test//exceptions/environment.alv
+--- Alvin ---
+ValueError: variable x is not defined.
+[33m
+The following extensions have been saved:
+loop
+[97m
+
+FILE: ../test//exceptions/keywords.alv
+--- Alvin ---
+TypeError: unsupported argument for 'car': 1
+TypeError: unsupported argument for 'cdr': 1
+[33m
+The following extensions have been saved:
+loop
+[97m
+
+FILE: ../test//exceptions/repl.alv
+--- Alvin ---
+
+FILE: ../test//extensions/functions.alv
+--- Alvin ---
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[33m
+The following extensions have been saved:
+loop
+[97m
+
+FILE: ../test//extensions/permanent_A.alv
+--- Alvin ---
+[33m
+The following extensions have been saved:
+permanent
+loop
+[97m
+
+FILE: ../test//extensions/permanent_B.alv
+--- Alvin ---
+[33m
+The following extensions have been saved:
+loop
+[97m
+
+FILE: ../test//interpreter/del_keywords.alv
 --- Alvin ---
 ValueError: variable what is not defined.
 ValueError: variable what is not defined.
@@ -293,9 +1147,7 @@ The following extensions have been saved:
 loop
 [97m
 
-FILE: ../test/interpreter//dev_commands.alv
-['loop']
-[('loop', 8)]
+FILE: ../test//interpreter/dev_commands.alv
 --- Alvin ---
 
 [33m╔══════════════════════════════════════╗[97m
@@ -321,7 +1173,7 @@ Scope 0
 
 
 
-ID:596049145876960.function.ctr:
+ID:206570715996049.function.ctr:
 
 Scope 0
 
@@ -340,15 +1192,22 @@ The following extensions have been saved:
 loop
 [97m
 
-FILE: ../test/interpreter//extensions.alv
-['loop']
-[('loop', 8)]
+FILE: ../test//interpreter/ext_A.alv
 --- Alvin ---
-['func1', 'loop']
-[('func1', 4), ('loop', 8)]
+[33m
+No extensions saved.
+[97m
+
+FILE: ../test//interpreter/ext_B.alv
+--- Alvin ---
+[33m
+The following extensions have been saved:
+loop
+[97m
+
+FILE: ../test//interpreter/extensions.alv
+--- Alvin ---
 2
-['func2', 'func1', 'loop']
-[('func2', 4), ('func1', 4), ('loop', 8)]
 9
 [33m
 The following extensions have been saved:
@@ -360,10 +1219,8 @@ loop
 
 
 
-FILE: ../test/interpreter//help_commands.alv
-[H[2J[3J['loop']
-[('loop', 8)]
---- Alvin ---
+FILE: ../test//interpreter/help_commands.alv
+[H[2J[3J--- Alvin ---
 
 [33m╔══════════════════════════════════════════════════════════════════════════════════╗[97m
 [33m║[97m The Alvin programming language was developed as an independent research project, [33m║[97m
@@ -451,26 +1308,1183 @@ loop
 [33m╚══════════════╝[97m
 
 
-Combined data file .coverage.work-laptop.66412.XmKqqnax
-Combined data file .coverage.work-laptop.66415.XShFiFrx
-Combined data file .coverage.work-laptop.66418.Xkjfitlx
-Combined data file .coverage.work-laptop.66421.XNsiorVx
-Combined data file .coverage.work-laptop.66427.XpoezSIx
-Combined data file .coverage.work-laptop.66430.XKcOsqzx
-Combined data file .coverage.work-laptop.66433.XcTiRrzx
-Combined data file .coverage.work-laptop.66442.XLWDwJkx
+
+FILE: ../test//keywords/basic.alv
+--- Alvin ---
+(1 2 3 4)
+(1 2 3)
+1
+#t
+#f
+3
+4
+1
+(2 3)
+2
+(2)
+(1 2 3)
+[33m
+The following extensions have been saved:
+loop
+[97m
+
+FILE: ../test//keywords/complex.alv
+--- Alvin ---
+1
+0
+1
+4
+9
+16
+25
+7
+(13 15)
+3
+--- Alvin ---
+[33m
+The following extensions have been saved:
+loop
+[97m3.141592653589793
+1
+[33m
+The following extensions have been saved:
+loop
+[97m
+
+FILE: ../test//keywords/logic.alv
+--- Alvin ---
+#f
+#f
+#f
+#t
+#f
+#t
+#f
+#f
+#t
+#t
+#t
+#f
+#t
+#t
+#f
+#t
+#f
+#f
+#f
+#t
+#t
+#t
+#f
+[33m
+The following extensions have been saved:
+loop
+[97m
+
+FILE: ../test//keywords/mathematics.alv
+--- Alvin ---
+#f
+#t
+#t
+#f
+#t
+#f
+#t
+#t
+#f
+#t
+#t
+#f
+#f
+#f
+#t
+#f
+3
+1
+12
+2.5
+2
+8
+2
+3
+[33m
+The following extensions have been saved:
+loop
+[97m
+
+FILE: ../test//keywords/predicates.alv
+--- Alvin ---
+#f
+#t
+#t
+#f
+#t
+#f
+#t
+#t
+#f
+#f
+#f
+#t
+#t
+[33m
+The following extensions have been saved:
+loop
+[97m
+
+FILE: ../test//main/flags.alv
+--- Alvin ---
+
+[33m╔════════════╗[97m
+[33m║[97m   Flags    [33m║[97m
+[33m║[97m -i : False [33m║[97m
+[33m║[97m -d : False [33m║[97m
+[33m║[97m -p : True  [33m║[97m
+[33m║[97m -z : False [33m║[97m
+[33m╚════════════╝[97m
+
+[33m
+The following extensions have been saved:
+loop
+[97m
+
+FILE: ../test//repl/commands.alv
+--- Alvin ---
+3
+3
+and is an operator, built-in function or reserved word.
+[33m
+The following extensions have been saved:
+loop
+[97m
+
+FILE: ../test//repl/comments.alv
+--- Alvin ---
+[33m
+The following extensions have been saved:
+loop
+[97m
+
+Running with -d flag
+
+
+FILE: ../test//datatypes/functions.alv
+--- Alvin ---
+2
+2
+4
+
+
+FILE: ../test//datatypes/templates.alv
+--- Alvin ---
+#t
+#t
+
+
+FILE: ../test//environment/closures.alv
+--- Alvin ---
+1
+2
+<lambda () (do ((update n (+ n 1))) n)>
+
+ID:250145792082648.function.counter:
+
+Scope 0
+
+
+ID:835066689728147.lambda.lambda:
+
+Scope 0
+
+ n : 2
+
+Scope 1
+
+
+
+
+
+FILE: ../test//environment/def.alv
+--- Alvin ---
+2
+6
+
+
+FILE: ../test//environment/imports.alv
+--- Alvin ---
+3.141592653589793
+'math' is an imported module.
+3.141592653589793
+'m' (or math) is an imported module.
+
+
+FILE: ../test//exceptions/datatypes.alv
+--- Alvin ---
+
+FILE: ../test//exceptions/environment.alv
+--- Alvin ---
+
+FILE: ../test//exceptions/keywords.alv
+--- Alvin ---
+
+FILE: ../test//exceptions/repl.alv
+--- Alvin ---
+
+FILE: ../test//extensions/functions.alv
+--- Alvin ---
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+
+
+FILE: ../test//extensions/permanent_A.alv
+--- Alvin ---
+
+
+FILE: ../test//extensions/permanent_B.alv
+--- Alvin ---
+
+FILE: ../test//interpreter/del_keywords.alv
+--- Alvin ---
+
+FILE: ../test//interpreter/dev_commands.alv
+--- Alvin ---
+
+[36m╔══════════════════════════════════════╗[97m
+[36m║[97m useful tools                         [36m║[97m
+[36m║[97m                                      [36m║[97m
+[36m║[97m (α)  dev.closures : closures         [36m║[97m
+[36m║[97m (α)  dev.env      : environment      [36m║[97m
+[36m║[97m (α)  dev.globals  : global variables [36m║[97m
+[36m║[97m (α)  dev.imports  : imported modules [36m║[97m
+[36m╚══════════════════════════════════════╝[97m
+
+
+No function environments found.
+
+
+No global variables found.
+
+
+No imported modules found.
+
+
+Scope 0
+
+
+
+ID:820076901315260.function.ctr:
+
+Scope 0
+
+
+
+
+Global variables:
+ x : 1
+
+
+Imported modules:
+ math alias m
+
+
+
+FILE: ../test//interpreter/ext_A.alv
+--- Alvin ---
+
+
+FILE: ../test//interpreter/ext_B.alv
+--- Alvin ---
+
+
+FILE: ../test//interpreter/extensions.alv
+--- Alvin ---
+2
+9
+
+[36m╔══════════════╗[97m
+[36m║[97m Arrivederci! [36m║[97m
+[36m╚══════════════╝[97m
+
+
+
+FILE: ../test//interpreter/help_commands.alv
+[H[2J[3J--- Alvin ---
+
+[36m╔══════════════════════════════════════════════════════════════════════════════════╗[97m
+[36m║[97m The Alvin programming language was developed as an independent research project, [36m║[97m
+[36m║[97m which began during CSCI 370: Programming Languages at Ave Maria University.      [36m║[97m
+[36m║[97m                                                                                  [36m║[97m
+[36m║[97m Documentation can be found on GitHub:                                            [36m║[97m
+[36m║[97m https://github.com/Antonio-Iijima/Alvin                                          [36m║[97m
+[36m║[97m                                                                                  [36m║[97m
+[36m║[97m (α)  clear     : clear the terminal                                              [36m║[97m
+[36m║[97m (α)  exit/quit : exit the interpreter                                            [36m║[97m
+[36m║[97m (α)  python *. : evaluate *. using Python                                        [36m║[97m
+[36m║[97m (α)  flags     : display interpreter flags                                       [36m║[97m
+[36m║[97m (α)  keywords  : display all language keywords                                   [36m║[97m
+[36m║[97m (α)  dev.info  : useful development/debugging tools                              [36m║[97m
+[36m╚══════════════════════════════════════════════════════════════════════════════════╝[97m
+
+
+[36m╔════════════════════════════════╗[97m
+[36m║[97m        KEYWORDS (59/58)        [36m║[97m
+[36m║[97m                                [36m║[97m
+[36m║[97m          REGULAR (29)          [36m║[97m
+[36m║[97m                                [36m║[97m
+[36m║[97m !=        %         *          [36m║[97m
+[36m║[97m **        +         ++         [36m║[97m
+[36m║[97m -         /         //         [36m║[97m
+[36m║[97m <         <=        ==         [36m║[97m
+[36m║[97m >         >=        append     [36m║[97m
+[36m║[97m atom?     bool?     cons       [36m║[97m
+[36m║[97m elem      eq        len        [36m║[97m
+[36m║[97m list      null?     number?    [36m║[97m
+[36m║[97m ref       setref    show       [36m║[97m
+[36m║[97m sort      usrin                [36m║[97m
+[36m║[97m                                [36m║[97m
+[36m║[97m         IRREGULAR (8)          [36m║[97m
+[36m║[97m                                [36m║[97m
+[36m║[97m do        eval      getfile    [36m║[97m
+[36m║[97m global    import    let        [36m║[97m
+[36m║[97m load      repeat               [36m║[97m
+[36m║[97m                                [36m║[97m
+[36m║[97m          BOOLEAN (6)           [36m║[97m
+[36m║[97m                                [36m║[97m
+[36m║[97m and       nand      nor        [36m║[97m
+[36m║[97m not       or        xor        [36m║[97m
+[36m║[97m                                [36m║[97m
+[36m║[97m          SPECIAL (7)           [36m║[97m
+[36m║[97m                                [36m║[97m
+[36m║[97m cond      lambda    list?      [36m║[97m
+[36m║[97m new       quote     string?    [36m║[97m
+[36m║[97m until                          [36m║[97m
+[36m║[97m                                [36m║[97m
+[36m║[97m        ENVIRONMENT (8)         [36m║[97m
+[36m║[97m                                [36m║[97m
+[36m║[97m burrow    def       del        [36m║[97m
+[36m║[97m delex     set       surface    [36m║[97m
+[36m║[97m template  update               [36m║[97m
+[36m║[97m                                [36m║[97m
+[36m║[97m         EXTENSIONS (1)         [36m║[97m
+[36m║[97m                                [36m║[97m
+[36m║[97m loop                           [36m║[97m
+[36m╚════════════════════════════════╝[97m
+
+
+[36m╔════════════╗[97m
+[36m║[97m   Flags    [36m║[97m
+[36m║[97m -i : False [36m║[97m
+[36m║[97m -d : True  [36m║[97m
+[36m║[97m -p : False [36m║[97m
+[36m║[97m -z : False [36m║[97m
+[36m╚════════════╝[97m
+
+
+[36m╔════════════════════════╗[97m
+[36m║[97m Welcome to the Alvin   [36m║[97m
+[36m║[97m  Programming Language  [36m║[97m
+[36m╚════════════════════════╝[97m
+
+ with debugging
+Enter 'help' to show further information
+
+[36m╔══════════════╗[97m
+[36m║[97m Arrivederci! [36m║[97m
+[36m╚══════════════╝[97m
+
+
+
+FILE: ../test//keywords/basic.alv
+--- Alvin ---
+(1 2 3 4)
+(1 2 3)
+1
+#t
+#f
+3
+4
+1
+(2 3)
+2
+(2)
+(1 2 3)
+
+
+FILE: ../test//keywords/complex.alv
+--- Alvin ---
+1
+0
+1
+4
+9
+16
+25
+7
+(13 15)
+3
+--- Alvin ---
+3.141592653589793
+1
+
+
+FILE: ../test//keywords/logic.alv
+--- Alvin ---
+#f
+#f
+#f
+#t
+#f
+#t
+#f
+#f
+#t
+#t
+#t
+#f
+#t
+#t
+#f
+#t
+#f
+#f
+#f
+#t
+#t
+#t
+#f
+
+
+FILE: ../test//keywords/mathematics.alv
+--- Alvin ---
+#f
+#t
+#t
+#f
+#t
+#f
+#t
+#t
+#f
+#t
+#t
+#f
+#f
+#f
+#t
+#f
+3
+1
+12
+2.5
+2
+8
+2
+3
+
+
+FILE: ../test//keywords/predicates.alv
+--- Alvin ---
+#f
+#t
+#t
+#f
+#t
+#f
+#t
+#t
+#f
+#f
+#f
+#t
+#t
+
+
+FILE: ../test//main/flags.alv
+--- Alvin ---
+
+[36m╔════════════╗[97m
+[36m║[97m   Flags    [36m║[97m
+[36m║[97m -i : False [36m║[97m
+[36m║[97m -d : True  [36m║[97m
+[36m║[97m -p : False [36m║[97m
+[36m║[97m -z : False [36m║[97m
+[36m╚════════════╝[97m
+
+
+
+FILE: ../test//repl/commands.alv
+--- Alvin ---
+3
+3
+and is an operator, built-in function or reserved word.
+
+
+FILE: ../test//repl/comments.alv
+--- Alvin ---
+
+
+Running with -z flag
+
+
+FILE: ../test//datatypes/functions.alv
+--- Alvin ---
+2
+2
+4
+
+
+FILE: ../test//datatypes/templates.alv
+--- Alvin ---
+#t
+#t
+
+
+FILE: ../test//environment/closures.alv
+--- Alvin ---
+1
+2
+<lambda () (do ((update n (+ n 1))) n)>
+
+ID:207016093308133.function.counter:
+
+Scope 0
+
+
+ID:653922508860710.lambda.lambda:
+
+Scope 0
+
+ n : 2
+
+Scope 1
+
+
+
+
+
+FILE: ../test//environment/def.alv
+--- Alvin ---
+2
+6
+
+
+FILE: ../test//environment/imports.alv
+--- Alvin ---
+3.141592653589793
+'math' is an imported module.
+3.141592653589793
+'m' (or math) is an imported module.
+
+
+FILE: ../test//exceptions/datatypes.alv
+--- Alvin ---
+TypeError: f takes 1 argument but 0 were given
+[35mYou just lost the 'list?' function. Number of keywords remaining: 58
+[97mTypeError: f takes 1 argument but 2 were given
+[35mYou just lost the 'and' function. Number of keywords remaining: 57
+[97m
+
+FILE: ../test//exceptions/environment.alv
+--- Alvin ---
+ValueError: variable x is not defined.
+[35mYou just lost the 'xor' function. Number of keywords remaining: 58
+[97m
+
+FILE: ../test//exceptions/keywords.alv
+--- Alvin ---
+TypeError: unsupported argument for 'car': 1
+[35mYou just lost the 'import' function. Number of keywords remaining: 58
+[97mTypeError: unsupported argument for 'cdr': 1
+[35mYou just lost the 'getfile' function. Number of keywords remaining: 57
+[97m
+
+FILE: ../test//exceptions/repl.alv
+--- Alvin ---
+
+FILE: ../test//extensions/functions.alv
+--- Alvin ---
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+
+
+FILE: ../test//extensions/permanent_A.alv
+--- Alvin ---
+
+
+FILE: ../test//extensions/permanent_B.alv
+--- Alvin ---
+NameError: extension 'permanent' not found.
+[35mYou just lost the 'new' function. Number of keywords remaining: 58
+[97m
+
+FILE: ../test//interpreter/del_keywords.alv
+--- Alvin ---
+ValueError: variable what is not defined.
+[35mYou just lost the 'cond' function. Number of keywords remaining: 58
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'xor' function. Number of keywords remaining: 57
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'def' function. Number of keywords remaining: 56
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'nor' function. Number of keywords remaining: 55
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'import' function. Number of keywords remaining: 54
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'lambda' function. Number of keywords remaining: 53
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'update' function. Number of keywords remaining: 52
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'loop' function. Number of keywords remaining: 51
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'load' function. Number of keywords remaining: 50
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'quote' function. Number of keywords remaining: 49
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'del' function. Number of keywords remaining: 48
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'nand' function. Number of keywords remaining: 47
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'delex' function. Number of keywords remaining: 46
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'surface' function. Number of keywords remaining: 45
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'burrow' function. Number of keywords remaining: 44
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'string?' function. Number of keywords remaining: 43
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'sort' function. Number of keywords remaining: 42
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'len' function. Number of keywords remaining: 41
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'new' function. Number of keywords remaining: 40
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'append' function. Number of keywords remaining: 39
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'let' function. Number of keywords remaining: 38
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'list?' function. Number of keywords remaining: 37
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'or' function. Number of keywords remaining: 36
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'template' function. Number of keywords remaining: 35
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'until' function. Number of keywords remaining: 34
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'global' function. Number of keywords remaining: 33
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'and' function. Number of keywords remaining: 32
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'not' function. Number of keywords remaining: 31
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'set' function. Number of keywords remaining: 30
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'eval' function. Number of keywords remaining: 29
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'do' function. Number of keywords remaining: 28
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'getfile' function. Number of keywords remaining: 27
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'repeat' function. Number of keywords remaining: 26
+[97mValueError: variable what is not defined.
+[35mYou just lost the '==' function. Number of keywords remaining: 25
+[97mValueError: variable what is not defined.
+[35mYou just lost the '**' function. Number of keywords remaining: 24
+[97mValueError: variable what is not defined.
+[35mYou just lost the '!=' function. Number of keywords remaining: 23
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'number?' function. Number of keywords remaining: 22
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'bool?' function. Number of keywords remaining: 21
+[97mValueError: variable what is not defined.
+[35mYou just lost the '<=' function. Number of keywords remaining: 20
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'atom?' function. Number of keywords remaining: 19
+[97mValueError: variable what is not defined.
+[35mYou just lost the '>' function. Number of keywords remaining: 18
+[97mValueError: variable what is not defined.
+[35mYou just lost the '>=' function. Number of keywords remaining: 17
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'setref' function. Number of keywords remaining: 16
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'eq' function. Number of keywords remaining: 15
+[97mValueError: variable what is not defined.
+[35mYou just lost the '*' function. Number of keywords remaining: 14
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'usrin' function. Number of keywords remaining: 13
+[97mValueError: variable what is not defined.
+[35mYou just lost the '-' function. Number of keywords remaining: 12
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'null?' function. Number of keywords remaining: 11
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'cons' function. Number of keywords remaining: 10
+[97mValueError: variable what is not defined.
+[35mYou just lost the '/' function. Number of keywords remaining: 9
+[97mValueError: variable what is not defined.
+[35mYou just lost the '<' function. Number of keywords remaining: 8
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'elem' function. Number of keywords remaining: 7
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'ref' function. Number of keywords remaining: 6
+[97mValueError: variable what is not defined.
+[35mYou just lost the 'show' function. Number of keywords remaining: 5
+[97mValueError: variable what is not defined.
+[35mYou just lost the '%' function. Number of keywords remaining: 4
+[97mValueError: variable what is not defined.
+[35mYou just lost the '+' function. Number of keywords remaining: 3
+[97mValueError: variable + is not defined.
+[35mYou just lost the 'list' function. Number of keywords remaining: 2
+[97mValueError: variable + is not defined.
+[35mYou just lost the '++' function. Number of keywords remaining: 1
+[97mValueError: variable + is not defined.
+[35mYou just lost the '//' function. Number of keywords remaining: 0
+[97mValueError: variable + is not defined.
+[35mYou have nothing left to lose. The language is now utterly and completely broken. Congratulations.
+[97mValueError: variable + is not defined.
+[35mYou have nothing left to lose. The language is now utterly and completely broken. Congratulations.
+[97mValueError: variable + is not defined.
+[35mYou have nothing left to lose. The language is now utterly and completely broken. Congratulations.
+[97mValueError: variable + is not defined.
+[35mYou have nothing left to lose. The language is now utterly and completely broken. Congratulations.
+[97m
+
+FILE: ../test//interpreter/dev_commands.alv
+--- Alvin ---
+
+[35m╔══════════════════════════════════════╗[97m
+[35m║[97m useful tools                         [35m║[97m
+[35m║[97m                                      [35m║[97m
+[35m║[97m (α)  dev.closures : closures         [35m║[97m
+[35m║[97m (α)  dev.env      : environment      [35m║[97m
+[35m║[97m (α)  dev.globals  : global variables [35m║[97m
+[35m║[97m (α)  dev.imports  : imported modules [35m║[97m
+[35m╚══════════════════════════════════════╝[97m
+
+
+No function environments found.
+
+
+No global variables found.
+
+
+No imported modules found.
+
+
+Scope 0
+
+
+
+ID:51775302508655.function.ctr:
+
+Scope 0
+
+
+
+
+Global variables:
+ x : 1
+
+
+Imported modules:
+ math alias m
+
+
+
+FILE: ../test//interpreter/ext_A.alv
+--- Alvin ---
+
+
+FILE: ../test//interpreter/ext_B.alv
+--- Alvin ---
+
+
+FILE: ../test//interpreter/extensions.alv
+--- Alvin ---
+2
+9
+
+[35mYou made 0 errors with a net loss of -1 function.[97m
+
+[35m╔══════════════╗[97m
+[35m║[97m Arrivederci! [35m║[97m
+[35m╚══════════════╝[97m
+
+
+
+FILE: ../test//interpreter/help_commands.alv
+[H[2J[3J--- Alvin ---
+
+[35m╔══════════════════════════════════════════════════════════════════════════════════╗[97m
+[35m║[97m The Alvin programming language was developed as an independent research project, [35m║[97m
+[35m║[97m which began during CSCI 370: Programming Languages at Ave Maria University.      [35m║[97m
+[35m║[97m                                                                                  [35m║[97m
+[35m║[97m Documentation can be found on GitHub:                                            [35m║[97m
+[35m║[97m https://github.com/Antonio-Iijima/Alvin                                          [35m║[97m
+[35m║[97m                                                                                  [35m║[97m
+[35m║[97m (α)  clear     : clear the terminal                                              [35m║[97m
+[35m║[97m (α)  exit/quit : exit the interpreter                                            [35m║[97m
+[35m║[97m (α)  python *. : evaluate *. using Python                                        [35m║[97m
+[35m║[97m (α)  flags     : display interpreter flags                                       [35m║[97m
+[35m║[97m (α)  keywords  : display all language keywords                                   [35m║[97m
+[35m║[97m (α)  dev.info  : useful development/debugging tools                              [35m║[97m
+[35m╚══════════════════════════════════════════════════════════════════════════════════╝[97m
+
+
+[35m╔════════════════════════════════╗[97m
+[35m║[97m        KEYWORDS (59/58)        [35m║[97m
+[35m║[97m                                [35m║[97m
+[35m║[97m          REGULAR (29)          [35m║[97m
+[35m║[97m                                [35m║[97m
+[35m║[97m !=        %         *          [35m║[97m
+[35m║[97m **        +         ++         [35m║[97m
+[35m║[97m -         /         //         [35m║[97m
+[35m║[97m <         <=        ==         [35m║[97m
+[35m║[97m >         >=        append     [35m║[97m
+[35m║[97m atom?     bool?     cons       [35m║[97m
+[35m║[97m elem      eq        len        [35m║[97m
+[35m║[97m list      null?     number?    [35m║[97m
+[35m║[97m ref       setref    show       [35m║[97m
+[35m║[97m sort      usrin                [35m║[97m
+[35m║[97m                                [35m║[97m
+[35m║[97m         IRREGULAR (8)          [35m║[97m
+[35m║[97m                                [35m║[97m
+[35m║[97m do        eval      getfile    [35m║[97m
+[35m║[97m global    import    let        [35m║[97m
+[35m║[97m load      repeat               [35m║[97m
+[35m║[97m                                [35m║[97m
+[35m║[97m          BOOLEAN (6)           [35m║[97m
+[35m║[97m                                [35m║[97m
+[35m║[97m and       nand      nor        [35m║[97m
+[35m║[97m not       or        xor        [35m║[97m
+[35m║[97m                                [35m║[97m
+[35m║[97m          SPECIAL (7)           [35m║[97m
+[35m║[97m                                [35m║[97m
+[35m║[97m cond      lambda    list?      [35m║[97m
+[35m║[97m new       quote     string?    [35m║[97m
+[35m║[97m until                          [35m║[97m
+[35m║[97m                                [35m║[97m
+[35m║[97m        ENVIRONMENT (8)         [35m║[97m
+[35m║[97m                                [35m║[97m
+[35m║[97m burrow    def       del        [35m║[97m
+[35m║[97m delex     set       surface    [35m║[97m
+[35m║[97m template  update               [35m║[97m
+[35m║[97m                                [35m║[97m
+[35m║[97m         EXTENSIONS (1)         [35m║[97m
+[35m║[97m                                [35m║[97m
+[35m║[97m loop                           [35m║[97m
+[35m╚════════════════════════════════╝[97m
+
+
+[35m╔════════════╗[97m
+[35m║[97m   Flags    [35m║[97m
+[35m║[97m -i : False [35m║[97m
+[35m║[97m -d : False [35m║[97m
+[35m║[97m -p : False [35m║[97m
+[35m║[97m -z : True  [35m║[97m
+[35m╚════════════╝[97m
+
+
+[35m╔════════════════════════╗[97m
+[35m║[97m Welcome to the Alvin   [35m║[97m
+[35m║[97m  Programming Language  [35m║[97m
+[35m╚════════════════════════╝[97m
+
+Enter 'help' to show further information
+[31mWARNING: Random keyword deletion enabled.[35m Proceed at your own risk.[97m
+
+[35mYou made 0 errors with a net loss of -1 function.[97m
+
+[35m╔══════════════╗[97m
+[35m║[97m Arrivederci! [35m║[97m
+[35m╚══════════════╝[97m
+
+
+
+FILE: ../test//keywords/basic.alv
+--- Alvin ---
+(1 2 3 4)
+(1 2 3)
+1
+#t
+#f
+3
+4
+1
+(2 3)
+2
+(2)
+(1 2 3)
+
+
+FILE: ../test//keywords/complex.alv
+--- Alvin ---
+1
+0
+1
+4
+9
+16
+25
+7
+(13 15)
+3
+--- Alvin ---
+3.141592653589793
+1
+
+
+FILE: ../test//keywords/logic.alv
+--- Alvin ---
+#f
+#f
+#f
+#t
+#f
+#t
+#f
+#f
+#t
+#t
+#t
+#f
+#t
+#t
+#f
+#t
+#f
+#f
+#f
+#t
+#t
+#t
+#f
+
+
+FILE: ../test//keywords/mathematics.alv
+--- Alvin ---
+#f
+#t
+#t
+#f
+#t
+#f
+#t
+#t
+#f
+#t
+#t
+#f
+#f
+#f
+#t
+#f
+3
+1
+12
+2.5
+2
+8
+2
+3
+
+
+FILE: ../test//keywords/predicates.alv
+--- Alvin ---
+#f
+#t
+#t
+#f
+#t
+#f
+#t
+#t
+#f
+#f
+#f
+#t
+#t
+
+
+FILE: ../test//main/flags.alv
+--- Alvin ---
+
+[35m╔════════════╗[97m
+[35m║[97m   Flags    [35m║[97m
+[35m║[97m -i : False [35m║[97m
+[35m║[97m -d : False [35m║[97m
+[35m║[97m -p : False [35m║[97m
+[35m║[97m -z : True  [35m║[97m
+[35m╚════════════╝[97m
+
+
+
+FILE: ../test//repl/commands.alv
+--- Alvin ---
+3
+3
+and is an operator, built-in function or reserved word.
+
+
+FILE: ../test//repl/comments.alv
+--- Alvin ---
+
+Combined data file .coverage.Home-Laptop.3305.XzijrnFx
+Combined data file .coverage.Home-Laptop.3308.XlesTbpx
+Combined data file .coverage.Home-Laptop.3311.XpBoyLVx
+Combined data file .coverage.Home-Laptop.3314.XvtmEFQx
+Combined data file .coverage.Home-Laptop.3317.XgKlDZbx
+Combined data file .coverage.Home-Laptop.3320.XfQQFncx
+Combined data file .coverage.Home-Laptop.3323.XolnkVBx
+Combined data file .coverage.Home-Laptop.3326.XlnQjuCx
+Combined data file .coverage.Home-Laptop.3331.Xpiiqolx
+Combined data file .coverage.Home-Laptop.3334.XlZuvGix
+Combined data file .coverage.Home-Laptop.3337.XLhVVZyx
+Combined data file .coverage.Home-Laptop.3340.XlPMslDx
+Combined data file .coverage.Home-Laptop.3343.XvtABnDx
+Combined data file .coverage.Home-Laptop.3347.XLEaISyx
+Combined data file .coverage.Home-Laptop.3350.XoEtMstx
+Combined data file .coverage.Home-Laptop.3353.XJRJpnMx
+Combined data file .coverage.Home-Laptop.3356.XfWnzmBx
+Combined data file .coverage.Home-Laptop.3359.XSdYkKUx
+Combined data file .coverage.Home-Laptop.3364.XsHBqxfx
+Combined data file .coverage.Home-Laptop.3367.XVWQZmEx
+Combined data file .coverage.Home-Laptop.3370.XdmjlUjx
+Combined data file .coverage.Home-Laptop.3373.XTiXuCkx
+Combined data file .coverage.Home-Laptop.3376.XOCTBklx
+Combined data file .coverage.Home-Laptop.3379.XBAXEUwx
+Combined data file .coverage.Home-Laptop.3382.XHDtnUJx
+Combined data file .coverage.Home-Laptop.3385.XtyXbrOx
+Combined data file .coverage.Home-Laptop.3389.XdAcIlAx
+Combined data file .coverage.Home-Laptop.3392.XnqQGwTx
+Combined data file .coverage.Home-Laptop.3395.XLysxSFx
+Combined data file .coverage.Home-Laptop.3398.XlTZLOCx
+Combined data file .coverage.Home-Laptop.3401.XGfbxqqx
+Combined data file .coverage.Home-Laptop.3404.XJByMLUx
+Combined data file .coverage.Home-Laptop.3407.XXhZCBgx
+Combined data file .coverage.Home-Laptop.3410.XDmlvpIx
+Combined data file .coverage.Home-Laptop.3413.XJkdJxex
+Combined data file .coverage.Home-Laptop.3416.XuPQzYbx
+Combined data file .coverage.Home-Laptop.3419.XzdtWBIx
+Combined data file .coverage.Home-Laptop.3422.XfwXzQIx
+Combined data file .coverage.Home-Laptop.3425.XWaQlKjx
+Combined data file .coverage.Home-Laptop.3428.XfnshbEx
+Combined data file .coverage.Home-Laptop.3431.XqUVhQix
+Combined data file .coverage.Home-Laptop.3434.XCQvrrXx
+Combined data file .coverage.Home-Laptop.3437.XWRzHxqx
+Combined data file .coverage.Home-Laptop.3440.XErjpgZx
+Combined data file .coverage.Home-Laptop.3451.XLhRdqZx
+Combined data file .coverage.Home-Laptop.3454.XdoNgAmx
+Combined data file .coverage.Home-Laptop.3457.XoPLOiSx
+Combined data file .coverage.Home-Laptop.3460.XRtktfRx
+Combined data file .coverage.Home-Laptop.3463.XRjpzuzx
+Combined data file .coverage.Home-Laptop.3466.XauSpwRx
+Combined data file .coverage.Home-Laptop.3469.XuDZIlcx
+Combined data file .coverage.Home-Laptop.3472.XQeXhNax
+Combined data file .coverage.Home-Laptop.3476.XLCibkHx
+Combined data file .coverage.Home-Laptop.3479.XSSzczpx
+Combined data file .coverage.Home-Laptop.3482.XQlJKqAx
+Combined data file .coverage.Home-Laptop.3485.XLfESrbx
+Combined data file .coverage.Home-Laptop.3488.XwrRjqzx
+Combined data file .coverage.Home-Laptop.3491.XxOLtVex
+Combined data file .coverage.Home-Laptop.3494.XsmdyBmx
+Combined data file .coverage.Home-Laptop.3497.XFfXezDx
+Combined data file .coverage.Home-Laptop.3500.XLSiUMgx
+Combined data file .coverage.Home-Laptop.3503.XZJUhQcx
+Combined data file .coverage.Home-Laptop.3508.XFfQHgcx
+Combined data file .coverage.Home-Laptop.3511.XPpgTyFx
+Combined data file .coverage.Home-Laptop.3514.XiRMLGDx
+Combined data file .coverage.Home-Laptop.3517.XZsUswlx
+Combined data file .coverage.Home-Laptop.3520.XpDYjjcx
+Combined data file .coverage.Home-Laptop.3523.XEkXvyix
+Combined data file .coverage.Home-Laptop.3526.XBptWvyx
+Combined data file .coverage.Home-Laptop.3529.XthdhYhx
+Combined data file .coverage.Home-Laptop.3534.XYyChdPx
+Combined data file .coverage.Home-Laptop.3537.XmiKHZYx
+Combined data file .coverage.Home-Laptop.3540.XUdtCltx
+Combined data file .coverage.Home-Laptop.3543.XUhTqjnx
+Combined data file .coverage.Home-Laptop.3546.XdIYvEcx
+Combined data file .coverage.Home-Laptop.3549.XrBKrxux
+Combined data file .coverage.Home-Laptop.3552.XyLDkoYx
+Combined data file .coverage.Home-Laptop.3555.XuYkkzkx
+Combined data file .coverage.Home-Laptop.3559.XwvQnEwx
+Combined data file .coverage.Home-Laptop.3562.XBALtXIx
+Combined data file .coverage.Home-Laptop.3565.XbdmtvVx
+Combined data file .coverage.Home-Laptop.3568.XZpWFfxx
+Combined data file .coverage.Home-Laptop.3571.XJjrBzUx
+Combined data file .coverage.Home-Laptop.3574.XfBbtAEx
+Combined data file .coverage.Home-Laptop.3577.XPOrGjtx
+Combined data file .coverage.Home-Laptop.3580.XqfbQeWx
+Skipping duplicate data .coverage.Home-Laptop.3583.XMXeWAXx
+Combined data file .coverage.Home-Laptop.3586.XYOInfdx
+Combined data file .coverage.Home-Laptop.3589.XWMxbJLx
+Combined data file .coverage.Home-Laptop.3592.XORPEkfx
+Combined data file .coverage.Home-Laptop.3595.XQbKujYx
+Combined data file .coverage.Home-Laptop.3598.XZxGKMGx
+Combined data file .coverage.Home-Laptop.3601.XVGZNnJx
+Combined data file .coverage.Home-Laptop.3604.XZCdoxsx
+Combined data file .coverage.Home-Laptop.3607.XqJGtUDx
+Combined data file .coverage.Home-Laptop.3610.XRoLYamx
+Combined data file .coverage.Home-Laptop.3615.XjTqYgXx
+Combined data file .coverage.Home-Laptop.3618.XJjhAWex
+Combined data file .coverage.Home-Laptop.3621.Xerzeqhx
+Combined data file .coverage.Home-Laptop.3624.XFHWCBJx
+Combined data file .coverage.Home-Laptop.3627.XAhiMTmx
+Combined data file .coverage.Home-Laptop.3630.XiUmgFkx
+Combined data file .coverage.Home-Laptop.3633.XRIvciOx
+Combined data file .coverage.Home-Laptop.3636.XCFmwQdx
+Skipping duplicate data .coverage.Home-Laptop.3640.XumdNBrx
+Skipping duplicate data .coverage.Home-Laptop.3643.XisQfNGx
+Skipping duplicate data .coverage.Home-Laptop.3646.XgUneWtx
+Skipping duplicate data .coverage.Home-Laptop.3649.XhYkYQEx
+Skipping duplicate data .coverage.Home-Laptop.3652.XnUHrPmx
+Combined data file .coverage.Home-Laptop.3655.XGpVVXRx
+Combined data file .coverage.Home-Laptop.3658.Xneaoywx
+Combined data file .coverage.Home-Laptop.3661.XYNJEmfx
+Skipping duplicate data .coverage.Home-Laptop.3664.XVDppgvx
+Skipping duplicate data .coverage.Home-Laptop.3667.XuQhoOyx
+Skipping duplicate data .coverage.Home-Laptop.3670.XGLChxvx
+Combined data file .coverage.Home-Laptop.3673.XCykTWYx
+Combined data file .coverage.Home-Laptop.3676.XmeqoqXx
+Skipping duplicate data .coverage.Home-Laptop.3681.XxFDaimx
+Skipping duplicate data .coverage.Home-Laptop.3684.XFHawybx
+Skipping duplicate data .coverage.Home-Laptop.3687.XhZQXvWx
+Combined data file .coverage.Home-Laptop.3690.XrqvYgNx
+Combined data file .coverage.Home-Laptop.3693.XiBEcLvx
+Skipping duplicate data .coverage.Home-Laptop.3698.XfdZWsGx
+Skipping duplicate data .coverage.Home-Laptop.3701.XgSkdzEx
+Skipping duplicate data .coverage.Home-Laptop.3704.XNWWrtmx
+Skipping duplicate data .coverage.Home-Laptop.3707.XaItTFlx
+Skipping duplicate data .coverage.Home-Laptop.3710.XuuUWTex
+Skipping duplicate data .coverage.Home-Laptop.3713.XQVfqfcx
+Skipping duplicate data .coverage.Home-Laptop.3716.XZFlBjkx
+Skipping duplicate data .coverage.Home-Laptop.3719.XHvHVggx
 Name                                       Stmts   Miss  Cover
 --------------------------------------------------------------
 /home/ai/github/alvin/src/config.py           46      0   100%
-/home/ai/github/alvin/src/datatypes.py        69     39    43%
-/home/ai/github/alvin/src/environment.py      88     31    65%
-/home/ai/github/alvin/src/evaluate.py         29     11    62%
-/home/ai/github/alvin/src/extensions.py        5      3    40%
-/home/ai/github/alvin/src/interpreter.py     137     17    88%
-/home/ai/github/alvin/src/keywords.py        126     42    67%
-/home/ai/github/alvin/src/main.py             24      4    83%
-/home/ai/github/alvin/src/parser.py           52      1    98%
-/home/ai/github/alvin/src/repl.py             43      9    79%
+/home/ai/github/alvin/src/datatypes.py        69      0   100%
+/home/ai/github/alvin/src/environment.py      88      0   100%
+/home/ai/github/alvin/src/evaluate.py         29      0   100%
+/home/ai/github/alvin/src/extensions.py        5      0   100%
+/home/ai/github/alvin/src/interpreter.py     136      0   100%
+/home/ai/github/alvin/src/keywords.py        126      0   100%
+/home/ai/github/alvin/src/main.py             24      0   100%
+/home/ai/github/alvin/src/parser.py           52      0   100%
+/home/ai/github/alvin/src/repl.py             43      0   100%
 --------------------------------------------------------------
-TOTAL                                        619    157    75%
+TOTAL                                        618      0   100%
 Wrote HTML report to htmlcov/index.html
