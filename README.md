@@ -1,3 +1,5 @@
+## NB - WIKI AND README UNDER REVISION - CONTENT IS NOT CURRENT
+
 # The Alvin Programming Language
 
 The Alvin Programming Language seeks to unify multiple diverse programming paradigms through a consistent syntax and intuitive semantics.
