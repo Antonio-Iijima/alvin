@@ -1,9 +1,10 @@
 # The Alvin Programming Language
 
-Alvin is an interpreted Lisp-family programming language implemented in Python and designed for flexibility and extensibility. 
+The Alvin Programming Language seeks to unify multiple diverse programming paradigms through a consistent syntax and intuitive semantics.
 
 <img src="https://github.com/Antonio-Iijima/alvin/blob/main/logo.png?raw=true" width=30%>
 
+---
 
 ## Table of Contents
 
@@ -13,6 +14,7 @@ Alvin is an interpreted Lisp-family programming language implemented in Python a
 - [Resources](#resources)
 - [License](#license)
 
+---
 
 ## Installation
 
@@ -33,10 +35,11 @@ $ cd alvin/src/
 
 You are now ready to start programming with Alvin.
 
+---
 
 ## Usage
 
-The Alvin interpreter can be run interactively using the `-i` flag, or it can just be used to run a file. To load files with the `-i` flag, provide their relative locations as commandline arguments to `main.py`. Several example files have been included with the project in the `examples/` folder:
+The Alvin interpreter can be run interactively using the `-i` flag, or it can be used to run a file. To load files with the `-i` flag, provide their locations as commandline arguments to `main.py`. Several example files have been included with the project in the `examples/` folder.
 
 ```
 $ python3 main.py ../examples/lisp.alv -i
@@ -51,37 +54,45 @@ Enter 'help' to show further information
 (α)
 ```
 
+---
 
 ## Contributing
 
-This project has taken far too much of my time, and will probably continue to do so for the foreseeable future. If you have ideas for interesting features, or you find a bugfix, feel free to:
+This project has taken far too much of my time, and will probably continue to do so for the foreseeable future. If you have ideas for interesting features, find or fix a bug, or even notice a typo, please feel free to contribute via a pull request.
 
-1.	Fork the repo
-2.	Create a feature branch
-3.	Make changes and push
-4.	Open a pull request 
-
-If you find a bug and just want to report it, please open an issue.
-
+---
 
 ## Resources
 
-Further information on how the language works and how to use it can be found on the [Wiki](https://github.com/Antonio-Iijima/alvin/wiki). For a basic overview, Alvin is a primarily functional language with the following features:
+In a nutshell, Alvin is a multi-paradigm language with the following features:
 
 - Cambridge Polish syntax
+- Homoiconicity
 - Applicative-order evaluation
-- Provision for side-effect
+- Side-effect
 - Dynamic binding
 - Dynamic scoping
 - Dynamic typing
-- Homoiconicity
-- Closures
-- Curried functions
+- First-order functions and closure
 - Reflexive lambda functions and anonymous recursion
 - Dynamic language extension
+- Objects (templates)
 
-There are several keywords and built-in functions reserved by the language. Everything else is meant to be user-defined.
+Currently, Alvin supports the following programming paradigms:
 
+- Imperative
+  - Procedural
+  - Object-oriented
+- Declarative
+  - Functional
+- Metaprogramming
+  - Reflective
+
+The unique contribution of Alvin is the ability to permanently modify the language through the use of extensions.
+
+For more information and a more thorough guide to the usage and capabilities of Alvin, please refer to the [Wiki](https://github.com/Antonio-Iijima/alvin/wiki).
+
+---
 
 ## License
 
