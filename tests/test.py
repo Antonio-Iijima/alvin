@@ -3,7 +3,8 @@ import sys
 
 
 
-def test(filepath: str = '.', args: list = []):
+def test(filepath: str, args: list = []) -> None:
+    """Recursively test files and directories."""
 
     # Test files with input.txt as standard sample input
     if os.path.isfile(filepath) and filepath.endswith('.alv'):
@@ -16,9 +17,10 @@ def test(filepath: str = '.', args: list = []):
             if file not in ["htmlcov"]: test(f"{filepath}/{file}", args)
 
 
-def main():
+def main() -> None:
+    """Run all tests with command line args."""
 
-    # Automatically run with command line flags, removing them from sys.argv as found; by default run with all flags if none provided
+    # Automatically run with command line flags, removing them from sys.argv as found; else by default run with all flags if none provided
     flags = [ flag for flag in ["-i", "-d", "-p", "-z"] if (flag in sys.argv and not(sys.argv.remove(flag))) ] or ["-i", "-d", "-p", "-z"]
     
     # Set initial directory to test folder
