@@ -5,7 +5,6 @@
 import os
 
 import keywords as kw
-import extensions as ext
 import environment as env
 import interpreter as intrp
 
