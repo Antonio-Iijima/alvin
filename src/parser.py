@@ -150,5 +150,5 @@ def convert(s: any) -> str | None:
 
 
 def parse(s: str) -> list: 
-    """Perform syntax checking and convert Alvin expresssion string to manipulable Python lists."""
-    return preprocess(lst_to_Python(syntax_check(Alvin_to_list(s))))[0]
+    """Perform syntax checking and convert Alvin expression string to manipulable Python lists."""
+    return preprocess(lst_to_Python(syntax_check(Alvin_to_list(s)))).pop()

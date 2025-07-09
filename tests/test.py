@@ -24,7 +24,7 @@ def main() -> None:
     flags = [ flag for flag in ["-i", "-d", "-p", "-z"] if (flag in sys.argv and not(sys.argv.remove(flag))) ] or ["-i", "-d", "-p", "-z"]
     
     # Set initial directory to test folder
-    initialDirectory = sys.argv[1] if len(sys.argv) > 1 else "../test"
+    initialDirectory = sys.argv[1] if len(sys.argv) > 1 else "../tests"
 
     os.system("echo '\nRunning without flags\n'")
     test(initialDirectory)
