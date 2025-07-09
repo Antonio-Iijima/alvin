@@ -29,8 +29,7 @@ def main(args: list = sys.argv) -> None:
     })
 
     # Remove flags from args
-    for flag in cf.config.FLAGS:
-        flag in args and args.remove(flag)
+    for flag in cf.config.FLAGS: flag in args and args.remove(flag)
     
     # If called with nothing else, print the version and exit
     if not (args[1:] or cf.config.iFlag): intrp.interpreter.prompt(); print(f"Alvin Programming Language version {cf.config.VERSION}"); exit()
