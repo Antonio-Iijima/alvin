@@ -3,7 +3,6 @@
 
 
 import sys
-import datetime
 
 import repl as rpl
 import config as cf
@@ -25,7 +24,7 @@ def main(args: list = sys.argv) -> None:
     cf.config.initialize({
         '-i' : '-i' in sys.argv, # interactive interpreter
         '-d' : '-d' in sys.argv, # debugging
-        '-p' : '-p' in sys.argv, # permanent extensions
+        '-p' : '-p' in sys.argv, # permanent extension changes
         '-z' : '-z' in sys.argv, # why
     })
 
