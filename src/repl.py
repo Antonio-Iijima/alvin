@@ -47,7 +47,7 @@ def REPL(stream: str = sys.stdin, loadingFile: bool = False) -> None:
         # If the expression is probably complete
         if prs.iscomplete(expression):
             
-            try: run(expression, cf.config.iFlag)
+            try: run(expression, showContent)
 
             except Exception as e:
 
@@ -82,14 +82,14 @@ def REPL(stream: str = sys.stdin, loadingFile: bool = False) -> None:
 
 
 
-def run(line: str, loadingFile: bool = False) -> None:
+def run(line: str, showContent: bool = False) -> None:
     """Execute a complete expression and print output, if any."""
 
     output = interpret(line.strip())
 
     # If the output is None, then the line probably has its own internal 
     # output solution, so don't print it. Otherwise print the output.
-    if not (loadingFile or output is None): print(output)
+    if showContent and output is not None: print(output)
 
 
 def interpret(line: str) -> any:
