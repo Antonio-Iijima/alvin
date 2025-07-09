@@ -19,7 +19,7 @@ class Config:
         # Setup constants
 
         # Technical details
-        self.VERSION = "4.2.5"
+        self.VERSION = "4.8"
         self.NAME = "Alvin"
 
         # Color customization

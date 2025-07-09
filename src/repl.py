@@ -26,7 +26,7 @@ def REPL(stream: str = sys.stdin, loadingFile: bool = False) -> None:
         if not loadingFile: 
             intrp.interpreter.welcome()
             intrp.interpreter.prompt()
-    else: print("--- Alvin ---")
+    else: print(f"--- Alvin v{cf.config.VERSION} ---")
         
     # Initialize expression
     expression = ""

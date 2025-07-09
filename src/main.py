@@ -3,6 +3,7 @@
 
 
 import sys
+import datetime
 
 import repl as rpl
 import config as cf
@@ -20,21 +21,20 @@ def main(args: list = sys.argv) -> None:
     # Because implementing a language in Python is really inefficient
     sys.setrecursionlimit(10**5)
 
-    # Read in flags
-    flags = {}
-
-    flags['-i'] = '-i' in sys.argv # interactive interpreter
-    flags['-d'] = '-d' in sys.argv # debugging
-    flags['-p'] = '-p' in sys.argv # permanent extensions
-    flags['-z'] = '-z' in sys.argv # why
-
-    # Setup config
-    cf.config.initialize(flags); 
+    # Setup config with flags
+    cf.config.initialize({
+        '-i' : '-i' in sys.argv, # interactive interpreter
+        '-d' : '-d' in sys.argv, # debugging
+        '-p' : '-p' in sys.argv, # permanent extensions
+        '-z' : '-z' in sys.argv, # why
+    })
 
     # Remove flags from args
     for flag in cf.config.FLAGS:
-        if flag in args:
-            args.remove(flag)
+        flag in args and args.remove(flag)
+    
+    # If called with nothing else, print the version and exit
+    if not (args[1:] or cf.config.iFlag): intrp.interpreter.prompt(); print(f"Alvin Programming Language version {cf.config.VERSION}"); exit()
 
     # Read in files if necessary
     for item in args[1:]:
