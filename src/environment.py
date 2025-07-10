@@ -207,10 +207,10 @@ class Environment:
 
 
     def cleanup(self, var: str, scope: int = 0) -> None:
-        """Basic garbage collection for the `FUNARG` environments attached to functions."""
+        """Basic garbage collection for the closure environments attached to functions."""
 
-        # Get the current variable; if it is a function, remove its FUNARG environment
-        current = self.env[scope].get(var, None); isinstance(current, dt.Function) and cf.config.CLOSURES.pop(current.id) 
+        # Get the current variable; if it is a closable, remove its closure
+        current = self.env[scope].get(var, None); isinstance(current, dt.Closable) and cf.config.CLOSURES.pop(current.id) 
 
 
     def __len__(self) -> int: return len(self.env)

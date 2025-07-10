@@ -37,7 +37,7 @@ def iskeyword(x: str) -> bool:
 
 def isimport(x: str) -> bool:
     """Unary `import` predicate."""
-    return re.match(r"^[a-z, A-Z]*[.][a-z, A-Z]+$", str(x))
+    return bool(re.match(r"^[a-z, A-Z]*[.][a-z, A-Z]+$", str(x)))
 
 
 def isnumber(x: str | int | float) -> bool: 
@@ -57,7 +57,7 @@ def istemplate(x: dt.Template | dt.Instance) -> bool:
 
 def iscxr(x: str) -> bool:
     """Unary `car` and `cdr` predicate, generalized to include all abbreviated forms."""
-    return re.match(r"^c[ad]+r$", str(x))
+    return bool(re.match(r"^c[ad]+r$", str(x)))
 
 
 def isatom(x: any) -> bool:
@@ -77,12 +77,12 @@ def isbool(x: str) -> bool:
 
 def islist(x: list) -> bool:
     """Unary `list` predicate."""
-    return isinstance(x[0], list) if len(x) == 1 else False
+    return isinstance(x[0], list) and len(x) == 1
 
 
 def isstring(x: list) -> bool:
     """Unary `string` predicate."""
-    return isinstance(x[0], str) if len(x) == 1 else False
+    return isinstance(x[0], str) and len(x) == 1
 
 
 

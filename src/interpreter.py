@@ -46,13 +46,13 @@ Programming Language"""
 
         self.text_box(display, centered=True)
 
-        if cf.config.iFlag: print(f"Alvin v{cf.config.VERSION}, running in interactive mode", end='\n'*(not cf.config.dFlag))
-        if cf.config.dFlag: print(" with debugging")
-        if cf.config.pFlag: print("Permanent extensions enabled")
+        cf.config.iFlag and print(f"Alvin v{cf.config.VERSION}, running in interactive mode", end='\n'*(not cf.config.dFlag))
+        cf.config.dFlag and print(" with debugging")
+        cf.config.pFlag and print("Permanent extensions enabled")
 
         print("Enter 'help' to show further information")
 
-        if cf.config.zFlag: print(f"{cf.config.RED}WARNING: Random keyword deletion enabled.{cf.config.PURPLE} Proceed at your own risk.{cf.config.END_COLOR}")
+        cf.config.zFlag and print(f"{cf.config.RED}WARNING: Random keyword deletion enabled.{cf.config.PURPLE} Proceed at your own risk.{cf.config.END_COLOR}")
 
 
     def help(self) -> None:
@@ -76,7 +76,7 @@ https://github.com/Antonio-Iijima/Alvin
 
     def clear(self) -> None:
         """Clear the terminal."""
-        os.system('cls' if os.name == 'nt' else 'clear'); self.welcome()
+        os.system('cls' if os.name == 'nt' else 'clear') or self.welcome()
 
 
     def quit(self) -> None:
@@ -88,9 +88,7 @@ https://github.com/Antonio-Iijima/Alvin
             net = cf.config.ERROR_COUNTER - (len(cf.config.KEYWORDS) - cf.config.INITIAL_KEYWORD_NUM)
             print(f"\n{cf.config.PURPLE}You made {cf.config.ERROR_COUNTER} error{"s"*(cf.config.ERROR_COUNTER!=1)} with a net loss of {net} function{"s"*(abs(net)!=1)}.{cf.config.END_COLOR}")
 
-        self.text_box("""Arrivederci!""", centered=True)
-
-        exit()
+        self.text_box("""Arrivederci!""", centered=True) or exit()
 
 
     def flags(self) -> None:
@@ -103,7 +101,7 @@ https://github.com/Antonio-Iijima/Alvin
 
 
     def show_closures(self) -> None:
-        """Display the current FUNARG environment."""
+        """Display the current closures."""
         
         print()
         if cf.config.CLOSURES:

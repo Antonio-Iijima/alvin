@@ -64,22 +64,22 @@ class Function(Closable):
             cf.config.CLOSURES[self.id].match_arguments(self.parameters, args)
 
             # Define 'self' as a special local reference to the current function
-            if self.type in ('lambda', 'self'): cf.config.CLOSURES[self.id].define('self', self.parameters, self.body)
+            self.type in ('lambda', 'self') and cf.config.CLOSURES[self.id].define('self', self.parameters, self.body)
 
-            # Extend the general environment with the current function's FUNARG environment
+            # Extend the general environment with the current function's closure (i.e. FUNARGs)
             cf.config.ENV.extend(cf.config.CLOSURES[self.id])
 
             # Evaluate the function
             try:
                 value = ev.evaluate(self.body)
 
-                # If returning a function, give it access to current FUNARG environment
+                # If returning a function, give it access to current closure
                 if isinstance(value, Function): cf.config.CLOSURES[value.id] = cf.config.CLOSURES[self.id].clone()
 
             # Safely end the extended scopes and remove 'self'
             finally:
                 cf.config.ENV.end_scope(len(cf.config.CLOSURES[self.id]))
-                if self.type in ('lambda', 'self'): cf.config.CLOSURES[self.id].delete('self')
+                self.type in ('lambda', 'self') and cf.config.CLOSURES[self.id].delete('self')
 
             return value
         
@@ -136,7 +136,7 @@ class Template(Closable):
         cf.config.CLOSURES[newInstance.id].env += cf.config.CLOSURES[self.id].env
 
         # Run initialization function
-        if self.init: cf.config.ENV.runClosed(cf.config.CLOSURES[newInstance.id], logic, self.init)
+        self.init and cf.config.ENV.runClosed(cf.config.CLOSURES[newInstance.id], logic, self.init)
             
         return newInstance
     
