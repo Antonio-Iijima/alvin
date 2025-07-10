@@ -48,10 +48,6 @@ def syntax_check(expr: list) -> list:
     # Confirm balanced parentheses
     isperfectlybalanced(expr)        
 
-    # Confirm that no two operators appear successively without correct parenthetical nesting
-    for i, c in enumerate(expr):
-        if kw.iskeyword(c) and kw.iskeyword(i+1): raise SyntaxError(f"invalid expression structure: {" ".join(expr)}")
-
     return expr
 
 
