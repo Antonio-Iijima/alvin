@@ -1,7 +1,5 @@
 # The Alvin Programming Language
 
-The Alvin Programming Language seeks to unify multiple diverse programming paradigms through a consistent syntax and intuitive semantics.
-
 <img src="https://github.com/Antonio-Iijima/alvin/blob/main/logo.png?raw=true" width=30%>
 
 ---
@@ -52,11 +50,11 @@ Enter 'help' to show further information
 
 ## Contributing
 
-This project has taken far too much of my time, and will probably continue to do so for the foreseeable future. If you have ideas for interesting features, find or fix a bug, or even notice a typo, please feel free to contribute via a pull request.
+If you have ideas for interesting features, find or fix a bug, or even notice a typo, please feel free to contribute via a pull request; however, as of now Alvin is no longer under active development (i.e. I will not be adding any new features, continued updates, etc.).
 
 ## Resources
 
-In a nutshell, Alvin is a multi-paradigm language with the following features:
+In a nutshell, Alvin is a Lisp-family, primarily functional programming language with the following features:
 
 - Cambridge Polish syntax
 - Homoiconicity
@@ -69,16 +67,6 @@ In a nutshell, Alvin is a multi-paradigm language with the following features:
 - Reflexive lambda functions and anonymous recursion
 - Dynamic language extension
 - Objects (templates)
-
-Currently, Alvin supports the following programming paradigms:
-
-- Imperative
-  - Procedural
-  - Object-oriented
-- Declarative
-  - Functional
-- Metaprogramming
-  - Reflective
 
 The unique contribution of Alvin is the ability to permanently modify the language through the use of extensions.
 
